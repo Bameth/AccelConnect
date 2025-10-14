@@ -1,0 +1,145 @@
+<!-- nav-component.html -->
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 bg-[#20264e]/95 backdrop-blur-xl shadow-2xl border-b border-white/5"
+>
+  <nav class="relative">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <!-- LEFT: Logo + Titre -->
+        <a
+          routerLink="/"
+          class="flex items-center gap-3 sm:gap-4 md:gap-6 group min-w-0 flex-shrink-0 z-10"
+        >
+          <!-- Logo avec effet glow -->
+          <div class="relative">
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-[#25509d] to-[#99cfbd] rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-all duration-500"
+            ></div>
+            <div
+              class="relative bg-white/10 p-2 rounded-2xl border border-white/10 group-hover:border-[#99cfbd]/50 transition-all duration-300"
+            >
+              <img
+                [src]="logoUrl"
+                alt="AccelConnect Logo"
+                class="relative h-8 w-8 sm:h-10 sm:w-10 object-contain group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+          </div>
+
+          <!-- Titre avec gradient -->
+          <div class="hidden sm:block">
+            <span
+              class="text-white text-2xl sm:text-3xl md:text-4xl font-black tracking-tight whitespace-nowrap bg-gradient-to-r from-white via-[#99cfbd] to-white bg-clip-text group-hover:text-transparent transition-all duration-500"
+            >
+              Accel<span class="text-[#99cfbd]">Connect</span>
+            </span>
+            <p class="text-xs text-white/50 font-medium tracking-wide">Votre portail intelligent</p>
+          </div>
+        </a>
+
+        <!-- CENTER: Barre de recherche (Desktop) -->
+        <div class="hidden lg:flex flex-1 justify-center px-8 max-w-2xl">
+          <div class="w-full relative group">
+            <div class="relative">
+              <!-- Glow effect -->
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-[#25509d]/30 via-[#99cfbd]/30 to-[#25509d]/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"
+              ></div>
+
+              <input
+                id="site-search"
+                type="search"
+                placeholder="Rechercher..."
+                class="relative w-full rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white placeholder-white/40 py-3 md:py-3.5 pl-12 pr-14 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-[#99cfbd]/50 focus:bg-white/10 focus:border-[#99cfbd]/30 transition-all duration-300"
+              />
+
+              <!-- Icône de recherche -->
+              <div class="absolute left-4 top-1/2 -translate-y-1/2">
+                <svg
+                  class="w-5 h-5 text-white/60 group-hover:text-[#99cfbd] transition-colors duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+
+              <!-- Bouton de recherche -->
+              <button
+                type="button"
+                aria-label="Rechercher"
+                class="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-gradient-to-r from-[#25509d] to-[#99cfbd] hover:shadow-lg hover:shadow-[#99cfbd]/50 flex items-center justify-center transition-all duration-300 hover:scale-110"
+              >
+                <svg
+                  class="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Actions + Avatar -->
+        <div class="flex items-center gap-3 md:gap-4">
+          <!-- Notifications (Desktop) -->
+          <button
+            class="hidden md:flex relative h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#99cfbd]/30 transition-all duration-300 group"
+          >
+            <svg
+              class="w-5 h-5 text-white/70 group-hover:text-[#99cfbd] transition-colors duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 h-4 w-4 bg-[#e84141] rounded-full text-white text-xs flex items-center justify-center font-bold animate-pulse"
+              >3</span
+            >
+          </button>
+
+          <!-- Avatar utilisateur -->
+          <button
+            class="relative h-10 w-10 sm:h-11 sm:w-11 rounded-full overflow-hidden border-2 border-white/20 shadow-lg hover:border-[#99cfbd] hover:shadow-[#99cfbd]/50 transition-all duration-300 hover:scale-110 group"
+          >
+            <img
+              [src]="avatarUrl"
+              alt="User"
+              class="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-[#25509d]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Barre de progression subtile -->
+  <div
+    class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#99cfbd]/50 to-transparent"
+  ></div>
+</header>

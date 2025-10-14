@@ -1,0 +1,555 @@
+<!-- second-section-component.html -->
+
+<!-- Section Calendrier + Actualités -->
+<section class="relative bg-gradient-to-b from-white via-gray-50 to-white py-16 md:py-24">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
+        <!-- === COLONNE GAUCHE : Calendrier (35%) === -->
+        <div class="lg:col-span-5 space-y-6">
+          <!-- En-tête Section -->
+          <div class="flex items-center gap-4">
+            <div class="relative">
+              <div
+                class="absolute inset-0 bg-gradient-to-br from-[#25509d] to-[#99cfbd] rounded-2xl blur-xl opacity-50"
+              ></div>
+              <div
+                class="relative w-12 h-12 bg-gradient-to-br from-[#25509d] to-[#99cfbd] rounded-2xl flex items-center justify-center shadow-lg"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-2xl md:text-3xl font-black text-gray-900">Un jour spécial</h3>
+              <p class="text-sm text-gray-600 font-medium">Événements à venir</p>
+            </div>
+          </div>
+
+          <!-- Calendrier Moderne -->
+          <div
+            class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-500"
+          >
+            <!-- Header Calendrier -->
+            <div class="flex items-center justify-between mb-6">
+              <button
+                (click)="prevMonth()"
+                class="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 hover:bg-gradient-to-br hover:from-[#25509d] hover:to-[#99cfbd] hover:text-white text-gray-700 transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-lg"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+
+              <div class="text-center">
+                <div class="text-2xl font-black text-gray-900 capitalize">{{ monthName }}</div>
+                <div class="text-sm text-gray-500 font-semibold">{{ year }}</div>
+              </div>
+
+              <button
+                (click)="nextMonth()"
+                class="w-11 h-11 flex items-center justify-center rounded-xl bg-gray-50 hover:bg-gradient-to-br hover:from-[#25509d] hover:to-[#99cfbd] hover:text-white text-gray-700 transition-all duration-300 hover:scale-110 shadow-sm hover:shadow-lg"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Jours de la semaine -->
+            <div
+              class="bg-gradient-to-r from-gray-50 to-white rounded-2xl px-4 py-3 mb-4 shadow-sm"
+            >
+              <div
+                class="grid grid-cols-7 gap-1 text-center text-xs font-black uppercase tracking-wider"
+              >
+                <div
+                  *ngFor="let day of weekDays; let i = index"
+                  [class.text-[#e84141]]="i === 0"
+                  [class.text-gray-600]="i !== 0"
+                >
+                  {{ day }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Grille des jours -->
+            <div class="grid grid-cols-7 gap-2">
+              <div
+                *ngFor="let day of calendarCells; let idx = index; trackBy: trackByIndex"
+                class="flex items-center justify-center aspect-square"
+              >
+                <button
+                  *ngIf="day !== null"
+                  (click)="selectDay(day)"
+                  class="w-full h-full flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#99cfbd] focus:ring-offset-2 relative overflow-hidden group"
+                  [ngClass]="{
+                    'bg-gradient-to-br from-[#6b140f] to-[#e84141] text-white shadow-lg scale-110 font-black':
+                      isToday(day),
+                    'bg-gradient-to-br from-[#25509d] to-[#99cfbd] text-white shadow-md':
+                      selectedDay === day && !isToday(day),
+                    'text-[#e84141] hover:bg-red-50':
+                      isSunday(idx) && !isToday(day) && selectedDay !== day,
+                    'text-gray-700 hover:bg-gradient-to-br hover:from-[#25509d]/10 hover:to-[#99cfbd]/10 hover:scale-110':
+                      !isSunday(idx) && !isToday(day) && selectedDay !== day
+                  }"
+                >
+                  <span class="relative z-10">{{ day }}</span>
+                  <div
+                    *ngIf="isToday(day)"
+                    class="absolute inset-0 animate-pulse bg-white/20"
+                  ></div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte Anniversaire Moderne -->
+          <div class="relative group">
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-[#e84141]/20 to-[#99cfbd]/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"
+            ></div>
+            <div
+              class="relative bg-gradient-to-br from-white to-gray-50 border-2 border-gray-100 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="relative">
+                    <div
+                      class="w-16 h-16 rounded-2xl overflow-hidden border-4 border-white shadow-lg"
+                    >
+                      <img
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop"
+                        alt="Ousmane DIA"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div
+                      class="absolute -bottom-1 -right-1 w-7 h-7 bg-gradient-to-r from-[#e84141] to-[#6b140f] rounded-full flex items-center justify-center shadow-lg border-2 border-white"
+                    >
+                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 font-semibold mb-1">
+                      🎉 Anniversaire aujourd'hui
+                    </p>
+                    <p class="text-base font-black text-gray-900">Ousmane DIA</p>
+                    <p class="text-xs text-gray-600 font-medium">Développeur Senior</p>
+                  </div>
+                </div>
+                <button
+                  class="px-5 py-2.5 bg-gradient-to-r from-[#e84141] to-[#6b140f] hover:from-[#6b140f] hover:to-[#e84141] text-white text-sm font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  Souhaiter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- === COLONNE DROITE : Actualités (65%) === -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- En-tête Section -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-[#25509d] to-[#99cfbd] rounded-2xl blur-xl opacity-50"
+                ></div>
+                <div
+                  class="relative w-12 h-12 bg-gradient-to-br from-[#25509d] to-[#99cfbd] rounded-2xl flex items-center justify-center shadow-lg"
+                >
+                  <svg
+                    class="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2.5"
+                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-2xl md:text-3xl font-black text-gray-900">Actualités</h3>
+                <p class="text-sm text-gray-600 font-medium">Restez informés</p>
+              </div>
+            </div>
+            <button
+              class="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gradient-to-r hover:from-[#25509d] hover:to-[#99cfbd] hover:text-white text-gray-700 font-bold rounded-full transition-all duration-300 shadow-sm hover:shadow-lg"
+            >
+              Voir tout
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Actualités - Layout Horizontal Responsive -->
+          <div class="space-y-4">
+            <!-- Card Principale -->
+            <article
+              class="group relative bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-500 cursor-pointer"
+            >
+              <div class="grid md:grid-cols-2 gap-0">
+                <!-- Image -->
+                <div class="relative h-64 md:h-auto overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
+                    alt="Formation"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+                  ></div>
+                  <div class="absolute top-4 left-4">
+                    <span
+                      class="px-4 py-1.5 bg-[#25509d] text-white text-xs font-bold rounded-full shadow-lg"
+                      >Formation</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Contenu -->
+                <div class="p-6 md:p-8 flex flex-col justify-center">
+                  <div class="flex items-center gap-3 text-sm text-gray-500 mb-4">
+                    <span class="flex items-center gap-1.5 font-semibold">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      Il y a 2 heures
+                    </span>
+                    <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                    <span class="font-semibold">5 min</span>
+                  </div>
+                  <h4
+                    class="text-2xl md:text-3xl font-black text-gray-900 mb-3 line-clamp-2 group-hover:text-[#25509d] transition-colors"
+                  >
+                    Lancement du nouveau programme de formation
+                  </h4>
+                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3">
+                    Découvrez les nouvelles opportunités de développement professionnel disponibles
+                    pour tous les collaborateurs.
+                  </p>
+                  <div
+                    class="flex items-center gap-2 text-[#25509d] font-bold group-hover:gap-4 transition-all"
+                  >
+                    Lire la suite
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Cards Secondaires -->
+            <div class="grid sm:grid-cols-2 gap-4">
+              <!-- Card 2 -->
+              <article
+                class="group bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-500 cursor-pointer"
+              >
+                <div class="relative h-48 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+                    alt="Business"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute top-3 left-3">
+                    <span
+                      class="px-3 py-1 bg-[#99cfbd] text-white text-xs font-bold rounded-full shadow-lg"
+                      >Business</span
+                    >
+                  </div>
+                  <div class="absolute bottom-3 left-3 right-3">
+                    <h4 class="text-lg font-black text-white mb-2 line-clamp-2">
+                      Résultats trimestriels exceptionnels
+                    </h4>
+                    <div class="flex items-center gap-2 text-xs text-white/80 font-semibold">
+                      <span>Hier</span>
+                      <span class="w-1 h-1 bg-white/60 rounded-full"></span>
+                      <span>3 min</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 3 -->
+              <article
+                class="group bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-500 cursor-pointer"
+              >
+                <div class="relative h-48 overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+                    alt="Actualité"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div class="absolute top-3 left-3">
+                    <span
+                      class="px-3 py-1 bg-[#e84141] text-white text-xs font-bold rounded-full shadow-lg"
+                      >Actualité</span
+                    >
+                  </div>
+                  <div class="absolute bottom-3 left-3 right-3">
+                    <h4 class="text-lg font-black text-white mb-2 line-clamp-2">
+                      Nouveau partenariat stratégique annoncé
+                    </h4>
+                    <div class="flex items-center gap-2 text-xs text-white/80 font-semibold">
+                      <span>Il y a 3 jours</span>
+                      <span class="w-1 h-1 bg-white/60 rounded-full"></span>
+                      <span>4 min</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- === SECTION RESSOURCES === -->
+<section class="relative w-full bg-gradient-to-b from-white to-gray-50 py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-3 gap-8 items-center">
+      <!-- Image Ressources -->
+      <div class="lg:col-span-1">
+        <div class="relative group">
+          <div
+            class="absolute -inset-4 bg-gradient-to-r from-[#25509d]/20 via-[#99cfbd]/20 to-[#e84141]/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500"
+          ></div>
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80"
+              alt="Ressources"
+              class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-[#20264e]/80 via-transparent to-transparent"
+            ></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <h3 class="text-2xl font-black text-white mb-2">Vos Ressources</h3>
+              <p class="text-white/80 text-sm font-medium">Accédez à tous vos outils</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cartes Ressources -->
+      <div class="lg:col-span-2 grid sm:grid-cols-2 gap-6">
+        <!-- Top Ressources -->
+        <div
+          class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 hover:shadow-2xl transition-all duration-500 group"
+        >
+          <div class="flex flex-col h-full">
+            <div class="text-center mb-6">
+              <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#25509d]/10 to-[#99cfbd]/10 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300"
+              >
+                <svg
+                  class="w-8 h-8 text-[#25509d]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-black text-gray-900 mb-2">Top Ressources</h3>
+              <div
+                class="w-16 h-1 bg-gradient-to-r from-[#25509d] to-[#99cfbd] mx-auto rounded-full"
+              ></div>
+            </div>
+
+            <div class="space-y-3 flex-1">
+              <a
+                href="#"
+                class="flex items-center justify-between p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#25509d]/5 hover:to-[#99cfbd]/5 transition-all group/item"
+              >
+                <span class="text-gray-700 font-bold group-hover/item:text-[#25509d]"
+                  >Omni 365</span
+                >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-hover/item:text-[#25509d] group-hover/item:translate-x-1 transition-all"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                class="flex items-center justify-between p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#25509d]/5 hover:to-[#99cfbd]/5 transition-all group/item"
+              >
+                <span class="text-gray-700 font-bold group-hover/item:text-[#25509d]"
+                  >Vision Accel</span
+                >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-hover/item:text-[#25509d] group-hover/item:translate-x-1 transition-all"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                class="flex items-center justify-between p-4 rounded-xl hover:bg-gradient-to-r hover:from-[#25509d]/5 hover:to-[#99cfbd]/5 transition-all group/item"
+              >
+                <span class="text-gray-700 font-bold group-hover/item:text-[#25509d]"
+                  >Kaarangué</span
+                >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-hover/item:text-[#25509d] group-hover/item:translate-x-1 transition-all"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
+
+            <button
+              class="mt-6 w-full py-3.5 bg-gradient-to-r from-[#25509d] to-[#99cfbd] hover:from-[#99cfbd] hover:to-[#25509d] text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Voir plus
+            </button>
+          </div>
+        </div>
+
+        <!-- Ressources Récentes -->
+        <div
+          class="bg-gradient-to-br from-[#20264e] to-[#25509d] rounded-3xl shadow-xl p-8 text-white hover:shadow-2xl transition-all duration-500"
+        >
+          <div class="flex flex-col h-full">
+            <div class="text-center mb-6">
+              <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl mb-4"
+              >
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-black mb-2">Ressources Récentes</h3>
+              <div class="w-16 h-1 bg-white/30 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="space-y-3 flex-1">
+              <div
+                class="flex items-start gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all"
+              >
+                <div
+                  class="w-2 h-2 bg-[#99cfbd] rounded-full mt-2 flex-shrink-0 animate-pulse"
+                ></div>
+                <div>
+                  <p class="font-bold mb-1">Guide d'onboarding 2025</p>
+                  <p class="text-sm text-white/70">Ajouté aujourd'hui</p>
+                </div>
+              </div>
+              <div
+                class="flex items-start gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all"
+              >
+                <div class="w-2 h-2 bg-[#99cfbd] rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-bold mb-1">Politiques RH mises à jour</p>
+                  <p class="text-sm text-white/70">Il y a 2 jours</p>
+                </div>
+              </div>
+              <div
+                class="flex items-start gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all"
+              >
+                <div class="w-2 h-2 bg-[#99cfbd] rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p class="font-bold mb-1">Manuel IT & Sécurité</p>
+                  <p class="text-sm text-white/70">Il y a 1 semaine</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="mt-6 w-full py-3.5 bg-white/10 hover:bg-white hover:text-[#25509d] backdrop-blur-sm border-2 border-white/20 font-bold rounded-xl transition-all duration-300"
+            >
+              Tout voir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

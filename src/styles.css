@@ -1,1 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+
+/* styles.css ou global styles */
+
+/* Améliorer le scroll smooth */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Assurer que le body prend toute la hauteur */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Éviter le débordement horizontal */
+body,
+html {
+  overflow-x: hidden;
+}
+
+/* Améliorer l'animation du chatbot */
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Support pour les petits écrans */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Améliorer la lisibilité du texte sur les images */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Effet hover sur les cartes d'icônes */
+.icon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Assurer que les images ne dépassent pas */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Améliorer l'accessibilité du focus */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Limiter le nombre de lignes de texte */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
