@@ -3,12 +3,12 @@ export class AppConfig {
   static readonly defaultAvatar = 'assets/img/nasr_new.jpg';
 
   static readonly icons = [
-    'assets/icons/menu.png',
-    'assets/icons/ressources.png',
-    'assets/icons/rh.png',
-    'assets/icons/commercial.png',
-    'assets/icons/moyens.png',
-    'assets/icons/formation.png',
+    'assets/gif/burger.gif',
+    'assets/gif/ressources.gif',
+    'assets/gif/rh.gif',
+    'assets/gif/commercial.gif',
+    'assets/gif/mg.gif',
+    'assets/gif/formation.gif',
   ];
 
   static readonly iconTitles = [
@@ -20,7 +20,6 @@ export class AppConfig {
     'Formation',
   ];
 
-  // 🆕 Routes associées à chaque icône
   static readonly iconRoutes = [
     '/restauration',
     '/ressources',
@@ -28,6 +27,36 @@ export class AppConfig {
     '/commercial',
     '/moyens',
     '/formation',
+  ];
+
+  // 🆕 Chemins des animations Lottie pour chaque menu
+  static readonly lottieAnimations = [
+    '/assets/lottie/Onlinefoodorder.json', // Menu
+    '/assets/lottie/Burger.json', // Ressources
+    '/assets/lottie/rh.json', // R.H.
+    '/assets/lottie/commercial.json', // Commercial
+    '/assets/lottie/LoadingWebKomship.json', // Moyens Généraux
+    '/assets/lottie/formation.json', // Formation
+  ];
+
+  // 🆕 Titres personnalisés pour chaque animation
+  static readonly animationTitles = [
+    'Chargement du Menu',
+    'Chargement des Ressources',
+    'Chargement RH',
+    'Chargement Commercial',
+    'Chargement Moyens Généraux',
+    'Chargement Formation',
+  ];
+
+  // 🆕 Couleurs de thème pour chaque animation
+  static readonly animationThemes = [
+    { primary: '#25509D', secondary: '#99CFBD' }, // Menu
+    { primary: '#4ade80', secondary: '#10b981' }, // Ressources (vert)
+    { primary: '#f59e0b', secondary: '#fbbf24' }, // R.H. (orange)
+    { primary: '#ef4444', secondary: '#f87171' }, // Commercial (rouge)
+    { primary: '#8b5cf6', secondary: '#a78bfa' }, // Moyens (violet)
+    { primary: '#06b6d4', secondary: '#22d3ee' }, // Formation (cyan)
   ];
 
   static readonly colors = {

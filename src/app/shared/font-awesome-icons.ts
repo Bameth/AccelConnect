@@ -1,2 +1,36 @@
 import { IconDefinition } from '@fortawesome/angular-fontawesome';
-export const fontAwesomeIcons: IconDefinition[] = [];
+import {
+  faWallet,
+  faChartBar,
+  faCreditCard,
+  faClock,
+  faShoppingCart,
+  faFire,
+  faUtensils,
+  faBowlRice,
+  faDrumstickBite,
+  faBowlFood,
+  faFish,
+  faStar,
+  faCartPlus,
+  faFireFlameCurved,
+  faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
+export const fontAwesomeIcons: IconDefinition[] = [
+  faWallet,
+  faChartBar,
+  faCreditCard,
+  faShoppingCart,
+  faFire,
+  faUtensils,
+  faBowlRice,
+  faDrumstickBite,
+  faBowlFood,
+  faFish,
+  faStar,
+  faClock,
+  faCartPlus,
+  faFireFlameCurved,
+  faArrowRight,
+  faClock, // Regular icon
+];

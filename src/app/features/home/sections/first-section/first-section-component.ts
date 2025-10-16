@@ -1,12 +1,13 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AppConfig } from '../../../../core/config/app.config';
+import { MenuTransitionComponent } from '../../../../shared/components/menu-transition/menu-transition-component';
 
 @Component({
   selector: 'app-first-section-component',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MenuTransitionComponent],
   templateUrl: './first-section-component.html',
   styleUrl: './first-section-component.css',
 })
@@ -15,6 +16,14 @@ export class FirstSectionComponent implements AfterViewInit {
   icons = AppConfig.icons;
   iconTitles = AppConfig.iconTitles;
   iconRoutes = AppConfig.iconRoutes;
+
+  lottieAnimations = AppConfig.lottieAnimations;
+  animationTitles = AppConfig.animationTitles;
+  animationThemes = AppConfig.animationThemes;
+
+  showTransition = false;
+  pendingRoute: string | null = null;
+  currentAnimationIndex: number = 0;
 
   @ViewChild('heroVideo') heroVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('videoContainer') videoContainer!: ElementRef<HTMLDivElement>;
@@ -26,7 +35,8 @@ export class FirstSectionComponent implements AfterViewInit {
   progress = 0;
   currentTimeDisplay = '0:00';
   durationDisplay = '0:00';
-  
+
+  constructor(private readonly router: Router) {}
 
   ngAfterViewInit(): void {
     if (typeof window === 'undefined') return;
@@ -39,6 +49,42 @@ export class FirstSectionComponent implements AfterViewInit {
       .play()
       .then(() => (this.isPlaying = true))
       .catch((err) => console.warn('Autoplay bloqué:', err));
+  }
+
+  // 🆕 Méthode pour gérer le clic sur une icône avec animation
+  onIconClick(event: Event, index: number): void {
+    event.preventDefault();
+
+    // Sauvegarder l'index et la route
+    this.currentAnimationIndex = index;
+    this.pendingRoute = this.iconRoutes[index];
+
+    // Afficher l'animation
+    this.showTransition = true;
+  }
+
+  // 🆕 Méthode appelée quand l'animation est terminée
+  onTransitionComplete(): void {
+    this.showTransition = false;
+    if (this.pendingRoute) {
+      this.router.navigate([this.pendingRoute]);
+      this.pendingRoute = null;
+    }
+  }
+
+  // 🆕 Obtenir l'animation actuelle
+  getCurrentAnimation(): string {
+    return this.lottieAnimations[this.currentAnimationIndex] || this.lottieAnimations[0];
+  }
+
+  // 🆕 Obtenir le titre de l'animation actuelle
+  getCurrentAnimationTitle(): string {
+    return this.animationTitles[this.currentAnimationIndex] || this.animationTitles[0];
+  }
+
+  // 🆕 Obtenir le thème de l'animation actuelle
+  getCurrentAnimationTheme(): { primary: string; secondary: string } {
+    return this.animationThemes[this.currentAnimationIndex] || this.animationThemes[0];
   }
 
   togglePlayPause(event: Event): void {

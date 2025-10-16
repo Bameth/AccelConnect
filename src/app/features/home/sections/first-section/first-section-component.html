@@ -386,49 +386,46 @@
       <a
         class="group cursor-pointer"
         [title]="iconTitles[$index]"
-        [routerLink]="iconRoutes[$index]"
+        (click)="onIconClick($event, $index)"
       >
-        <!-- Carte -->
         <div class="relative">
+          <!-- Carte principale -->
           <div
-            class="absolute -inset-4 bg-gradient-to-br from-[#25509d]/0 via-[#99cfbd]/0 to-[#25509d]/0 group-hover:from-[#25509d]/20 group-hover:via-[#99cfbd]/20 group-hover:to-[#25509d]/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700"
-          ></div>
-
-          <div
-            class="relative bg-white rounded-2xl p-6 shadow-lg border border-gray-100 group-hover:shadow-2xl group-hover:border-[#99cfbd]/30 group-hover:-translate-y-2 transition-all duration-500"
+            class="relative bg-white rounded-2xl p-6 shadow-md border border-gray-100 group-hover:shadow-lg group-hover:-translate-y-1 transition-all duration-300"
           >
-            <div class="relative aspect-square mb-4">
-              <div
-                class="absolute inset-0 bg-gradient-to-br from-[#25509d]/5 to-[#99cfbd]/5 rounded-xl group-hover:from-[#25509d]/10 group-hover:to-[#99cfbd]/10 transition-all duration-500"
-              ></div>
+            <!-- Conteneur de l'icône -->
+            <div class="relative aspect-square mb-4 flex items-center justify-center">
               <img
                 [src]="icons[$index]"
                 [alt]="iconTitles[$index]"
-                class="relative w-full h-full object-contain p-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500"
+                class="relative w-3/4 h-3/4 object-contain group-hover:scale-110 transition-transform duration-500"
               />
             </div>
 
+            <!-- Badge rouge (optionnel, si tu veux garder ton effet de notification) -->
             @if ($index === 2 || $index === 4) {
             <div class="absolute -top-2 -right-2 flex h-6 w-6">
               <span
                 class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e84141] opacity-75"
               ></span>
               <span
-                class="relative inline-flex items-center justify-center h-6 w-6 rounded-full bg-gradient-to-br from-[#e84141] to-[#ff6b6b] text-white text-xs font-bold shadow-lg border-2 border-white"
+                class="relative inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#e84141] text-white text-xs font-bold shadow-md border-2 border-white"
               >
                 {{ $index === 2 ? '5' : '2' }}
               </span>
             </div>
             }
 
+            <!-- Titre de l'icône -->
             <h3
-              class="text-center text-sm font-bold text-gray-700 group-hover:text-[#25509d] transition-colors duration-300 line-clamp-2 min-h-[2.5rem] flex items-center justify-center"
+              class="text-center text-sm font-semibold text-gray-700 group-hover:text-gray-900 transition-colors duration-300 line-clamp-2 min-h-[2.5rem] flex items-center justify-center"
             >
               {{ iconTitles[$index] }}
             </h3>
 
+            <!-- Barre colorée (facultative, tu peux supprimer si tu veux du full blanc) -->
             <div
-              class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-[#25509d] to-[#99cfbd] group-hover:w-3/4 transition-all duration-500 rounded-full"
+              class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gray-200 group-hover:w-3/4 transition-all duration-300 rounded-full"
             ></div>
           </div>
         </div>
@@ -437,6 +434,16 @@
     </div>
   </div>
 </section>
+
+<!-- 🎬 Animation de transition dynamique pour tous les menus -->
+@if (showTransition) {
+<app-menu-transition
+  [animationPath]="getCurrentAnimation()"
+  [theme]="getCurrentAnimationTheme()"
+  [duration]="2500"
+  (animationComplete)="onTransitionComplete()"
+/>
+}
 
 <!-- Bouton Chat flottant moderne (style Intercom) -->
 <button
@@ -447,7 +454,7 @@
 >
   <div class="relative">
     <!-- Badge notification -->
-    <span class="absolute -top-1 -right-1 flex h-6 w-6 z-10">
+    <!-- <span class="absolute -top-1 -right-1 flex h-6 w-6 z-10">
       <span
         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e84141] opacity-75"
       ></span>
@@ -456,7 +463,7 @@
       >
         3
       </span>
-    </span>
+    </span> -->
 
     <!-- Bouton principal -->
     <div
@@ -464,16 +471,16 @@
     >
       <!-- Image avatar -->
       <img
-        src="assets/icons/alex.png"
+        src="assets/gif/chat-bot.gif"
         alt="Assistant Alex"
         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
       />
 
       <!-- Overlay gradient -->
-      <div class="absolute inset-0 bg-gradient-to-t from-[#25509d]/60 to-transparent"></div>
+      <!-- <div class="absolute inset-0 bg-gradient-to-t from-[#25509d]/60 to-transparent"></div> -->
 
       <!-- Icône chat -->
-      <div
+      <!-- <div
         class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       >
         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -484,14 +491,14 @@
             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
           />
         </svg>
-      </div>
+      </div> -->
     </div>
 
     <!-- Rings animés -->
-    <div class="absolute inset-0 rounded-2xl">
+    <!-- <div class="absolute inset-0 rounded-2xl">
       <span class="absolute inset-0 rounded-2xl bg-[#25509d]/30 animate-ping"></span>
       <span class="absolute inset-0 rounded-2xl bg-[#99cfbd]/20 animate-pulse"></span>
-    </div>
+    </div> -->
   </div>
 
   <!-- Tooltip moderne -->
