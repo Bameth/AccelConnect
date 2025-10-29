@@ -1,0 +1,494 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+  <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <button
+          class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+          Affecter des plats aux restaurants
+        </h1>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 ml-14">
+        Sélectionnez un restaurant et choisissez les plats disponibles pour aujourd'hui
+      </p>
+    </div>
+
+    <!-- Sélection du restaurant -->
+    <div class="mb-6">
+      <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-4">
+        Restaurant *
+      </label>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- JOLOF -->
+        <button
+          type="button"
+          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-orange-500 rounded-2xl hover:shadow-lg transition-all"
+        >
+          <div class="absolute top-4 right-4">
+            <div
+              class="w-6 h-6 rounded-full border-2 border-orange-500 bg-orange-500 flex items-center justify-center"
+            >
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div
+              class="w-16 h-16 bg-orange-50 dark:bg-orange-500/10 rounded-2xl flex items-center justify-center"
+            >
+              <svg
+                class="w-8 h-8 text-orange-600 dark:text-orange-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+            </div>
+            <div class="text-left">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">JOLOF</h3>
+              <p class="text-sm text-orange-600 dark:text-orange-400 font-medium">
+                12 plats disponibles
+              </p>
+            </div>
+          </div>
+        </button>
+
+        <!-- RODRA -->
+        <button
+          type="button"
+          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl hover:border-green-500 hover:shadow-lg transition-all"
+        >
+          <div class="absolute top-4 right-4">
+            <div
+              class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 group-hover:border-green-500 transition-colors"
+            ></div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div
+              class="w-16 h-16 bg-green-50 dark:bg-green-500/10 rounded-2xl flex items-center justify-center"
+            >
+              <svg
+                class="w-8 h-8 text-green-600 dark:text-green-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+            </div>
+            <div class="text-left">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">RODRA</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                8 plats disponibles
+              </p>
+            </div>
+          </div>
+        </button>
+
+        <!-- CHEZ EVA -->
+        <button
+          type="button"
+          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl hover:border-purple-500 hover:shadow-lg transition-all"
+        >
+          <div class="absolute top-4 right-4">
+            <div
+              class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 group-hover:border-purple-500 transition-colors"
+            ></div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div
+              class="w-16 h-16 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center"
+            >
+              <svg
+                class="w-8 h-8 text-purple-600 dark:text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+            </div>
+            <div class="text-left">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">CHEZ EVA</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                10 plats disponibles
+              </p>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de recherche et filtres -->
+    <div
+      class="mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4"
+    >
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1 relative">
+          <svg
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            type="text"
+            placeholder="Rechercher un plat..."
+            class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+          />
+        </div>
+        <select
+          class="px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 transition-all"
+        >
+          <option value="">Toutes catégories</option>
+          <option value="plat">Plats principaux</option>
+          <option value="boisson">Boissons</option>
+          <option value="dessert">Desserts</option>
+          <option value="accompagnement">Accompagnements</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Liste des plats disponibles -->
+    <div
+      class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6"
+    >
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Plats disponibles</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Sélectionnez les plats à ajouter à JOLOF
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span
+            class="px-3 py-1.5 bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 text-sm font-semibold rounded-lg"
+          >
+            8 sélectionnés
+          </span>
+        </div>
+      </div>
+
+      <!-- Grid des plats -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+        <!-- Plat 1 - Sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Thiébou Dieune"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Thiébou Dieune</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Sénégalais</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">4 000 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 3 - Non sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
+            ></div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Mafé"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+              Mafé
+              <span class="text-base">🥗</span>
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Africain</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-gray-900 dark:text-white">3 200 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 4 - Non sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
+            ></div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Jus de Bissap"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Jus de Bissap</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Boisson • Traditionnel</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-gray-900 dark:text-white">1 000 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 5 - Sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Attiéké Poisson"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Attiéké Poisson</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Ivoirien</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">4 500 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 6 - Non disponible -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden opacity-60 cursor-not-allowed"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-gray-300 dark:bg-gray-600 border-2 border-gray-400 dark:border-gray-500 rounded-full"
+            ></div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Thiébou Yapp"
+              class="w-full h-full object-cover grayscale"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Thiébou Yapp</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Sénégalais</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-gray-900 dark:text-white">3 800 FCFA</span>
+              <span
+                class="px-2 py-1 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-xs font-semibold rounded-full"
+              >
+                Indisponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 7 - Sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
+            >
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Café Touba"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Café Touba</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Boisson • Traditionnel</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">500 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plat 8 - Non sélectionné -->
+        <div
+          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
+        >
+          <div class="absolute top-3 right-3 z-10">
+            <div
+              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
+            ></div>
+          </div>
+          <div class="aspect-square overflow-hidden">
+            <img
+              src="/api/placeholder/300/300"
+              alt="Salade Fraîche"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+              Salade Fraîche
+              <span class="text-base">🥗</span>
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Accompagnement • Frais</p>
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-gray-900 dark:text-white">1 500 FCFA</span>
+              <span
+                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+              >
+                Disponible
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions en bas -->
+      <div
+        class="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            class="text-sm font-medium text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+          >
+            Tout sélectionner
+          </button>
+          <span class="text-gray-300 dark:text-gray-600">|</span>
+          <button
+            type="button"
+            class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          >
+            Tout désélectionner
+          </button>
+        </div>
+        <div class="flex gap-3">
+          <button
+            type="button"
+            class="px-6 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 transition-colors"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-700 rounded-xl hover:from-orange-700 hover:to-orange-800 transition-all shadow-lg shadow-orange-500/30"
+          >
+            Affecter à JOLOF (8 plats)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

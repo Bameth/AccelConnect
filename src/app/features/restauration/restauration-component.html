@@ -1,665 +1,390 @@
-<!-- SECTION À TABLE - Design Ultra Premium Optimisé -->
+<!-- SECTION À TABLE - Design Ultra Premium Moderne (Full Responsive) -->
 <section
-  class="relative min-h-screen bg-white py-8 md:py-12 lg:py-16 overflow-hidden"
+  class="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-4 sm:py-6 md:py-8 lg:py-12 overflow-hidden"
+  style="
+    font-family: 'UberMove', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+      sans-serif;
+  "
 >
-  <!-- Decorative Background Elements -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+  <!-- Animated Background Blobs -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div
-      class="absolute top-10 -right-10 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-br from-[#E84141]/8 to-[#99CFBD]/8 rounded-full blur-3xl animate-pulse"
+      class="absolute top-0 -right-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-br from-red-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"
       style="animation-duration: 4s"
     ></div>
     <div
-      class="absolute bottom-20 -left-10 w-64 h-64 md:w-80 md:h-80 bg-gradient-to-tr from-[#25509D]/8 to-[#99CFBD]/8 rounded-full blur-3xl animate-pulse"
+      class="absolute bottom-0 -left-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-tr from-blue-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse"
       style="animation-duration: 5s; animation-delay: 1s"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 w-48 sm:w-60 md:w-72 h-48 sm:h-60 md:h-72 bg-gradient-to-br from-purple-400/5 to-pink-400/5 rounded-full blur-3xl animate-pulse"
+      style="animation-duration: 6s; animation-delay: 2s"
     ></div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
     <!-- Hero Header Premium -->
-    <div class="mb-8 md:mb-12">
-      <div class="grid lg:grid-cols-2 gap-6 md:gap-10 items-center">
-        <!-- Left Content -->
-        <div class="space-y-6">
-          <!-- Badge Status -->
-          <div
-            class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-[#E84141]/20 shadow-md hover:shadow-lg transition-all duration-300 group"
-          >
-            <span class="relative flex h-2 w-2">
+    <div class="mb-6 sm:mb-8 md:mb-10 lg:mb-12">
+      <!-- Status Badge & Top Bar -->
+      <div class="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 flex-wrap gap-3 sm:gap-4">
+        <div
+          class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300 group"
+        >
+          <div class="relative flex items-center gap-1.5 sm:gap-2">
+            <!-- <span class="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
               <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E84141] opacity-75"
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"
               ></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-[#E84141]"></span>
-            </span>
-            <span class="text-[#E84141] font-bold text-xs uppercase tracking-wide"
-              >Menu du Jour • Ousmane Dia</span
-            >
+              <span
+                class="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-500 shadow-lg shadow-red-500/50"
+              ></span>
+            </span> -->
             <fa-icon
-              [icon]="['fas', 'arrow-right']"
-              class="text-[#E84141] text-xs group-hover:translate-x-1 transition-transform"
+              [icon]="['fas', 'bell']"
+              class="text-red-500 text-xs sm:text-sm"
+              style="animation-duration: 2s"
             ></fa-icon>
           </div>
-
-          <!-- Titre Principal -->
-          <div class="space-y-3">
-            <h1
-              class="text-4xl sm:text-5xl lg:text-6xl font-black text-[#20264E] leading-tight tracking-tight"
-              style="font-family: 'Playfair Display', serif"
+          <div class="flex items-center flex-wrap gap-1 sm:gap-2">
+            <span class="text-red-600 font-black text-xs sm:text-sm uppercase tracking-wider"
+              >Menu du Jour</span
             >
-              <span class="block">À Table</span>
-              <span
-                class="block mt-1 bg-gradient-to-r from-[#E84141] to-[#6B140F] bg-clip-text text-transparent"
+          </div>
+          <fa-icon
+            [icon]="['fas', 'arrow-right']"
+            class="text-red-500 text-xs sm:text-sm group-hover:translate-x-1 transition-transform hidden sm:block"
+          ></fa-icon>
+        </div>
+      </div>
+
+      <!-- Hero Title & Animation -->
+      <div
+        class="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center mb-6 sm:mb-8 md:mb-10 lg:mb-12"
+      >
+        <!-- Left Content -->
+        <div class="space-y-4 sm:space-y-5 md:space-y-6">
+          <div>
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-none mb-2 sm:mb-3 md:mb-4"
+              style="font-family: 'Georgia, serif'"
+            >
+              À Table
+            </h1>
+            <div class="relative inline-block">
+              <h2
+                class="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-clip-text text-transparent animate-pulse"
               >
                 Vos délices quotidiens
-              </span>
-            </h1>
-            <p class="text-base md:text-lg text-gray-600 leading-relaxed max-w-xl">
-              Découvrez nos menus préparés avec passion par nos restaurants partenaires
-              <fa-icon [icon]="['fas', 'utensils']" class="text-[#99CFBD] ml-2"></fa-icon>
-            </p>
+              </h2>
+              <div
+                class="absolute -bottom-1 sm:-bottom-2 left-0 right-0 h-0.5 sm:h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"
+              ></div>
+            </div>
           </div>
 
           <!-- Stats Cards Premium -->
-          <div class="grid grid-cols-3 gap-3">
-            <!-- Solde -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            @for (stat of stats; track stat.id) {
             <div class="group relative">
               <div
-                class="relative bg-white/90 backdrop-blur-sm border border-gray-100 rounded-xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                class="absolute inset-0 rounded-xl sm:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+                [style.background]="
+                  'linear-gradient(to bottom right, ' +
+                  stat.gradientFrom +
+                  ', ' +
+                  stat.gradientTo +
+                  ')'
+                "
+              ></div>
+              <div
+                class="relative bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-3 md:p-4 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
               >
-                <div class="flex flex-col gap-2">
-                  <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#25509D] to-[#20264E] rounded-lg flex items-center justify-center shadow-md"
-                  >
-                    <fa-icon
-                      [icon]="['fas', 'wallet']"
-                      class="text-white text-sm sm:text-base"
-                    ></fa-icon>
-                  </div>
-                  <div>
-                    <div
-                      class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold"
-                    >
-                      Solde
-                    </div>
-                    <div class="text-lg sm:text-xl font-black text-[#20264E]">
-                      10K<span class="text-xs ml-0.5">F</span>
-                    </div>
-                  </div>
+                <div
+                  class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3 shadow-lg"
+                  [style.background]="
+                    'linear-gradient(to bottom right, ' +
+                    stat.gradientFrom +
+                    ', ' +
+                    stat.gradientTo +
+                    ')'
+                  "
+                >
+                  <fa-icon
+                    [icon]="['fas', stat.icon]"
+                    class="text-white text-sm sm:text-base md:text-xl"
+                  ></fa-icon>
                 </div>
                 <div
-                  class="h-0.5 bg-gradient-to-r from-[#25509D] to-[#99CFBD] rounded-full mt-2"
+                  class="text-[10px] sm:text-xs text-gray-500 uppercase font-bold mb-0.5 sm:mb-1"
+                >
+                  {{ stat.label }}
+                </div>
+                <div class="text-lg sm:text-xl md:text-2xl font-black text-gray-900">
+                  {{ stat.value }}<span class="text-xs sm:text-sm ml-0.5 text-gray-600">F</span>
+                </div>
+                <div
+                  class="h-0.5 sm:h-1 rounded-full mt-1.5 sm:mt-2"
+                  [style.background]="
+                    'linear-gradient(to right, ' + stat.gradientFrom + ', ' + stat.gradientTo + ')'
+                  "
                 ></div>
               </div>
             </div>
-
-            <!-- Consommé -->
-            <div class="group relative">
-              <div
-                class="relative bg-white/90 backdrop-blur-sm border border-gray-100 rounded-xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <div class="flex flex-col gap-2">
-                  <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#99CFBD] to-[#7ab8a8] rounded-lg flex items-center justify-center shadow-md"
-                  >
-                    <fa-icon
-                      [icon]="['fas', 'chart-bar']"
-                      class="text-white text-sm sm:text-base"
-                    ></fa-icon>
-                  </div>
-                  <div>
-                    <div
-                      class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold"
-                    >
-                      Consommé
-                    </div>
-                    <div class="text-lg sm:text-xl font-black text-[#20264E]">
-                      15K<span class="text-xs ml-0.5">F</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="h-0.5 bg-gradient-to-r from-[#99CFBD] to-[#25509D] rounded-full mt-2"
-                ></div>
-              </div>
-            </div>
-
-            <!-- À payer -->
-            <div class="group relative">
-              <div
-                class="relative bg-white/90 backdrop-blur-sm border border-gray-100 rounded-xl p-3 sm:p-4 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <div class="flex flex-col gap-2">
-                  <div
-                    class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#E84141] to-[#6B140F] rounded-lg flex items-center justify-center shadow-md"
-                  >
-                    <fa-icon
-                      [icon]="['fas', 'credit-card']"
-                      class="text-white text-sm sm:text-base"
-                    ></fa-icon>
-                  </div>
-                  <div>
-                    <div
-                      class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide font-bold"
-                    >
-                      À payer
-                    </div>
-                    <div class="text-lg sm:text-xl font-black text-[#20264E]">
-                      25K<span class="text-xs ml-0.5">F</span>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="h-0.5 bg-gradient-to-r from-[#E84141] to-[#6B140F] rounded-full mt-2"
-                ></div>
-              </div>
-            </div>
+            }
           </div>
         </div>
 
-        <!-- Right: Hero Image with Lottie Chef -->
+        <!-- Right: Hero Animation -->
         <div class="hidden lg:flex items-center justify-center">
           <div class="relative w-full max-w-md">
-            <!-- Glow Effects - Match background design -->
             <div
-              class="absolute -top-6 -right-6 w-64 h-64 bg-gradient-to-br from-[#E84141]/8 to-[#99CFBD]/8 rounded-full blur-3xl animate-pulse"
-              style="animation-duration: 4s"
+              class="absolute inset-0 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full blur-3xl animate-pulse"
             ></div>
-            <div
-              class="absolute -bottom-6 -left-6 w-56 h-56 bg-gradient-to-tr from-[#25509D]/8 to-[#99CFBD]/8 rounded-full blur-3xl animate-pulse"
-              style="animation-duration: 5s; animation-delay: 1s"
-            ></div>
-
-            <!-- Chef Animation Container -->
-            <div class="relative z-10 flex items-center justify-center">
-              <ng-lottie
-                [options]="lottieOptions"
-                width="100%"
-                height="450px"
-                containerClass="flex items-center justify-center"
-                (animationCreated)="onAnimationCreated($event)"
-              ></ng-lottie>
+            <div class="relative">
+              <div
+                class="relative w-64 h-64 xl:w-80 xl:h-80 mx-auto rounded-full shadow-2xl overflow-hidden"
+              >
+                <!-- Background blanc pour Lottie -->
+                <div class="absolute inset-0 bg-white rounded-full"></div>
+                <!-- Chef Animation Container -->
+                <ng-lottie
+                  [options]="lottieOptions"
+                  width="100%"
+                  height="100%"
+                  containerClass="flex items-center justify-center relative z-10"
+                  (animationCreated)="onAnimationCreated($event)"
+                ></ng-lottie>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Navigation Jours + Panier -->
-      <div class="flex flex-wrap items-center gap-2 md:gap-3 pt-8 mt-8 border-t border-gray-200">
+      <div
+        class="flex flex-wrap items-center gap-2 sm:gap-3 pt-4 sm:pt-6 md:pt-8 border-t-2 border-gray-200"
+      >
+        @for (day of days; track day; let first = $first) {
         <button
-          class="px-4 py-2 text-sm rounded-xl bg-gradient-to-r from-[#E84141] to-[#6B140F] text-white font-bold uppercase tracking-wide shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-          (click)="selectDay('Lundi')"
+          [class]="
+            first
+              ? 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105 transition-all duration-300 hover:scale-110'
+              : 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-gray-700 font-bold text-xs sm:text-sm uppercase tracking-wider border-2 border-gray-200 hover:border-red-500 hover:text-red-500 hover:scale-105 transition-all duration-300'
+          "
+          (click)="selectDay(day)"
         >
-          <fa-icon [icon]="['fas', 'clock']" class="mr-1.5"></fa-icon>Lundi
+          @if (first) {
+          <fa-icon [icon]="['fas', 'clock']" class="mr-1 sm:mr-2 text-xs sm:text-sm"></fa-icon>
+          }
+          <span class="hidden xs:inline">{{ day }}</span>
+          <span class="xs:hidden">{{ day.substring(0, 3) }}</span>
         </button>
-        <button
-          class="px-4 py-2 text-sm rounded-xl bg-white text-gray-700 font-bold uppercase tracking-wide border border-gray-200 hover:border-[#E84141] hover:bg-[#E84141] hover:text-white hover:scale-105 transition-all duration-300"
-          (click)="selectDay('Mardi')"
-        >
-          Mardi
-        </button>
-        <button
-          class="px-4 py-2 text-sm rounded-xl bg-white text-gray-700 font-bold uppercase tracking-wide border border-gray-200 hover:border-[#E84141] hover:bg-[#E84141] hover:text-white hover:scale-105 transition-all duration-300"
-          (click)="selectDay('Mercredi')"
-        >
-          Mercredi
-        </button>
-        <button
-          class="px-4 py-2 text-sm rounded-xl bg-white text-gray-700 font-bold uppercase tracking-wide border border-gray-200 hover:border-[#E84141] hover:bg-[#E84141] hover:text-white hover:scale-105 transition-all duration-300"
-          (click)="selectDay('Jeudi')"
-        >
-          Jeudi
-        </button>
-        <button
-          class="px-4 py-2 text-sm rounded-xl bg-white text-gray-700 font-bold uppercase tracking-wide border border-gray-200 hover:border-[#E84141] hover:bg-[#E84141] hover:text-white hover:scale-105 transition-all duration-300"
-          (click)="selectDay('Vendredi')"
-        >
-          Vendredi
-        </button>
+        }
 
         <!-- Panier Premium -->
-        <button class="ml-auto relative group" (click)="openCart()">
+        <button class="ml-auto group relative" [routerLink]="['/restauration/cart']">
           <div
-            class="absolute inset-0 bg-gradient-to-br from-[#E84141] to-[#6B140F] rounded-xl blur opacity-50 group-hover:opacity-75 transition-all duration-300"
+            class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
           ></div>
           <div
-            class="relative px-4 py-2 rounded-xl bg-gradient-to-br from-[#E84141] to-[#6B140F] flex items-center gap-2 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+            class="relative px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
-            <fa-icon [icon]="['fas', 'shopping-cart']" class="text-white text-sm"></fa-icon>
-            <span class="text-white font-bold text-sm">Panier</span>
-            <span class="px-2 py-0.5 bg-white text-[#E84141] text-xs font-black rounded-full"
-              >3</span
+            <fa-icon
+              [icon]="['fas', 'shopping-cart']"
+              class="text-white text-sm sm:text-base md:text-lg"
+            ></fa-icon>
+            <span class="text-white font-bold text-xs sm:text-sm md:text-base hidden xs:inline"
+              >Panier</span
+            >
+            <span
+              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full animate-pulse"
+              >{{ cartItemCount }}</span
             >
           </div>
         </button>
       </div>
     </div>
 
-    <!-- Restaurant Cards -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      <!-- Card 1 - Jolof -->
-      <div class="group relative" (click)="selectRestaurant('jolof')">
+    <!-- Restaurant Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+      @for (restaurant of restaurants; track restaurant.id) {
+      <div class="group relative" (click)="selectRestaurant(restaurant.id)">
         <div
-          class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 cursor-pointer group-hover:-translate-y-1"
+          class="absolute inset-0 rounded-2xl sm:rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
+          [style.background]="
+            'linear-gradient(to bottom right, ' +
+            restaurant.gradientFrom +
+            ', ' +
+            restaurant.gradientTo +
+            ')'
+          "
+        ></div>
+
+        <div
+          class="relative bg-white rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-500 cursor-pointer group-hover:-translate-y-2"
         >
-          <!-- Header -->
+          <!-- Header avec gradient et stats -->
           <div
-            class="relative h-28 bg-gradient-to-br from-[#E84141] to-[#6B140F] p-4 overflow-hidden"
+            class="relative h-28 sm:h-32 md:h-36 p-3 sm:p-4 md:p-5 overflow-hidden"
+            [style.background]="
+              'linear-gradient(to bottom right, ' +
+              restaurant.gradientFrom +
+              ', ' +
+              restaurant.gradientTo +
+              ')'
+            "
           >
-            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-            <div class="relative z-10 flex items-center gap-3">
-              <div
-                class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30"
-              >
-                <fa-icon [icon]="['fas', 'fire']" class="text-white text-lg"></fa-icon>
-              </div>
-              <div>
-                <h3
-                  class="text-2xl font-black text-white tracking-tight"
-                  style="font-family: 'Playfair Display', serif"
+            <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+            <div
+              class="absolute top-0 right-0 w-24 sm:w-28 md:w-32 h-24 sm:h-28 md:h-32 bg-white/5 rounded-full blur-2xl"
+            ></div>
+
+            <div class="relative z-10 flex items-start justify-between">
+              <div class="flex items-center gap-2 sm:gap-3">
+                @if (restaurant.icon) {
+                <div
+                  class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/30 shadow-xl group-hover:scale-110 transition-transform"
                 >
-                  Jolof
-                </h3>
-                <p class="text-white/80 text-xs font-medium">Spécialités sénégalaises</p>
+                  <fa-icon
+                    [icon]="['fas', restaurant.icon]"
+                    class="text-white text-lg sm:text-xl md:text-2xl"
+                  ></fa-icon>
+                </div>
+                }
+                <div>
+                  <h3
+                    class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-0.5 sm:mb-1"
+                    style="font-family: 'Georgia, serif'"
+                  >
+                    {{ restaurant.name }}
+                  </h3>
+                  <p class="text-white/90 text-[10px] sm:text-xs font-medium">
+                    {{ restaurant.subtitle }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Menu Items -->
-          <div class="p-4 space-y-2.5">
-            <!-- Item 1 -->
+          <!-- Menu Items Modern -->
+          <div class="p-3 sm:p-4 md:p-5 space-y-2 sm:space-y-3">
+            @for (item of restaurant.items; track item.id) {
             <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#E84141]/30 hover:shadow-md transition-all duration-300"
+              class="group/item relative p-2.5 sm:p-3 md:p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg"
+              [class]="'border-gray-100 hover:border-' + item.hoverBorder"
             >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#E84141]/10 to-[#E84141]/5 rounded-lg flex items-center justify-center flex-shrink-0"
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md text-lg sm:text-xl md:text-2xl group-hover/item:scale-110 transition-transform flex-shrink-0"
+                    [style.background]="
+                      'linear-gradient(to bottom right, ' +
+                      item.gradientFrom +
+                      ', ' +
+                      item.gradientTo +
+                      ')'
+                    "
                   >
-                    <fa-icon [icon]="['fas', 'bowl-rice']" class="text-[#E84141]"></fa-icon>
+                    {{ item.emoji }}
                   </div>
                   <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Soupe Okadia</h4>
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                      <span class="text-[#E84141] font-black text-base">2,500 F</span>
-                      <span
-                        class="text-[9px] bg-[#E84141]/10 text-[#E84141] px-1.5 py-0.5 rounded-full font-bold"
-                        >Spécialité</span
-                      >
+                    <div class="flex items-center gap-2 mb-0.5 sm:mb-1 flex-wrap">
+                      <h4 class="font-black text-gray-900 text-xs sm:text-sm truncate">
+                        {{ item.name }}
+                      </h4>
+                    </div>
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                      <span class="text-red-600 font-black text-sm sm:text-base md:text-lg">{{
+                        item.price
+                      }}</span>
+                      <span class="text-gray-600 font-bold text-[10px] sm:text-xs">FCFA</span>
                     </div>
                   </div>
                 </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#E84141] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">2</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#E84141] to-[#6B140F] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
 
-            <!-- Item 2 -->
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#99CFBD]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#99CFBD]/10 to-[#99CFBD]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <fa-icon [icon]="['fas', 'utensils']" class="text-[#99CFBD]"></fa-icon>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Plat Okadia Complet</h4>
-                    <span class="text-[#E84141] font-black text-base">4,000 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                   <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#E84141] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
+                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-100 hover:bg-red-100 flex items-center justify-center transition-all"
+                    (click)="toggleFavorite(item.id); $event.stopPropagation()"
                   >
-                    −
+                    <fa-icon
+                      [icon]="['fas', 'heart']"
+                      class="text-gray-400 hover:text-red-500 text-xs sm:text-sm"
+                    ></fa-icon>
                   </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">1</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#E84141] to-[#6B140F] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
 
-            <!-- Item 3 -->
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#25509D]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
                   <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#25509D]/10 to-[#25509D]/5 rounded-lg flex items-center justify-center flex-shrink-0"
+                    class="flex items-center gap-1 sm:gap-2 bg-gray-100 rounded-lg sm:rounded-xl p-0.5 sm:p-1"
                   >
-                    <fa-icon [icon]="['fas', 'drumstick-bite']" class="text-[#25509D]"></fa-icon>
+                    <button
+                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-white hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all shadow-sm"
+                      [style.background]="
+                        item.quantity > 0
+                          ? 'linear-gradient(to bottom right, ' +
+                            item.gradientFrom +
+                            ', ' +
+                            item.gradientTo +
+                            ')'
+                          : ''
+                      "
+                      [class.text-white]="item.quantity > 0"
+                      (click)="decreaseQuantity(restaurant.id, item.id); $event.stopPropagation()"
+                    >
+                      <fa-icon [icon]="['fas', 'minus']" class="text-[10px] sm:text-xs"></fa-icon>
+                    </button>
+                    <span
+                      class="w-5 sm:w-6 text-center font-black text-gray-900 text-xs sm:text-sm"
+                      >{{ item.quantity }}</span
+                    >
+                    <button
+                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all"
+                      [style.background]="
+                        'linear-gradient(to bottom right, ' +
+                        item.gradientFrom +
+                        ', ' +
+                        item.gradientTo +
+                        ')'
+                      "
+                      (click)="increaseQuantity(restaurant.id, item.id); $event.stopPropagation()"
+                    >
+                      <fa-icon [icon]="['fas', 'plus']" class="text-[10px] sm:text-xs"></fa-icon>
+                    </button>
                   </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Brochettes mixtes</h4>
-                    <span class="text-[#E84141] font-black text-base">3,000 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#E84141] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#E84141] to-[#6B140F] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
                 </div>
               </div>
             </div>
+            }
           </div>
 
           <!-- Footer Button -->
-          <div class="p-4 pt-2">
+          <div class="p-3 sm:p-4 md:p-5 pt-0">
             <button
-              class="w-full py-3 bg-gradient-to-r from-[#E84141] to-[#6B140F] hover:from-[#6B140F] hover:to-[#E84141] text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-105"
+              class="w-full py-3 sm:py-3.5 md:py-4 hover:shadow-2xl text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
+              [style.background]="
+                'linear-gradient(to right, ' +
+                restaurant.gradientFrom +
+                ', ' +
+                restaurant.gradientTo +
+                ')'
+              "
+              (click)="addToCart(restaurant.id); $event.stopPropagation()"
             >
-              <fa-icon [icon]="['fas', 'cart-plus']" class="mr-2"></fa-icon>Ajouter au panier
+              <fa-icon
+                [icon]="['fas', 'cart-plus']"
+                class="text-base sm:text-lg group-hover/btn:animate-bounce"
+              ></fa-icon>
+              <span class="hidden xs:inline">Ajouter au panier</span>
+              <span class="xs:hidden">Ajouter</span>
               <span
-                class="ml-2 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold"
-                >3 items</span
+                class="ml-1 sm:ml-2 px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-black"
+                [class.animate-pulse]="getRestaurantItemCount(restaurant.id) > 0"
+                >{{ getRestaurantItemCount(restaurant.id) }}</span
               >
             </button>
           </div>
         </div>
       </div>
-
-      <!-- Card 2 - Rodra -->
-      <div class="group relative" (click)="selectRestaurant('Rodra')">
-        <div
-          class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 cursor-pointer group-hover:-translate-y-1"
-        >
-          <!-- Header -->
-          <div
-            class="relative h-28 bg-gradient-to-br from-[#303131] to-[#20264E] p-4 overflow-hidden"
-          >
-            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-            <div class="relative z-10 flex items-center gap-3">
-              <div
-                class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30"
-              >
-                <fa-icon [icon]="['fas', 'fire-flame-curved']" class="text-white text-lg"></fa-icon>
-              </div>
-              <div>
-                <h3
-                  class="text-2xl font-black text-white tracking-tight"
-                  style="font-family: 'Playfair Display', serif"
-                >
-                  Rodra
-                </h3>
-                <p class="text-white/80 text-xs font-medium">Dibiterie & Grillades</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Menu Items -->
-          <div class="p-4 space-y-2.5">
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#303131]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#303131]/10 to-[#303131]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <fa-icon [icon]="['fas', 'drumstick-bite']" class="text-[#303131]"></fa-icon>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Dibi mouton</h4>
-                    <span class="text-[#E84141] font-black text-base">3,500 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#303131] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#303131] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#99CFBD]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#99CFBD]/10 to-[#99CFBD]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <fa-icon [icon]="['fas', 'bowl-food']" class="text-[#99CFBD]"></fa-icon>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Yassa poulet</h4>
-                    <span class="text-[#E84141] font-black text-base">3,200 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#303131] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#303131] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#25509D]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#25509D]/10 to-[#25509D]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <fa-icon [icon]="['fas', 'fish']" class="text-[#25509D]"></fa-icon>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Thiébou guinar</h4>
-                    <span class="text-[#E84141] font-black text-base">2,800 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#303131] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#303131] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Footer Button -->
-          <div class="p-4 pt-2">
-            <button
-              class="w-full py-3 bg-gradient-to-r from-[#303131] to-[#20264E] hover:from-[#20264E] hover:to-[#303131] text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-105"
-            >
-              <fa-icon [icon]="['fas', 'cart-plus']" class="mr-2"></fa-icon>Ajouter au panier
-              <span
-                class="ml-2 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold"
-                >0 items</span
-              >
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 - EVA -->
-      <div class="group relative" (click)="selectRestaurant('eva')">
-        <div
-          class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 cursor-pointer group-hover:-translate-y-1"
-        >
-          <!-- Header -->
-          <div
-            class="relative h-28 bg-gradient-to-br from-[#25509D] to-[#99CFBD] p-4 overflow-hidden"
-          >
-            <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-            <div class="relative z-10 flex items-center gap-3">
-              <div
-                class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30"
-              >
-                <fa-icon [icon]="['fas', 'star']" class="text-white text-lg"></fa-icon>
-              </div>
-              <div>
-                <h3
-                  class="text-2xl font-black text-white tracking-tight"
-                  style="font-family: 'Playfair Display', serif"
-                >
-                  EVA
-                </h3>
-                <p class="text-white/80 text-xs font-medium">Cuisine raffinée</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Menu Items -->
-          <div class="p-4 space-y-2.5">
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#25509D]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#25509D]/10 to-[#25509D]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <i class="fas fa-drumstick-bite text-[#25509D]"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Dibi mouton</h4>
-                    <span class="text-[#E84141] font-black text-base">3,500 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#25509D] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#25509D] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#99CFBD]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#99CFBD]/10 to-[#99CFBD]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <i class="fas fa-bowl-food text-[#99CFBD]"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Yassa poulet</h4>
-                    <span class="text-[#E84141] font-black text-base">3,200 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#25509D] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#25509D] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 hover:border-[#99CFBD]/30 hover:shadow-md transition-all duration-300"
-            >
-              <div class="flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#99CFBD]/10 to-[#99CFBD]/5 rounded-lg flex items-center justify-center flex-shrink-0"
-                  >
-                    <i class="fas fa-fish text-[#99CFBD]"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="font-bold text-[#20264E] text-sm truncate">Thiébou guinar</h4>
-                    <span class="text-[#E84141] font-black text-base">2,800 F</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gray-100 hover:bg-[#25509D] hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all text-sm"
-                  >
-                    −
-                  </button>
-                  <span class="w-6 text-center font-bold text-[#20264E] text-sm">0</span>
-                  <button
-                    class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#25509D] to-[#20264E] text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all text-sm"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Footer Button -->
-          <div class="p-4 pt-2">
-            <button
-              class="w-full py-3 bg-gradient-to-r from-[#25509D] to-[#99CFBD] hover:from-[#99CFBD] hover:to-[#25509D] text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:scale-105"
-            >
-              <fa-icon [icon]="['fas', 'cart-plus']" class="mr-2"></fa-icon>Ajouter au panier
-              <span
-                class="ml-2 px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold"
-                >0 items</span
-              >
-            </button>
-          </div>
-        </div>
-      </div>
+      }
     </div>
   </div>
 </section>

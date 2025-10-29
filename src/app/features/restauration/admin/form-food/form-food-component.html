@@ -1,0 +1,311 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+  <div class="px-4 py-6 mx-auto max-w-5xl sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <button
+          class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </button>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Ajouter un nouveau plat</h1>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 ml-14">
+        Créez un nouveau plat qui pourra être affecté aux restaurants
+      </p>
+    </div>
+
+    <!-- Formulaire -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <form class="p-6 space-y-6">
+        <!-- Image du plat -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-3">
+            Photo du plat *
+          </label>
+          <div class="flex items-start gap-6">
+            <div class="relative group">
+              <div
+                class="w-32 h-32 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-600 overflow-hidden bg-gray-50 dark:bg-gray-900 flex items-center justify-center"
+              >
+                <img
+                  src="#"
+                  alt="Preview"
+                  class="hidden w-full h-full object-cover"
+                  id="imagePreview"
+                />
+                <div id="imagePlaceholder" class="text-center">
+                  <svg
+                    class="w-10 h-10 mx-auto text-gray-400 mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span class="text-xs text-gray-500 dark:text-gray-400">Image</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"
+              >
+                <svg
+                  class="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="flex-1">
+              <input type="file" id="foodImage" accept="image/*" class="hidden" />
+              <label
+                for="foodImage"
+                class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                Télécharger une image
+              </label>
+              <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                PNG, JPG ou JPEG jusqu'à 5MB. Résolution recommandée: 800x800px
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 dark:border-gray-700"></div>
+
+        <!-- Nom du plat -->
+        <div>
+          <label
+            for="foodName"
+            class="block text-sm font-semibold text-gray-900 dark:text-white mb-2"
+          >
+            Nom du plat *
+          </label>
+          <input
+            type="text"
+            id="foodName"
+            placeholder="Ex: Thiébou Dieune, Yassa Poulet..."
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-white dark:placeholder-gray-500 transition-all"
+          />
+        </div>
+
+        <!-- Catégorie et Type -->
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label
+              for="foodCategory"
+              class="block text-sm font-semibold text-gray-900 dark:text-white mb-2"
+            >
+              Catégorie *
+            </label>
+            <select
+              id="foodCategory"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-white transition-all"
+            >
+              <option value="">Sélectionner une catégorie</option>
+              <option value="plat">Plat principal</option>
+              <option value="accompagnement">Accompagnement</option>
+              <option value="boisson">Boisson</option>
+              <option value="dessert">Dessert</option>
+              <option value="entree">Entrée</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              for="foodType"
+              class="block text-sm font-semibold text-gray-900 dark:text-white mb-2"
+            >
+              Type de cuisine
+            </label>
+            <select
+              id="foodType"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-white transition-all"
+            >
+              <option value="">Sélectionner un type</option>
+              <option value="senegalais">Sénégalais</option>
+              <option value="africain">Africain</option>
+              <option value="international">International</option>
+              <option value="rapide">Restauration rapide</option>
+            </select>
+          </div>
+        </div> -->
+
+        <!-- Prix -->
+        <div>
+          <label
+            for="foodPrice"
+            class="block text-sm font-semibold text-gray-900 dark:text-white mb-2"
+          >
+            Prix unitaire *
+          </label>
+          <div class="relative">
+            <input
+              type="number"
+              id="foodPrice"
+              placeholder="2500"
+              min="0"
+              step="100"
+              class="w-full px-4 py-3 pr-24 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-white dark:placeholder-gray-500 transition-all"
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+              <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">FCFA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label
+            for="foodDescription"
+            class="block text-sm font-semibold text-gray-900 dark:text-white mb-2"
+          >
+            Description
+          </label>
+          <textarea
+            id="foodDescription"
+            rows="4"
+            placeholder="Décrivez le plat, ses ingrédients principaux, son goût..."
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:border-gray-600 dark:text-white dark:placeholder-gray-500 transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Options supplémentaires -->
+        <!-- <div class="space-y-4">
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white"> Options </label>
+
+          <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
+            <input
+              type="checkbox"
+              id="isVegetarian"
+              class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
+            />
+            <label
+              for="isVegetarian"
+              class="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
+            >
+              <span class="text-lg">🥗</span>
+              Plat végétarien
+            </label>
+          </div>
+
+          <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
+            <input
+              type="checkbox"
+              id="isSpicy"
+              class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
+            />
+            <label
+              for="isSpicy"
+              class="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
+            >
+              <span class="text-lg">🌶️</span>
+              Plat épicé
+            </label>
+          </div>
+
+          <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
+            <input
+              type="checkbox"
+              id="isAvailable"
+              checked
+              class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
+            />
+            <label
+              for="isAvailable"
+              class="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
+            >
+              <span class="text-lg">✅</span>
+              Disponible immédiatement
+            </label>
+          </div>
+        </div> -->
+
+        <div class="border-t border-gray-200 dark:border-gray-700"></div>
+
+        <!-- Boutons d'action -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <button
+            type="button"
+            class="flex-1 px-6 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/30"
+          >
+            Créer le plat
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Info box -->
+    <div
+      class="mt-6 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-xl"
+    >
+      <div class="flex gap-3">
+        <svg
+          class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <div>
+          <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
+            Note importante
+          </h4>
+          <p class="text-xs text-blue-700 dark:text-blue-400">
+            Une fois le plat créé, vous pourrez l'affecter à un ou plusieurs restaurants (JOLOF,
+            RODRA, CHEZ EVA) depuis la section "Affecter aux restaurants".
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

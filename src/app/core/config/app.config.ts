@@ -33,10 +33,10 @@ export class AppConfig {
   static readonly lottieAnimations = [
     '/assets/lottie/Onlinefoodorder.json', // Menu
     '/assets/lottie/Burger.json', // Ressources
-    '/assets/lottie/rh.json', // R.H.
+    '/assets/lottie/livreur.json', // R.H.
     '/assets/lottie/commercial.json', // Commercial
     '/assets/lottie/LoadingWebKomship.json', // Moyens Généraux
-    '/assets/lottie/formation.json', // Formation
+    '/assets/lottie/Profile.json', // Formation
   ];
 
   // 🆕 Titres personnalisés pour chaque animation

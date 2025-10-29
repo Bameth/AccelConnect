@@ -22,7 +22,7 @@ export class MenuTransitionComponent implements OnInit {
   @Input() animationPath: string = '/assets/lottie/Burger.json';
   @Input() animationTitle: string = 'Chargement du Menu';
   @Input() theme: AnimationTheme = { primary: '#25509D', secondary: '#99CFBD' };
-  @Input() duration: number = 2500; // Durée en ms
+  @Input() duration: number = 1000; // Durée en ms
 
   isVisible = false;
   lottieOptions: AnimationOptions = {
