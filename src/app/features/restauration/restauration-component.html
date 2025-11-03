@@ -31,24 +31,18 @@
           class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300 group"
         >
           <div class="relative flex items-center gap-1.5 sm:gap-2">
-            <!-- <span class="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-              <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"
-              ></span>
-              <span
-                class="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-500 shadow-lg shadow-red-500/50"
-              ></span>
-            </span> -->
             <fa-icon
               [icon]="['fas', 'bell']"
-              class="text-red-500 text-xs sm:text-sm"
-              style="animation-duration: 2s"
+              class="text-red-500 text-xs sm:text-sm animate-bounce"
             ></fa-icon>
           </div>
           <div class="flex items-center flex-wrap gap-1 sm:gap-2">
             <span class="text-red-600 font-black text-xs sm:text-sm uppercase tracking-wider"
               >Menu du Jour</span
             >
+            <span class="text-gray-500 text-[10px] sm:text-xs font-medium">{{
+              selectedDate() | date : 'dd/MM/yyyy'
+            }}</span>
           </div>
           <fa-icon
             [icon]="['fas', 'arrow-right']"
@@ -144,15 +138,13 @@
               <div
                 class="relative w-64 h-64 xl:w-80 xl:h-80 mx-auto rounded-full shadow-2xl overflow-hidden"
               >
-                <!-- Background blanc pour Lottie -->
                 <div class="absolute inset-0 bg-white rounded-full"></div>
-                <!-- Chef Animation Container -->
                 <ng-lottie
                   [options]="lottieOptions"
                   width="100%"
                   height="100%"
                   containerClass="flex items-center justify-center relative z-10"
-                  (animationCreated)="onAnimationCreated($event)"
+                  (animationCreated)="onAnimationCreated($any($event))"
                 ></ng-lottie>
               </div>
             </div>
@@ -164,16 +156,16 @@
       <div
         class="flex flex-wrap items-center gap-2 sm:gap-3 pt-4 sm:pt-6 md:pt-8 border-t-2 border-gray-200"
       >
-        @for (day of days; track day; let first = $first) {
+        @for (day of days; track day; let i = $index) {
         <button
+          (click)="selectDay(day)"
           [class]="
-            first
+            selectedDay() === day
               ? 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105 transition-all duration-300 hover:scale-110'
               : 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-gray-700 font-bold text-xs sm:text-sm uppercase tracking-wider border-2 border-gray-200 hover:border-red-500 hover:text-red-500 hover:scale-105 transition-all duration-300'
           "
-          (click)="selectDay(day)"
         >
-          @if (first) {
+          @if (selectedDay() === day) {
           <fa-icon [icon]="['fas', 'clock']" class="mr-1 sm:mr-2 text-xs sm:text-sm"></fa-icon>
           }
           <span class="hidden xs:inline">{{ day }}</span>
@@ -198,17 +190,151 @@
             >
             <span
               class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full animate-pulse"
-              >{{ cartItemCount }}</span
+              >3</span
             >
           </div>
         </button>
       </div>
     </div>
 
-    <!-- Restaurant Cards Grid -->
+    <!-- Message d'erreur -->
+    @if (errorMessage()) {
+    <div class="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-2xl">
+      <div class="flex items-center gap-3">
+        <fa-icon [icon]="['fas', 'exclamation-circle']" class="text-red-500 text-xl"></fa-icon>
+        <p class="text-red-700 font-semibold">{{ errorMessage() }}</p>
+      </div>
+    </div>
+    }
+
+    <!-- Loader -->
+    @if (isLoading()) {
+    <div class="flex flex-col items-center justify-center py-20">
+      <div class="relative w-24 h-24 mb-6">
+        <div
+          class="absolute inset-0 rounded-full border-4 border-red-200 animate-ping opacity-20"
+        ></div>
+        <div class="absolute inset-0 rounded-full border-4 border-red-200 animate-pulse"></div>
+        <div
+          class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent animate-spin"
+        ></div>
+        <div
+          class="absolute inset-2 rounded-full border-4 border-orange-400 border-b-transparent animate-spin"
+          style="animation-direction: reverse; animation-duration: 1s"
+        ></div>
+      </div>
+      <div class="text-center">
+        <p class="text-gray-900 font-black text-xl mb-2 animate-pulse">
+          Préparation de vos menus...
+        </p>
+        <p class="text-gray-500 font-medium text-sm">
+          Nos chefs sélectionnent les meilleurs plats pour vous
+        </p>
+      </div>
+    </div>
+    }
+
+    <!-- Restaurant Cards Grid ou Weekend Message -->
+    @if (!isLoading()) {
+
+    <!-- Weekend Message -->
+    @if (isWeekend(selectedDate())) {
+    <div class="relative overflow-hidden rounded-3xl">
+      <!-- Animated Background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50"></div>
+      <div
+        class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"
+      ></div>
+      <div
+        class="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tr from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse"
+        style="animation-delay: 1s"
+      ></div>
+
+      <div class="relative z-10 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8">
+        <div class="max-w-4xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <!-- Left: Animation -->
+            <div class="flex justify-center order-2 md:order-1">
+              <div class="relative w-full max-w-sm">
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-2xl animate-pulse"
+                ></div>
+                <div class="relative">
+                  <ng-lottie
+                    [options]="weekendLottieOptions"
+                    width="100%"
+                    height="350px"
+                    containerClass="flex items-center justify-center"
+                    (animationCreated)="onAnimationCreated($any($event))"
+                  ></ng-lottie>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Message -->
+            <div class="text-center md:text-left space-y-6 order-1 md:order-2">
+              <div>
+                <h2
+                  class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 md:mb-4"
+                  style="font-family: 'Georgia, serif'"
+                >
+                  {{ getCurrentWeekendMessage().title }}
+                </h2>
+                <p class="text-lg sm:text-xl md:text-2xl text-gray-600 font-semibold">
+                  {{ getCurrentWeekendMessage().subtitle }}
+                </p>
+              </div>
+
+              <div
+                class="inline-flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-purple-100"
+              >
+                <div
+                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg"
+                >
+                  <fa-icon
+                    [icon]="['fas', 'calendar-check']"
+                    class="text-white text-xl sm:text-2xl"
+                  ></fa-icon>
+                </div>
+                <div class="text-left">
+                  <p class="text-xs sm:text-sm text-gray-500 font-semibold">Retour des menus</p>
+                  <p class="text-lg sm:text-xl font-black text-gray-900">Lundi prochain</p>
+                </div>
+              </div>
+
+              <div class="pt-4">
+                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                  <div
+                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
+                  >
+                    <span class="text-2xl">🌴</span>
+                    <span class="ml-2 text-sm font-bold text-gray-700">Détente</span>
+                  </div>
+                  <div
+                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
+                  >
+                    <span class="text-2xl">☕</span>
+                    <span class="ml-2 text-sm font-bold text-gray-700">Repos</span>
+                  </div>
+                  <div
+                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
+                  >
+                    <span class="text-2xl">🎉</span>
+                    <span class="ml-2 text-sm font-bold text-gray-700">Profitez</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @else {
+
+    <!-- Restaurant Cards Grid (Weekdays) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-      @for (restaurant of restaurants; track restaurant.id) {
-      <div class="group relative" (click)="selectRestaurant(restaurant.id)">
+      @for (restaurant of restaurants(); track restaurant.id) {
+      <div class="group relative">
         <div
           class="absolute inset-0 rounded-2xl sm:rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
           [style.background]="
@@ -241,7 +367,18 @@
 
             <div class="relative z-10 flex items-start justify-between">
               <div class="flex items-center gap-2 sm:gap-3">
-                @if (restaurant.icon) {
+                <!-- Logo du restaurant (si disponible) ou icône -->
+                @if (restaurant.logoUrl) {
+                <div
+                  class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border-2 border-white/50 shadow-xl group-hover:scale-110 transition-transform overflow-hidden p-1"
+                >
+                  <img
+                    [src]="restaurant.logoUrl"
+                    [alt]="restaurant.name"
+                    class="w-full h-full object-contain"
+                  />
+                </div>
+                } @else {
                 <div
                   class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/30 shadow-xl group-hover:scale-110 transition-transform"
                 >
@@ -263,10 +400,18 @@
                   </p>
                 </div>
               </div>
+
+              <!-- Badge statut menu -->
+              @if (!restaurant.hasMenu) {
+              <div class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30">
+                <span class="text-white text-[10px] font-bold">Fermé</span>
+              </div>
+              }
             </div>
           </div>
 
-          <!-- Menu Items Modern -->
+          <!-- Menu Items ou Message -->
+          @if (restaurant.hasMenu && restaurant.items.length > 0) {
           <div class="p-3 sm:p-4 md:p-5 space-y-2 sm:space-y-3">
             @for (item of restaurant.items; track item.id) {
             <div
@@ -275,8 +420,20 @@
             >
               <div class="flex items-center justify-between gap-2 sm:gap-3">
                 <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                  <!-- Image du plat (si disponible) ou icône -->
+                  @if (item.imageUrl) {
                   <div
-                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md text-lg sm:text-xl md:text-2xl group-hover/item:scale-110 transition-transform flex-shrink-0"
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0 overflow-hidden border-2 border-white"
+                  >
+                    <img
+                      [src]="item.imageUrl"
+                      [alt]="item.mealName"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  } @else {
+                  <div
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0"
                     [style.background]="
                       'linear-gradient(to bottom right, ' +
                       item.gradientFrom +
@@ -285,17 +442,19 @@
                       ')'
                     "
                   >
-                    {{ item.emoji }}
+                    <fa-icon
+                      [icon]="['fas', 'utensils']"
+                      class="text-white text-sm sm:text-base"
+                    ></fa-icon>
                   </div>
+                  }
                   <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-0.5 sm:mb-1 flex-wrap">
-                      <h4 class="font-black text-gray-900 text-xs sm:text-sm truncate">
-                        {{ item.name }}
-                      </h4>
-                    </div>
+                    <h4 class="font-black text-gray-900 text-xs sm:text-sm truncate">
+                      {{ item.mealName }}
+                    </h4>
                     <div class="flex items-center gap-1.5 sm:gap-2">
                       <span class="text-red-600 font-black text-sm sm:text-base md:text-lg">{{
-                        item.price
+                        item.unitPrice
                       }}</span>
                       <span class="text-gray-600 font-bold text-[10px] sm:text-xs">FCFA</span>
                     </div>
@@ -303,16 +462,6 @@
                 </div>
 
                 <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-                  <button
-                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-100 hover:bg-red-100 flex items-center justify-center transition-all"
-                    (click)="toggleFavorite(item.id); $event.stopPropagation()"
-                  >
-                    <fa-icon
-                      [icon]="['fas', 'heart']"
-                      class="text-gray-400 hover:text-red-500 text-xs sm:text-sm"
-                    ></fa-icon>
-                  </button>
-
                   <div
                     class="flex items-center gap-1 sm:gap-2 bg-gray-100 rounded-lg sm:rounded-xl p-0.5 sm:p-1"
                   >
@@ -328,7 +477,7 @@
                           : ''
                       "
                       [class.text-white]="item.quantity > 0"
-                      (click)="decreaseQuantity(restaurant.id, item.id); $event.stopPropagation()"
+                      (click)="decreaseQuantity(restaurant.id, item.id!); $event.stopPropagation()"
                     >
                       <fa-icon [icon]="['fas', 'minus']" class="text-[10px] sm:text-xs"></fa-icon>
                     </button>
@@ -345,7 +494,7 @@
                         item.gradientTo +
                         ')'
                       "
-                      (click)="increaseQuantity(restaurant.id, item.id); $event.stopPropagation()"
+                      (click)="increaseQuantity(restaurant.id, item.id!); $event.stopPropagation()"
                     >
                       <fa-icon [icon]="['fas', 'plus']" class="text-[10px] sm:text-xs"></fa-icon>
                     </button>
@@ -355,8 +504,16 @@
             </div>
             }
           </div>
+          } @else {
+          <div class="p-8 text-center">
+            <fa-icon [icon]="['fas', 'utensils']" class="text-gray-300 text-4xl mb-3"></fa-icon>
+            <p class="text-gray-500 font-semibold">Aucun menu disponible aujourd'hui</p>
+            <p class="text-gray-400 text-sm mt-1">Revenez demain !</p>
+          </div>
+          }
 
           <!-- Footer Button -->
+          @if (restaurant.hasMenu && restaurant.items.length > 0) {
           <div class="p-3 sm:p-4 md:p-5 pt-0">
             <button
               class="w-full py-3 sm:py-3.5 md:py-4 hover:shadow-2xl text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
@@ -367,7 +524,6 @@
                 restaurant.gradientTo +
                 ')'
               "
-              (click)="addToCart(restaurant.id); $event.stopPropagation()"
             >
               <fa-icon
                 [icon]="['fas', 'cart-plus']"
@@ -378,13 +534,16 @@
               <span
                 class="ml-1 sm:ml-2 px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-black"
                 [class.animate-pulse]="getRestaurantItemCount(restaurant.id) > 0"
-                >{{ getRestaurantItemCount(restaurant.id) }}</span
               >
+                {{ getRestaurantItemCount(restaurant.id) }}
+              </span>
             </button>
           </div>
+          }
         </div>
       </div>
       }
     </div>
+    } }
   </div>
 </section>

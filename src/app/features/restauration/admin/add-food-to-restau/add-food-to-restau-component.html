@@ -3,43 +3,206 @@
     <!-- Header -->
     <div class="mb-8">
       <div class="flex items-center gap-3 mb-2">
-        <button
-          class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-        </button>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
           Affecter des plats aux restaurants
         </h1>
       </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400 ml-14">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
         Sélectionnez un restaurant et choisissez les plats disponibles pour aujourd'hui
+      </p>
+    </div>
+
+    <!-- Messages d'erreur et succès -->
+    <div
+      *ngIf="errorMessage()"
+      class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl"
+    >
+      <div class="flex items-center gap-3">
+        <svg
+          class="w-5 h-5 text-red-600 dark:text-red-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p class="text-sm font-medium text-red-800 dark:text-red-200">{{ errorMessage() }}</p>
+      </div>
+    </div>
+
+    <div
+      *ngIf="successMessage()"
+      class="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl"
+    >
+      <div class="flex items-center gap-3">
+        <svg
+          class="w-5 h-5 text-green-600 dark:text-green-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p class="text-sm font-medium text-green-800 dark:text-green-200">{{ successMessage() }}</p>
+      </div>
+    </div>
+
+    <!-- Sélection de la date -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <label class="block text-sm font-semibold text-gray-900 dark:text-white">
+          Date du menu <span class="text-red-500">*</span>
+        </label>
+
+        <!-- Toggle pour choisir entre aujourd'hui et une autre date -->
+        <button
+          type="button"
+          (click)="toggleDateMode()"
+          class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg transition-all"
+          [class]="
+            useTodayDate()
+              ? 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-500/30'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          "
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          {{ useTodayDate() ? "Aujourd'hui" : 'Autre date' }}
+        </button>
+      </div>
+
+      <!-- Affichage conditionnel selon le mode -->
+      <div
+        *ngIf="useTodayDate()"
+        class="p-4 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-2 border-orange-200 dark:border-orange-800 rounded-xl"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Menu pour</p>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ getDayName(getTodayDate()) }} {{ getTodayDate() | date : 'dd/MM/yyyy' }}
+            </p>
+            <p
+              *ngIf="isWeekend(getTodayDate())"
+              class="text-xs text-red-600 dark:text-red-400 mt-1 font-medium"
+            >
+              ⚠️ Aujourd'hui est un week-end
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!useTodayDate()" class="relative">
+        <input
+          type="date"
+          [value]="selectedDate()"
+          (change)="onDateChange($event)"
+          class="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+        />
+        <div *ngIf="selectedDate()" class="mt-2 text-sm">
+          <span
+            class="inline-flex items-center px-3 py-1 rounded-lg"
+            [class]="
+              isWeekend(selectedDate())
+                ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400'
+                : 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400'
+            "
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                *ngIf="!isWeekend(selectedDate())"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+              <path
+                *ngIf="isWeekend(selectedDate())"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {{ getDayName(selectedDate()) }}
+          </span>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+        💡 Les menus sont disponibles du lundi au vendredi uniquement
       </p>
     </div>
 
     <!-- Sélection du restaurant -->
     <div class="mb-6">
       <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-4">
-        Restaurant *
+        Restaurant <span class="text-red-500">*</span>
       </label>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- JOLOF -->
+
+      <div *ngIf="isLoading()" class="text-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+        <p class="text-sm text-gray-500 mt-4">Chargement des restaurants...</p>
+      </div>
+
+      <div *ngIf="!isLoading()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <button
+          *ngFor="let restaurant of restaurants(); let i = index"
           type="button"
-          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-orange-500 rounded-2xl hover:shadow-lg transition-all"
+          (click)="selectRestaurant(restaurant)"
+          [class]="
+            'group relative p-6 bg-white dark:bg-gray-800 border-2 rounded-2xl hover:shadow-lg transition-all ' +
+            (selectedRestaurant()?.id === restaurant.id
+              ? 'border-' + getRestaurantColor(i) + '-500'
+              : 'border-gray-200 dark:border-gray-700 hover:border-' +
+                getRestaurantColor(i) +
+                '-500')
+          "
         >
           <div class="absolute top-4 right-4">
             <div
-              class="w-6 h-6 rounded-full border-2 border-orange-500 bg-orange-500 flex items-center justify-center"
+              [class]="
+                'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ' +
+                (selectedRestaurant()?.id === restaurant.id
+                  ? 'border-' + getRestaurantColor(i) + '-500 bg-' + getRestaurantColor(i) + '-500'
+                  : 'border-gray-300 dark:border-gray-600 group-hover:border-' +
+                    getRestaurantColor(i) +
+                    '-500')
+              "
             >
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                *ngIf="selectedRestaurant()?.id === restaurant.id"
+                class="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -51,10 +214,22 @@
           </div>
           <div class="flex items-center gap-4">
             <div
-              class="w-16 h-16 bg-orange-50 dark:bg-orange-500/10 rounded-2xl flex items-center justify-center"
+              [class]="
+                'w-16 h-16 rounded-2xl flex items-center justify-center bg-' +
+                getRestaurantColor(i) +
+                '-50 dark:bg-' +
+                getRestaurantColor(i) +
+                '-500/10'
+              "
             >
               <svg
-                class="w-8 h-8 text-orange-600 dark:text-orange-400"
+                [class]="
+                  'w-8 h-8 text-' +
+                  getRestaurantColor(i) +
+                  '-600 dark:text-' +
+                  getRestaurantColor(i) +
+                  '-400'
+                "
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -68,83 +243,22 @@
               </svg>
             </div>
             <div class="text-left">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">JOLOF</h3>
-              <p class="text-sm text-orange-600 dark:text-orange-400 font-medium">
-                12 plats disponibles
-              </p>
-            </div>
-          </div>
-        </button>
-
-        <!-- RODRA -->
-        <button
-          type="button"
-          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl hover:border-green-500 hover:shadow-lg transition-all"
-        >
-          <div class="absolute top-4 right-4">
-            <div
-              class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 group-hover:border-green-500 transition-colors"
-            ></div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div
-              class="w-16 h-16 bg-green-50 dark:bg-green-500/10 rounded-2xl flex items-center justify-center"
-            >
-              <svg
-                class="w-8 h-8 text-green-600 dark:text-green-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                {{ restaurant.restaurant_name }}
+              </h3>
+              <p
+                [class]="
+                  'text-sm font-medium ' +
+                  (selectedRestaurant()?.id === restaurant.id
+                    ? 'text-' +
+                      getRestaurantColor(i) +
+                      '-600 dark:text-' +
+                      getRestaurantColor(i) +
+                      '-400'
+                    : 'text-gray-500 dark:text-gray-400')
+                "
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-            </div>
-            <div class="text-left">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">RODRA</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                8 plats disponibles
-              </p>
-            </div>
-          </div>
-        </button>
-
-        <!-- CHEZ EVA -->
-        <button
-          type="button"
-          class="group relative p-6 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-2xl hover:border-purple-500 hover:shadow-lg transition-all"
-        >
-          <div class="absolute top-4 right-4">
-            <div
-              class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 group-hover:border-purple-500 transition-colors"
-            ></div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div
-              class="w-16 h-16 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center"
-            >
-              <svg
-                class="w-8 h-8 text-purple-600 dark:text-purple-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                />
-              </svg>
-            </div>
-            <div class="text-left">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">CHEZ EVA</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                10 plats disponibles
+                {{ restaurant.address }}
               </p>
             </div>
           </div>
@@ -174,18 +288,11 @@
           <input
             type="text"
             placeholder="Rechercher un plat..."
+            (input)="onSearchChange($event)"
+            [value]="searchQuery()"
             class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
           />
         </div>
-        <select
-          class="px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 transition-all"
-        >
-          <option value="">Toutes catégories</option>
-          <option value="plat">Plats principaux</option>
-          <option value="boisson">Boissons</option>
-          <option value="dessert">Desserts</option>
-          <option value="accompagnement">Accompagnements</option>
-        </select>
       </div>
     </div>
 
@@ -197,29 +304,59 @@
         <div>
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">Plats disponibles</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Sélectionnez les plats à ajouter à JOLOF
+            <span *ngIf="selectedRestaurant()">
+              <span *ngIf="useTodayDate()">
+                Sélectionnez les plats du menu d'aujourd'hui pour
+                {{ selectedRestaurant()!.restaurant_name }}
+              </span>
+              <span *ngIf="!useTodayDate()">
+                Sélectionnez les plats pour le menu du {{ getDayName(selectedDate()) }}
+                {{ selectedDate() }} à {{ selectedRestaurant()!.restaurant_name }}
+              </span>
+            </span>
+            <span *ngIf="!selectedRestaurant()"> Veuillez d'abord sélectionner un restaurant </span>
           </p>
         </div>
         <div class="flex items-center gap-3">
           <span
             class="px-3 py-1.5 bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 text-sm font-semibold rounded-lg"
           >
-            8 sélectionnés
+            {{ selectedMealIds().size }} sélectionnés
           </span>
         </div>
       </div>
 
       <!-- Grid des plats -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-        <!-- Plat 1 - Sélectionné -->
+      <div
+        *ngIf="filteredMeals().length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6"
+      >
         <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+          *ngFor="let meal of filteredMeals()"
+          (click)="toggleMealSelection(meal.id!)"
+          [class]="
+            'group relative bg-gray-50 dark:bg-gray-900 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer border-2 ' +
+            (isMealSelected(meal.id!)
+              ? 'border-orange-500'
+              : 'border-transparent hover:border-orange-300')
+          "
         >
           <div class="absolute top-3 right-3 z-10">
             <div
-              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
+              [class]="
+                'w-7 h-7 rounded-full flex items-center justify-center shadow-lg transition-all ' +
+                (isMealSelected(meal.id!)
+                  ? 'bg-orange-500'
+                  : 'bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600')
+              "
             >
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                *ngIf="isMealSelected(meal.id!)"
+                class="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -229,51 +366,42 @@
               </svg>
             </div>
           </div>
-          <div class="aspect-square overflow-hidden">
+          <div
+            class="aspect-square overflow-hidden bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/20 dark:to-orange-800/20"
+          >
             <img
-              src="/api/placeholder/300/300"
-              alt="Thiébou Dieune"
+              *ngIf="meal.imageUrl"
+              [src]="meal.imageUrl"
+              [alt]="meal.mealName"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform"
             />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Thiébou Dieune</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Sénégalais</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">4 000 FCFA</span>
-              <span
-                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
+            <div *ngIf="!meal.imageUrl" class="w-full h-full flex items-center justify-center">
+              <svg
+                class="w-16 h-16 text-orange-300 dark:text-orange-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Disponible
-              </span>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
             </div>
           </div>
-        </div>
-
-        <!-- Plat 3 - Non sélectionné -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
-        >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
-            ></div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Mafé"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-            />
-          </div>
           <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-              Mafé
-              <span class="text-base">🥗</span>
+            <h3 class="font-bold text-gray-900 dark:text-white mb-1 truncate">
+              {{ meal.mealName }}
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Africain</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">
+              {{ meal.description }}
+            </p>
             <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-gray-900 dark:text-white">3 200 FCFA</span>
+              <span class="text-lg font-bold text-orange-600 dark:text-orange-400"
+                >{{ meal.unitPrice }} FCFA</span
+              >
               <span
                 class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
               >
@@ -282,177 +410,24 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Plat 4 - Non sélectionné -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
+      <!-- Message si aucun plat -->
+      <div *ngIf="filteredMeals().length === 0" class="text-center py-12">
+        <svg
+          class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
-            ></div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Jus de Bissap"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-            />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Jus de Bissap</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Boisson • Traditionnel</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-gray-900 dark:text-white">1 000 FCFA</span>
-              <span
-                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
-              >
-                Disponible
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plat 5 - Sélectionné -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-        >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
-            >
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Attiéké Poisson"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-            />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Attiéké Poisson</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Ivoirien</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">4 500 FCFA</span>
-              <span
-                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
-              >
-                Disponible
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plat 6 - Non disponible -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden opacity-60 cursor-not-allowed"
-        >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-gray-300 dark:bg-gray-600 border-2 border-gray-400 dark:border-gray-500 rounded-full"
-            ></div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Thiébou Yapp"
-              class="w-full h-full object-cover grayscale"
-            />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Thiébou Yapp</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Plat principal • Sénégalais</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-gray-900 dark:text-white">3 800 FCFA</span>
-              <span
-                class="px-2 py-1 bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-xs font-semibold rounded-full"
-              >
-                Indisponible
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plat 7 - Sélectionné -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-orange-500 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-        >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center shadow-lg"
-            >
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Café Touba"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-            />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1">Café Touba</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Boisson • Traditionnel</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-orange-600 dark:text-orange-400">500 FCFA</span>
-              <span
-                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
-              >
-                Disponible
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plat 8 - Non sélectionné -->
-        <div
-          class="group relative bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer"
-        >
-          <div class="absolute top-3 right-3 z-10">
-            <div
-              class="w-7 h-7 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-orange-500 transition-colors"
-            ></div>
-          </div>
-          <div class="aspect-square overflow-hidden">
-            <img
-              src="/api/placeholder/300/300"
-              alt="Salade Fraîche"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-            />
-          </div>
-          <div class="p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-              Salade Fraîche
-              <span class="text-base">🥗</span>
-            </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Accompagnement • Frais</p>
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-gray-900 dark:text-white">1 500 FCFA</span>
-              <span
-                class="px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full"
-              >
-                Disponible
-              </span>
-            </div>
-          </div>
-        </div>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p class="text-gray-500 dark:text-gray-400">Aucun plat trouvé</p>
       </div>
 
       <!-- Actions en bas -->
@@ -462,14 +437,18 @@
         <div class="flex items-center gap-3">
           <button
             type="button"
-            class="text-sm font-medium text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+            (click)="selectAllMeals()"
+            [disabled]="filteredMeals().length === 0"
+            class="text-sm font-medium text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Tout sélectionner
           </button>
           <span class="text-gray-300 dark:text-gray-600">|</span>
           <button
             type="button"
-            class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            (click)="deselectAllMeals()"
+            [disabled]="selectedMealIds().size === 0"
+            class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Tout désélectionner
           </button>
@@ -477,15 +456,54 @@
         <div class="flex gap-3">
           <button
             type="button"
-            class="px-6 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 transition-colors"
+            (click)="cancel()"
+            [disabled]="isSaving()"
+            class="px-6 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Annuler
           </button>
           <button
             type="button"
-            class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-700 rounded-xl hover:from-orange-700 hover:to-orange-800 transition-all shadow-lg shadow-orange-500/30"
+            (click)="createMenu()"
+            [disabled]="
+              !selectedRestaurant() ||
+              selectedMealIds().size === 0 ||
+              isSaving() ||
+              isWeekend(getEffectiveDate())
+            "
+            class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-700 rounded-xl hover:from-orange-700 hover:to-orange-800 transition-all shadow-lg shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            Affecter à JOLOF (8 plats)
+            <svg
+              *ngIf="isSaving()"
+              class="animate-spin h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <span *ngIf="!isSaving() && selectedRestaurant()">
+              <span *ngIf="useTodayDate()">
+                Créer menu d'aujourd'hui ({{ selectedMealIds().size }} plats)
+              </span>
+              <span *ngIf="!useTodayDate()">
+                Créer menu pour {{ getDayName(selectedDate()) }} ({{ selectedMealIds().size }}
+                plats)
+              </span>
+            </span>
+            <span *ngIf="!isSaving() && !selectedRestaurant()"> Créer le menu </span>
+            <span *ngIf="isSaving()"> Création en cours... </span>
           </button>
         </div>
       </div>

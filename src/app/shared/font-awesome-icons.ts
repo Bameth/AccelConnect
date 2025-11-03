@@ -35,6 +35,8 @@ import {
   faCircle,
   faTrash,
   faHouse,
+  faPepperHot,
+  faCalendarCheck,
 } from '@fortawesome/free-solid-svg-icons';
 export const fontAwesomeIcons: IconDefinition[] = [
   faWallet,
@@ -64,6 +66,9 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faHeart,
   faStar,
   faClock,
+  faUtensils,
+  faCalendarCheck,
+  faPepperHot,
   faCartPlus,
   faFireFlameCurved,
   faMinus,

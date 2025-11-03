@@ -1,17 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FaIconComponent, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 import { AnimationItem } from 'lottie-web';
 import { RouterModule } from '@angular/router';
-import { Restaurant, Stat } from '../../core/models/precharges';
+import { RestaurantService } from './services/impl/restaurant.service';
+import { MenuClientService } from './services/impl/menu.client.service';
+import {
+  MealDisplay,
+  RestaurantDisplay,
+  RestaurantWithMenu,
+  Stat,
+} from './model/menuMealRestau.model';
 
 @Component({
   selector: 'app-restauration-component',
-  imports: [FontAwesomeModule, FaIconComponent, LottieComponent, RouterModule],
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule, FaIconComponent, LottieComponent, RouterModule],
   templateUrl: './restauration-component.html',
   styleUrl: './restauration-component.css',
 })
-export class RestaurationComponent {
+export class RestaurationComponent implements OnInit {
+  private readonly restaurantService = inject(RestaurantService);
+  private readonly menuClientService = inject(MenuClientService);
+
+  // Signaux
+  restaurants = signal<RestaurantDisplay[]>([]);
+  selectedDate = signal<string>(this.getTodayDate());
+  selectedDay = signal<string>(this.getCurrentDayName());
+  isLoading = signal<boolean>(true);
+  errorMessage = signal<string>('');
+
   // Days
   days: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
 
@@ -43,129 +62,48 @@ export class RestaurationComponent {
     },
   ];
 
-  // Restaurants Data
-  restaurants: Restaurant[] = [
+  // Configurations des restaurants (couleurs et icônes)
+  private readonly restaurantConfigs = [
     {
-      id: 'jolof',
-      name: 'Jolof',
-      subtitle: 'Spécialités sénégalaises',
       icon: 'fire',
       gradientFrom: '#E84141',
       gradientTo: '#6B140F',
-      items: [
-        {
-          id: 'jolof-1',
-          name: 'Soupe Okadia',
-          price: 2500,
-          emoji: '🍲',
-          quantity: 2,
-          gradientFrom: '#E84141',
-          gradientTo: '#FF6B35',
-          hoverBorder: 'red-200',
-        },
-        {
-          id: 'jolof-2',
-          name: 'Plat Okadia Complet',
-          price: 4000,
-          emoji: '🍽️',
-          quantity: 1,
-          gradientFrom: '#14B8A6',
-          gradientTo: '#10B981',
-          hoverBorder: 'teal-200',
-        },
-        {
-          id: 'jolof-3',
-          name: 'Brochettes mixtes',
-          price: 3000,
-          emoji: '🍢',
-          quantity: 0,
-          gradientFrom: '#2563EB',
-          gradientTo: '#6366F1',
-          hoverBorder: 'blue-200',
-        },
-      ],
     },
     {
-      id: 'rodra',
-      name: 'Rodra',
-      subtitle: 'Dibiterie & Grillades',
+      icon: 'drumstick-bite',
       gradientFrom: '#303131',
       gradientTo: '#20264E',
-      items: [
-        {
-          id: 'rodra-1',
-          name: 'Dibi mouton',
-          price: 3500,
-          emoji: '🥩',
-          quantity: 0,
-          gradientFrom: '#D97706',
-          gradientTo: '#C2410C',
-          hoverBorder: 'amber-200',
-        },
-        {
-          id: 'rodra-2',
-          name: 'Yassa poulet',
-          price: 3200,
-          emoji: '🍗',
-          quantity: 0,
-          gradientFrom: '#14B8A6',
-          gradientTo: '#06B6D4',
-          hoverBorder: 'teal-200',
-        },
-        {
-          id: 'rodra-3',
-          name: 'Thiébou guinar',
-          price: 2800,
-          emoji: '🐟',
-          quantity: 0,
-          gradientFrom: '#3B82F6',
-          gradientTo: '#A855F7',
-          hoverBorder: 'purple-200',
-        },
-      ],
     },
     {
-      id: 'eva',
-      name: 'EVA',
-      subtitle: 'Cuisine raffinée',
       icon: 'star',
       gradientFrom: '#25509D',
       gradientTo: '#99CFBD',
-      items: [
-        {
-          id: 'eva-1',
-          name: 'Filet mignon sauce poivre',
-          price: 4500,
-          emoji: '🥩',
-          quantity: 0,
-          gradientFrom: '#F43F5E',
-          gradientTo: '#DB2777',
-          hoverBorder: 'rose-200',
-        },
-        {
-          id: 'eva-2',
-          name: 'Salade César Premium',
-          price: 2500,
-          emoji: '🥗',
-          quantity: 0,
-          gradientFrom: '#22C55E',
-          gradientTo: '#10B981',
-          hoverBorder: 'emerald-200',
-        },
-        {
-          id: 'eva-3',
-          name: 'Risotto aux fruits de mer',
-          price: 4200,
-          emoji: '🦐',
-          quantity: 0,
-          gradientFrom: '#3B82F6',
-          gradientTo: '#14B8A6',
-          hoverBorder: 'teal-200',
-        },
-      ],
+    },
+    {
+      icon: 'utensils',
+      gradientFrom: '#059669',
+      gradientTo: '#10B981',
+    },
+    {
+      icon: 'pepper-hot',
+      gradientFrom: '#DC2626',
+      gradientTo: '#F97316',
     },
   ];
 
+  // Couleurs pour les plats (sans emojis)
+  private readonly mealStyles = [
+    { gradientFrom: '#E84141', gradientTo: '#FF6B35', hoverBorder: 'red-200' },
+    { gradientFrom: '#14B8A6', gradientTo: '#10B981', hoverBorder: 'teal-200' },
+    { gradientFrom: '#2563EB', gradientTo: '#6366F1', hoverBorder: 'blue-200' },
+    { gradientFrom: '#D97706', gradientTo: '#C2410C', hoverBorder: 'amber-200' },
+    { gradientFrom: '#14B8A6', gradientTo: '#06B6D4', hoverBorder: 'teal-200' },
+    { gradientFrom: '#3B82F6', gradientTo: '#A855F7', hoverBorder: 'purple-200' },
+    { gradientFrom: '#22C55E', gradientTo: '#10B981', hoverBorder: 'emerald-200' },
+    { gradientFrom: '#3B82F6', gradientTo: '#14B8A6', hoverBorder: 'teal-200' },
+  ];
+
+  // Animation du chef principal
   lottieOptions: AnimationOptions = {
     path: '/assets/lottie/3DChefDancing.json',
     loop: true,
@@ -175,40 +113,198 @@ export class RestaurationComponent {
     },
   };
 
-  selectRestaurant(arg0: string) {
-    throw new Error('Method not implemented.');
+  // Animation du weekend
+  weekendLottieOptions: AnimationOptions = {
+    path: '/assets/lottie/relax.json',
+    loop: true,
+    autoplay: true,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
+
+  ngOnInit(): void {
+    this.loadRestaurantsWithMenus();
   }
 
-  selectDay(arg0: string) {
-    throw new Error('Method not implemented.');
+  getTodayDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  getCurrentDayName(): string {
+    const date = new Date();
+    const dayIndex = date.getDay();
+
+    // Convertir en index de notre tableau (Lundi = 0)
+    if (dayIndex === 1 || dayIndex === 6) {
+      // Weekend, retourner Lundi par défaut
+      return 'Lundi';
+    }
+    // Retourner le jour correspondant
+    console.log(this.days[dayIndex - 1]);
+    return this.days[dayIndex - 1];
+  }
+
+  isWeekend(date: string): boolean {
+    const day = new Date(date).getDay();
+    return day === 0 || day === 6; // 0 = Dimanche, 6 = Samedi
+  }
+
+  getCurrentWeekendMessage(): { title: string; subtitle: string } {
+    const date = new Date(this.selectedDate());
+    const day = date.getDay();
+
+    if (day === 6) {
+      return {
+        title: 'Bon Samedi ! 🎉',
+        subtitle: 'Profitez de votre weekend, nos cuisines sont fermées',
+      };
+    } else {
+      return {
+        title: 'Bon Dimanche ! ☀️',
+        subtitle: 'Reposez-vous bien, on se retrouve lundi',
+      };
+    }
+  }
+
+  loadRestaurantsWithMenus(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.restaurantService.getRestaurants().subscribe({
+      next: (restaurants) => {
+        this.menuClientService.getRestaurantsWithTodayMenus(restaurants).subscribe({
+          next: (restaurantsWithMenus) => {
+            const displayRestaurants = this.mapToDisplayRestaurants(restaurantsWithMenus);
+            this.restaurants.set(displayRestaurants);
+            this.isLoading.set(false);
+          },
+          error: (error) => {
+            console.error('Erreur lors du chargement des menus:', error);
+            this.errorMessage.set('Impossible de charger les menus du jour');
+            this.isLoading.set(false);
+          },
+        });
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des restaurants:', error);
+        this.errorMessage.set('Impossible de charger les restaurants');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  mapToDisplayRestaurants(restaurantsWithMenus: RestaurantWithMenu[]): RestaurantDisplay[] {
+    return restaurantsWithMenus.map((rwm, index) => {
+      const config = this.restaurantConfigs[index % this.restaurantConfigs.length];
+
+      const items: MealDisplay[] =
+        rwm.menu?.meals?.map((meal, mealIndex) => {
+          const style = this.mealStyles[mealIndex % this.mealStyles.length];
+          return {
+            ...meal,
+            quantity: 0,
+            // Support pour les images futures
+            imageUrl: (meal as any).imageUrl || null,
+            gradientFrom: style.gradientFrom,
+            gradientTo: style.gradientTo,
+            hoverBorder: style.hoverBorder,
+          };
+        }) || [];
+
+      return {
+        id: rwm.restaurant.id,
+        name: rwm.restaurant.restaurant_name,
+        subtitle: rwm.hasMenu ? `${rwm.itemCount} plats disponibles` : "Aucun menu aujourd'hui",
+        logoUrl: (rwm.restaurant as any).logoUrl || null,
+        icon: config.icon,
+        gradientFrom: config.gradientFrom,
+        gradientTo: config.gradientTo,
+        hasMenu: rwm.hasMenu,
+        items,
+      };
+    });
+  }
+
+  selectDay(day: string): void {
+    this.selectedDay.set(day);
+    const dayIndex = this.days.indexOf(day);
+    const date = this.getDateForDay(dayIndex);
+    this.selectedDate.set(date);
+    this.loadMenusForDate(date);
+  }
+
+  getDateForDay(dayIndex: number): string {
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 = Dimanche, 1 = Lundi, etc.
+    const diff = dayIndex + 1 - currentDay; // +1 car nos jours commencent à Lundi (0)
+    const targetDate = new Date(today);
+    targetDate.setDate(today.getDate() + diff);
+    return targetDate.toISOString().split('T')[0];
+  }
+
+  loadMenusForDate(date: string): void {
+    this.isLoading.set(true);
+
+    setTimeout(() => {
+      this.restaurantService.getRestaurants().subscribe({
+        next: (restaurants) => {
+          this.menuClientService.getRestaurantsWithMenusByDate(restaurants, date).subscribe({
+            next: (restaurantsWithMenus) => {
+              const displayRestaurants = this.mapToDisplayRestaurants(restaurantsWithMenus);
+              this.restaurants.set(displayRestaurants);
+              this.isLoading.set(false);
+            },
+            error: (error) => {
+              console.error('Erreur lors du chargement des menus:', error);
+              this.isLoading.set(false);
+            },
+          });
+        },
+      });
+    }, 500);
   }
 
   onAnimationCreated(animationItem: AnimationItem): void {
-    console.log('Chef animation loaded!', animationItem);
-  }
-  increaseQuantity(restaurantId: string, itemId: string): void {
-    // TODO: Implémenter la logique
+    console.log('Animation loaded!', animationItem);
   }
 
-  decreaseQuantity(restaurantId: string, itemId: string): void {
-    // TODO: Implémenter la logique
+  increaseQuantity(restaurantId: number, itemId: number): void {
+    const currentRestaurants = this.restaurants();
+    const updatedRestaurants = currentRestaurants.map((restaurant) => {
+      if (restaurant.id === restaurantId) {
+        return {
+          ...restaurant,
+          items: restaurant.items.map((item) =>
+            item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+          ),
+        };
+      }
+      return restaurant;
+    });
+    this.restaurants.set(updatedRestaurants);
   }
 
-  toggleFavorite(itemId: string): void {
-    // TODO: Implémenter la logique
+  decreaseQuantity(restaurantId: number, itemId: number): void {
+    const currentRestaurants = this.restaurants();
+    const updatedRestaurants = currentRestaurants.map((restaurant) => {
+      if (restaurant.id === restaurantId) {
+        return {
+          ...restaurant,
+          items: restaurant.items.map((item) =>
+            item.id === itemId && item.quantity > 0
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
+          ),
+        };
+      }
+      return restaurant;
+    });
+    this.restaurants.set(updatedRestaurants);
   }
 
-  addToCart(restaurantId: string): void {
-    // TODO: Implémenter la logique
-  }
-  get cartItemCount(): number {
-    return this.restaurants.reduce((total, restaurant) => {
-      return total + restaurant.items.reduce((sum, item) => sum + item.quantity, 0);
-    }, 0);
-  }
-
-  getRestaurantItemCount(restaurantId: string): number {
-    const restaurant = this.restaurants.find((r) => r.id === restaurantId);
+  getRestaurantItemCount(restaurantId: number): number {
+    const restaurant = this.restaurants().find((r) => r.id === restaurantId);
     return restaurant ? restaurant.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
   }
 }
