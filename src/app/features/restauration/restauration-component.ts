@@ -228,6 +228,7 @@ export class RestaurationComponent implements OnInit {
     const date = this.getDateForDay(dayIndex);
     this.selectedDate.set(date);
     this.loadMenusForDate(date);
+   
   }
 
   getDateForDay(dayIndex: number): string {

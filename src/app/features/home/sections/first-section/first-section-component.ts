@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AppConfig } from '../../../../core/config/app.config';
 import { MenuTransitionComponent } from '../../../../shared/components/menu-transition/menu-transition-component';
+import { AlexChatComponent } from "../../alex-chat/alex-chat-component";
 
 @Component({
   selector: 'app-first-section-component',
   standalone: true,
-  imports: [CommonModule, RouterModule, MenuTransitionComponent],
+  imports: [CommonModule, RouterModule, MenuTransitionComponent, AlexChatComponent],
   templateUrl: './first-section-component.html',
   styleUrl: './first-section-component.css',
 })
