@@ -14,6 +14,8 @@ import { AddFoodToRestauComponent } from './features/restauration/admin/add-food
 import { ListPlatComponent } from './features/restauration/admin/list-plat/list-plat-component';
 import { ListeRestaurant } from './features/restauration/admin/liste-restaurant/liste-restaurant';
 import { FormRestaurant } from './features/restauration/admin/form-restaurant/form-restaurant';
+import { authGuard } from './features/auth/guards/auth.guard';
+import { roleGuard } from './features/auth/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -44,6 +46,8 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] },
     children: [
       { path: '', component: AdminComponent },
       { path: 'add-food', component: FormFoodComponent },

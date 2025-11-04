@@ -39,6 +39,7 @@
     "@rive-app/canvas-advanced": "^2.32.0",
     "@tailwindcss/postcss": "^4.1.14",
     "express": "^5.1.0",
+    "keycloak-js": "^26.2.1",
     "lottie-web": "^5.13.0",
     "ng-rive": "^0.3.1",
     "ngx-lottie": "^20.0.0",
