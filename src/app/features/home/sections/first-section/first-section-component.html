@@ -1,10 +1,7 @@
 <!-- first-section-component.html -->
 
 <!-- HERO SECTION - Style Twitch/Discord/Netflix -->
-<section
-  id="accueil"
-  class="relative min-h-screen flex items-center overflow-hidden bg-[#0e1015]"
->
+<section id="accueil" class="relative min-h-screen flex items-center overflow-hidden bg-[#0e1015]">
   <!-- Background gradient sophistiqué -->
   <div class="absolute inset-0">
     <div class="absolute inset-0 bg-gradient-to-br from-[#0e1015] via-[#1a1f3a] to-[#20264e]"></div>
@@ -83,34 +80,29 @@
       <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <!-- Partie gauche: Texte -->
         <div class="space-y-8 lg:space-y-10">
-          <!-- Badge status (style Twitch) -->
-          <div
-            class="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#25509d]/20 to-[#99cfbd]/20 backdrop-blur-xl border border-[#99cfbd]/30 rounded-full animate-fade-in"
-          >
-            <span class="relative flex h-3 w-3">
-              <span
-                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ade80] opacity-75"
-              ></span>
-              <span
-                class="relative inline-flex rounded-full h-3 w-3 bg-[#4ade80] shadow-lg shadow-[#4ade80]/50"
-              ></span>
-            </span>
-            <span class="text-white font-semibold text-sm tracking-wide"
-              >En ligne • 250+ utilisateurs actifs</span
-            >
-          </div>
-
           <!-- Titre principal (style Netflix/Instagram) -->
           <div class="space-y-4">
             <h1
               class="font-black text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.05] tracking-tight"
             >
               <span class="block animate-slide-up">Dalal ak jàmm,</span>
+
+              <!-- Affichage dynamique du nom de l'utilisateur -->
+              @if (isLoading()) {
+              <!-- État de chargement avec animation -->
               <span
                 class="block mt-2 bg-gradient-to-r from-[#99cfbd] via-[#7ab8a8] to-[#5da89c] bg-clip-text text-transparent animate-slide-up animation-delay-100"
               >
-                Nassour !
+                <span class="inline-block animate-pulse">...</span>
               </span>
+              } @else {
+              <!-- Nom de l'utilisateur avec animation -->
+              <span
+                class="block mt-2 bg-gradient-to-r from-[#99cfbd] via-[#7ab8a8] to-[#5da89c] bg-clip-text text-transparent animate-slide-up animation-delay-100"
+              >
+                {{ getDisplayName() }}!
+              </span>
+              }
             </h1>
           </div>
 

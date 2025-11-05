@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { KeycloakService } from '../service/keycloak-service';
+import { KeycloakService } from '../service/keycloak.service';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = async () => {
   const keycloakService = inject(KeycloakService);
   const router = inject(Router);
 
@@ -10,13 +10,13 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  // Prefer native Keycloak login if available
+  // Rediriger vers Keycloak pour l'authentification
   try {
-    keycloakService.login();
-  } catch {
+    await keycloakService.login();
+    return false;
+  } catch (error) {
+    console.error('❌ Authentication failed:', error);
     router.navigate(['/login']);
+    return false;
   }
-  return false;
 };
-
-
