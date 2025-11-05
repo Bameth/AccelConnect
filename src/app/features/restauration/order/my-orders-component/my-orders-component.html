@@ -1,0 +1,345 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-8 px-4"
+  style="font-family: 'UberMove', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+>
+  <!-- Animated Background -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div
+      class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse"
+    ></div>
+    <div
+      class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse"
+      style="animation-delay: 1s"
+    ></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <!-- Header Premium -->
+    <div class="mb-8">
+      <div class="flex items-center gap-4 mb-6">
+        <div
+          class="w-16 h-16 bg-gradient-to-br from-blue-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-xl"
+        >
+          <fa-icon [icon]="['fas', 'receipt']" class="text-white text-2xl"></fa-icon>
+        </div>
+        <div>
+          <h1 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+            Mes Commandes
+          </h1>
+          <p class="text-gray-600 text-lg">Suivez l'état de vos commandes</p>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <!-- Total Commandes du mois -->
+        <div class="group relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-blue-500 to-teal-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md"
+              >
+                <fa-icon [icon]="['fas', 'shopping-bag']" class="text-white text-xl"></fa-icon>
+              </div>
+              <div class="text-right">
+                <p class="text-3xl font-black text-gray-900">{{ totalOrders() }}</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 font-semibold">Commandes du mois</p>
+          </div>
+        </div>
+
+        <!-- Total Dépensé du mois -->
+        <div class="group relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-md"
+              >
+                <fa-icon [icon]="['fas', 'wallet']" class="text-white text-xl"></fa-icon>
+              </div>
+              <div class="text-right">
+                <p class="text-2xl font-black text-gray-900">
+                  {{ formatAmount(totalSpent()) }}<span class="text-sm ml-1">F</span>
+                </p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 font-semibold">Dépensé ce mois</p>
+          </div>
+        </div>
+
+        <!-- Confirmées -->
+        <div class="group relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-md"
+              >
+                <fa-icon [icon]="['fas', 'check-circle']" class="text-white text-xl"></fa-icon>
+              </div>
+              <div class="text-right">
+                <p class="text-3xl font-black text-gray-900">{{ confirmedCount() }}</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 font-semibold">Confirmées</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sélecteur de mois -->
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg mb-4">
+        <div class="flex items-center gap-3">
+          <fa-icon [icon]="['fas', 'calendar-alt']" class="text-blue-500 text-xl"></fa-icon>
+          <select
+            [value]="selectedMonth()"
+            (change)="selectMonth($any($event.target).value)"
+            class="flex-1 px-4 py-2 bg-white border-2 border-gray-200 rounded-xl font-semibold text-gray-700 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer"
+          >
+            @for (month of availableMonths(); track month.value) {
+            <option [value]="month.value">{{ month.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Filtres de statut -->
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center gap-2 overflow-x-auto pb-2">
+          @for (filter of filters; track filter.value) {
+          <button
+            (click)="applyFilter(filter.value)"
+            [class]="
+              selectedFilter() === filter.value
+                ? 'px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-teal-500 text-white font-bold text-sm shadow-lg scale-105 transition-all'
+                : 'px-4 py-2 rounded-xl bg-gray-100 text-gray-700 font-semibold text-sm hover:bg-gray-200 hover:scale-105 transition-all'
+            "
+          >
+            <div class="flex items-center gap-2 whitespace-nowrap">
+              <fa-icon [icon]="['fas', filter.icon]" class="text-sm"></fa-icon>
+              <span>{{ filter.label }}</span>
+              <span
+                class="px-2 py-0.5 rounded-full text-xs font-black"
+                [class]="
+                  selectedFilter() === filter.value ? 'bg-white/20' : 'bg-blue-100 text-blue-700'
+                "
+              >
+                {{ filter.count }}
+              </span>
+            </div>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+    <div class="flex flex-col items-center justify-center py-20">
+      <div class="relative w-20 h-20 mb-6">
+        <div
+          class="absolute inset-0 rounded-full border-4 border-blue-200 animate-ping opacity-20"
+        ></div>
+        <div
+          class="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"
+        ></div>
+      </div>
+      <p class="text-gray-700 font-bold text-xl animate-pulse">Chargement de vos commandes...</p>
+    </div>
+    }
+
+    <!-- Liste vide -->
+    @if (!isLoading() && filteredOrders().length === 0) {
+    <div class="flex flex-col items-center justify-center py-20">
+      <div class="w-64 h-64 mb-6">
+        <ng-lottie
+          [options]="emptyOrdersOptions"
+          (animationCreated)="onAnimationCreated($event)"
+          class="w-full h-full"
+        ></ng-lottie>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Aucune commande</h2>
+      <p class="text-gray-600 text-lg mb-8 text-center max-w-md">
+        Vous n'avez pas de commande pour cette période. Découvrez nos délicieux plats !
+      </p>
+      <button
+        routerLink="/restauration"
+        class="group bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all flex items-center gap-3"
+      >
+        <span>Découvrir le menu</span>
+        <fa-icon
+          [icon]="['fas', 'arrow-right']"
+          class="text-lg group-hover:translate-x-1 transition-transform"
+        ></fa-icon>
+      </button>
+    </div>
+    }
+
+    <!-- Liste des commandes -->
+    @if (!isLoading() && filteredOrders().length > 0) {
+    <div class="space-y-4">
+      @for (order of filteredOrders(); track order.id; let i = $index) {
+      <div
+        class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-200"
+        [style.animation-delay]="i * 50 + 'ms'"
+      >
+        <!-- Header -->
+        <div
+          class="p-6 cursor-pointer"
+          (click)="toggleOrderDetails(order.id)"
+          [class.bg-gray-50]="expandedOrderId() === order.id"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <!-- Left Info -->
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-3">
+                <!-- Status Badge -->
+                <div
+                  class="px-4 py-2 rounded-xl font-bold text-sm text-white shadow-md bg-gradient-to-r"
+                  [class]="getStatusColor(order.status)"
+                >
+                  <div class="flex items-center gap-2">
+                    <fa-icon
+                      [icon]="['fas', getStatusIcon(order.status)]"
+                      class="text-sm"
+                    ></fa-icon>
+                    <span>{{ getStatusLabel(order.status) }}</span>
+                  </div>
+                </div>
+
+                <!-- Order ID -->
+                <div class="px-3 py-1.5 bg-gray-100 rounded-lg">
+                  <span class="text-xs font-bold text-gray-600">#{{ order.id }}</span>
+                </div>
+              </div>
+
+              <!-- Restaurant -->
+              <div class="flex items-center gap-2 mb-2">
+                <fa-icon [icon]="['fas', 'store']" class="text-gray-400 text-sm"></fa-icon>
+                <h3 class="text-xl font-black text-gray-900">{{ order.restaurantName }}</h3>
+              </div>
+
+              <!-- Date -->
+              <div class="flex items-center gap-2 text-gray-600 text-sm">
+                <fa-icon [icon]="['fas', 'calendar']" class="text-gray-400"></fa-icon>
+                <span class="font-medium">{{
+                  order.orderDate | date : 'EEEE dd MMMM yyyy' : '' : 'fr-FR'
+                }}</span>
+                <span class="text-gray-400">•</span>
+                <span class="font-medium">{{
+                  order.createdAt | date : 'HH:mm' : '' : 'fr-FR'
+                }}</span>
+              </div>
+            </div>
+
+            <!-- Right Info -->
+            <div class="text-right">
+              <div class="mb-2">
+                <p class="text-3xl font-black text-blue-600">
+                  {{ formatAmount(order.totalAmount) }}<span class="text-lg ml-1">F</span>
+                </p>
+                <p class="text-xs text-gray-500 font-medium mt-1">
+                  dont {{ formatAmount(order.deliveryFeeShare) }} F de livraison
+                </p>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex items-center gap-2 justify-end mt-3">
+                @if (canCancel(order)) {
+                <button
+                  (click)="cancelOrder(order.id, $event)"
+                  class="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100 transition-all"
+                >
+                  <fa-icon [icon]="['fas', 'times']" class="mr-1"></fa-icon>
+                  Annuler
+                </button>
+                }
+                <button
+                  class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200 transition-all"
+                >
+                  <fa-icon
+                    [icon]="['fas', expandedOrderId() === order.id ? 'chevron-up' : 'chevron-down']"
+                  ></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expanded Details -->
+        @if (expandedOrderId() === order.id) {
+        <div class="border-t-2 border-gray-100 p-6 bg-gray-50">
+          <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <fa-icon [icon]="['fas', 'utensils']" class="text-blue-500"></fa-icon>
+            Détails de la commande
+          </h4>
+
+          <div class="space-y-3">
+            @for (item of order.items; track item.id) {
+            <div class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm">
+              <div class="flex items-center gap-4 flex-1">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl flex items-center justify-center shadow-md"
+                >
+                  <fa-icon [icon]="['fas', 'utensils']" class="text-white"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h5 class="font-bold text-gray-900 text-lg">{{ item.mealName }}</h5>
+                  <p class="text-sm text-gray-600 font-medium">
+                    {{ formatAmount(item.unitPrice) }} F × {{ item.quantity }}
+                  </p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-xl font-black text-blue-600">
+                  {{ formatAmount(item.subtotal) }}<span class="text-sm ml-1">F</span>
+                </p>
+              </div>
+            </div>
+            }
+          </div>
+
+          <!-- Récapitulatif -->
+          <div class="mt-6 p-4 bg-blue-50 rounded-xl">
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-700 font-semibold">Sous-total</span>
+                <span class="font-bold text-gray-900">{{ formatAmount(order.subtotal) }} F</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-700 font-semibold">Frais de livraison</span>
+                <span class="font-bold text-blue-600"
+                  >{{ formatAmount(order.deliveryFeeShare) }} F</span
+                >
+              </div>
+              <div class="h-px bg-gray-300 my-2"></div>
+              <div class="flex justify-between">
+                <span class="text-gray-900 font-bold text-lg">Total</span>
+                <span class="font-black text-blue-600 text-2xl">
+                  {{ formatAmount(order.totalAmount) }}<span class="text-sm ml-1">F</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

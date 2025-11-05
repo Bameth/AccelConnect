@@ -1,15 +1,17 @@
 import {
   ApplicationConfig,
+  LOCALE_ID,
   APP_INITIALIZER,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
   PLATFORM_ID,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import localeFr from '@angular/common/locales/fr';
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, registerLocaleData } from '@angular/common';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -29,11 +31,12 @@ export function initializeKeycloak(
     return Promise.resolve(false);
   };
 }
-
+registerLocaleData(localeFr);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    { provide: LOCALE_ID, useValue: 'fr-FR' },
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),

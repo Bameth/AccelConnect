@@ -1,0 +1,271 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <div
+          class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
+        >
+          <fa-icon [icon]="['fas', 'wallet']" class="text-white text-xl"></fa-icon>
+        </div>
+        <div>
+          <h1 class="text-3xl md:text-4xl font-black text-gray-900">Gestion des Portefeuilles</h1>
+          <p class="text-gray-600">Gérez les dépôts et soldes des utilisateurs</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtres et recherche -->
+    <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Recherche -->
+        <div class="relative">
+          <fa-icon
+            [icon]="['fas', 'search']"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          ></fa-icon>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            placeholder="Rechercher un utilisateur..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Tri par solde -->
+        <button
+          (click)="sortByBalance(false)"
+          class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors flex items-center gap-2"
+        >
+          <fa-icon [icon]="['fas', 'arrow-down-wide-short']"></fa-icon>
+          Trier par solde
+        </button>
+
+        <!-- Tri par nom -->
+        <button
+          (click)="sortByName()"
+          class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors flex items-center gap-2"
+        >
+          <fa-icon [icon]="['fas', 'arrow-down-a-z']"></fa-icon>
+          Trier par nom
+        </button>
+
+        <!-- Filtre par statut -->
+        <select
+          (change)="filterByStatus($any($event.target).value)"
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="all">Tous les statuts</option>
+          <option value="Actif">Actif</option>
+          <option value="Solde faible">Solde faible</option>
+          <option value="Solde épuisé">Solde épuisé</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+    </div>
+    }
+
+    <!-- Liste des utilisateurs -->
+    @if (!isLoading()) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+      @for (user of filteredUsers(); track user.userId) {
+      <div
+        class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-200"
+      >
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-4 sm:p-5">
+          <div class="flex items-start justify-between">
+            <div class="flex-1 min-w-0">
+              <h3 class="text-white font-bold text-lg truncate">{{ user.username }}</h3>
+              <p class="text-white/80 text-sm truncate">{{ user.email }}</p>
+            </div>
+            <span
+              class="px-3 py-1 rounded-full text-xs font-bold"
+              [class]="getStatusColor(user.status)"
+            >
+              {{ user.status }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="p-4 sm:p-5 space-y-4">
+          <!-- Solde actuel -->
+          <div
+            class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-600">Solde actuel</span>
+              <fa-icon [icon]="['fas', 'wallet']" class="text-green-600"></fa-icon>
+            </div>
+            <div class="text-2xl font-black text-green-700">
+              {{ formatAmount(user.balance) }}
+            </div>
+          </div>
+
+          <!-- Statistiques -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="text-xs text-gray-500 mb-1">Total déposé</div>
+              <div class="text-sm font-bold text-gray-900">
+                {{ formatAmount(user.totalDeposited) }}
+              </div>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="text-xs text-gray-500 mb-1">Total dépensé</div>
+              <div class="text-sm font-bold text-gray-900">
+                {{ formatAmount(user.totalSpent) }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Nombre de commandes -->
+          <div class="flex items-center gap-2 text-sm text-gray-600">
+            <fa-icon [icon]="['fas', 'shopping-bag']"></fa-icon>
+            <span>{{ user.totalOrders }} commande(s)</span>
+          </div>
+
+          <!-- Bouton dépôt -->
+          <button
+            (click)="selectUser(user)"
+            class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+          >
+            <fa-icon [icon]="['fas', 'plus-circle']"></fa-icon>
+            Effectuer un dépôt
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Message si aucun résultat -->
+    @if (filteredUsers().length === 0) {
+    <div class="text-center py-12">
+      <fa-icon [icon]="['fas', 'users-slash']" class="text-gray-300 text-6xl mb-4"></fa-icon>
+      <p class="text-gray-600 font-semibold">Aucun utilisateur trouvé</p>
+    </div>
+    } }
+  </div>
+
+  <!-- Modal de dépôt -->
+  @if (selectedUser()) {
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+      <!-- Header modal -->
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-black text-white">Effectuer un dépôt</h2>
+          <button
+            (click)="closeDepositModal()"
+            class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+          >
+            <fa-icon [icon]="['fas', 'times']" class="text-white"></fa-icon>
+          </button>
+        </div>
+        <div class="mt-3">
+          <p class="text-white/90 font-medium">{{ selectedUser()!.username }}</p>
+          <p class="text-white/70 text-sm">{{ selectedUser()!.email }}</p>
+        </div>
+      </div>
+
+      <!-- Body modal -->
+      <div class="p-6 space-y-4">
+        <!-- Solde actuel -->
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="text-sm text-gray-600 mb-1">Solde actuel</div>
+          <div class="text-2xl font-black text-gray-900">
+            {{ formatAmount(selectedUser()!.balance) }}
+          </div>
+        </div>
+
+        <!-- Montant à déposer -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Montant à déposer (FCFA) *
+          </label>
+          <input
+            type="number"
+            [(ngModel)]="depositAmount"
+            [min]="0"
+            [step]="1000"
+            placeholder="Ex: 10000"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg font-bold"
+          />
+          <!-- Boutons rapides -->
+          <div class="grid grid-cols-3 gap-2 mt-2">
+            <button
+              (click)="depositAmount.set(5000)"
+              class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              5,000
+            </button>
+            <button
+              (click)="depositAmount.set(10000)"
+              class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              10,000
+            </button>
+            <button
+              (click)="depositAmount.set(20000)"
+              class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              20,000
+            </button>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2"> Description </label>
+          <input
+            type="text"
+            [(ngModel)]="depositDescription"
+            placeholder="Description du dépôt"
+            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <!-- Nouveau solde prévu -->
+        @if (depositAmount() && depositAmount()! > 0) {
+        <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+          <div class="text-sm text-green-700 mb-1">Nouveau solde</div>
+          <div class="text-2xl font-black text-green-700">
+            {{ formatAmount(selectedUser()!.balance + depositAmount()!) }}
+          </div>
+        </div>
+        }
+
+        <!-- Boutons -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <button
+            (click)="closeDepositModal()"
+            [disabled]="isDepositing()"
+            class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors disabled:opacity-50"
+          >
+            Annuler
+          </button>
+          <button
+            (click)="makeDeposit()"
+            [disabled]="isDepositing() || !depositAmount() || depositAmount()! <= 0"
+            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            @if (isDepositing()) {
+            <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
+            <span>Traitement...</span>
+            } @else {
+            <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+            <span>Confirmer</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

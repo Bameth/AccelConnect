@@ -1,230 +1,236 @@
+<!-- admin-orders.component.html -->
 <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
   <div class="px-4 py-6 mx-auto max-w-[1600px] sm:px-6 lg:px-8">
-    <!-- Header avec date et actions -->
+    <!-- Header -->
     <div class="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Commandes du Jour</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Gestion des Commandes</h1>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Mardi 28 Octobre 2025 • {{ tableData.length }} commandes
+          {{ formatDate(selectedDate) }} • {{ filteredStats?.totalOrders || 0 }} commandes
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3">
-        <button
-          class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-            />
-          </svg>
-          Filtrer
-        </button>
-
-        <button
-          class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
-          Exporter
-        </button>
-      </div>
+      <button
+        (click)="exportOrders()"
+        class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
+        </svg>
+        Exporter CSV
+      </button>
     </div>
 
-    <!-- Stats Cards par Restaurant -->
+    <!-- Statistiques -->
     <div class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
-      <!-- Total général -->
       <div
         class="relative p-5 overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg"
       >
         <div class="relative z-10">
-          <div class="flex items-center justify-between mb-3">
-            <div
-              class="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl backdrop-blur-sm"
-            >
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-sm font-medium text-blue-100 uppercase">Total Général</p>
-          <p class="mt-2 text-3xl font-bold text-white">45 750 FCFA</p>
-          <div class="flex items-center gap-2 mt-3">
-            <span class="text-xs font-medium text-blue-100">15 commandes</span>
-          </div>
-        </div>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-8 -mt-8"></div>
-      </div>
-
-      <!-- JOLOF -->
-      <div
-        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow"
-      >
-        <div class="flex items-center justify-between mb-3">
-          <div
-            class="flex items-center justify-center w-12 h-12 bg-orange-50 rounded-xl dark:bg-orange-500/10"
-          >
-            <svg
-              class="w-6 h-6 text-orange-600 dark:text-orange-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-          </div>
-          <span
-            class="px-2.5 py-1 text-xs font-semibold text-orange-700 bg-orange-100 rounded-full dark:bg-orange-500/10 dark:text-orange-400"
-          >
-            JOLOF
-          </span>
-        </div>
-        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">À payer</p>
-        <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">18 500 FCFA</p>
-        <div class="flex items-center gap-1 mt-3">
-          <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path
-              fill-rule="evenodd"
-              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">6 commandes</span>
+          <p class="text-sm font-medium text-blue-100 uppercase">Total Commandes</p>
+          <p class="mt-2 text-3xl font-bold text-white">{{ filteredStats?.totalOrders || 0 }}</p>
         </div>
       </div>
 
-      <!-- RODRA -->
       <div
-        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow"
+        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
       >
-        <div class="flex items-center justify-between mb-3">
-          <div
-            class="flex items-center justify-center w-12 h-12 bg-green-50 rounded-xl dark:bg-green-500/10"
-          >
-            <svg
-              class="w-6 h-6 text-green-600 dark:text-green-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-          </div>
-          <span
-            class="px-2.5 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full dark:bg-green-500/10 dark:text-green-400"
-          >
-            RODRA
-          </span>
-        </div>
-        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">À payer</p>
-        <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">15 250 FCFA</p>
-        <div class="flex items-center gap-1 mt-3">
-          <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path
-              fill-rule="evenodd"
-              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">5 commandes</span>
-        </div>
+        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Montant Total</p>
+        <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+          {{ filteredStats?.totalAmount || 0 | number : '1.0-0' }} FCFA
+        </p>
       </div>
 
-      <!-- CHEZ EVA -->
       <div
-        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow"
+        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
       >
-        <div class="flex items-center justify-between mb-3">
-          <div
-            class="flex items-center justify-center w-12 h-12 bg-purple-50 rounded-xl dark:bg-purple-500/10"
-          >
-            <svg
-              class="w-6 h-6 text-purple-600 dark:text-purple-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Confirmées</p>
+        <p class="mt-1 text-2xl font-bold text-green-600 dark:text-green-400">
+          {{ filteredStats?.confirmedCount || 0 }}
+        </p>
+      </div>
+
+      <div
+        class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
+      >
+        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Annulées</p>
+        <p class="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">
+          {{ filteredStats?.cancelledCount || 0 }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div
+      class="p-4 mb-6 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <!-- Mode de vue -->
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Vue
+          </label>
+          <div class="flex gap-2">
+            <button
+              (click)="onViewModeChange('day')"
+              [class]="
+                viewMode === 'day'
+                  ? 'flex-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg'
+                  : 'flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+              "
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
+              Jour
+            </button>
+            <button
+              (click)="onViewModeChange('month')"
+              [class]="
+                viewMode === 'month'
+                  ? 'flex-1 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg'
+                  : 'flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+              "
+            >
+              Mois
+            </button>
           </div>
-          <span
-            class="px-2.5 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full dark:bg-purple-500/10 dark:text-purple-400"
-          >
-            CHEZ EVA
-          </span>
         </div>
-        <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">À payer</p>
-        <p class="mt-1 text-2xl font-bold text-gray-900 dark:text-white">12 000 FCFA</p>
-        <div class="flex items-center gap-1 mt-3">
-          <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path
-              fill-rule="evenodd"
-              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span class="text-xs font-medium text-gray-700 dark:text-gray-300">4 commandes</span>
+
+        <!-- Date (si mode jour) -->
+        <div *ngIf="viewMode === 'day'">
+          <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Date
+          </label>
+          <input
+            type="date"
+            [(ngModel)]="selectedDate"
+            (change)="onDateChange()"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          />
+        </div>
+
+        <!-- Mois et Année (si mode mois) -->
+        <ng-container *ngIf="viewMode === 'month'">
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Mois
+            </label>
+            <select
+              [(ngModel)]="selectedMonth"
+              (change)="onMonthChange()"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            >
+              <option *ngFor="let month of months" [value]="month.value">
+                {{ month.label }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Année
+            </label>
+            <select
+              [(ngModel)]="selectedYear"
+              (change)="onMonthChange()"
+              class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            >
+              <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+            </select>
+          </div>
+        </ng-container>
+
+        <!-- Restaurant -->
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Restaurant
+          </label>
+          <select
+            [(ngModel)]="filters.restaurantId"
+            (change)="onFilterChange()"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          >
+            <option [value]="undefined">Tous les restaurants</option>
+            <option *ngFor="let restaurant of restaurants" [value]="restaurant.id">
+              {{ restaurant.restaurant_name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Statut -->
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Statut
+          </label>
+          <select
+            [(ngModel)]="filters.status"
+            (change)="onFilterChange()"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          >
+            <option value="ALL">Tous les statuts</option>
+            <option value="CONFIRMED">Confirmées</option>
+            <option value="CANCELLED">Annulées</option>
+          </select>
+        </div>
+
+        <!-- Recherche -->
+        <div class="md:col-span-2 lg:col-span-1">
+          <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            Recherche
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="filters.searchTerm"
+            (ngModelChange)="onFilterChange()"
+            placeholder="Utilisateur ou restaurant..."
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          />
         </div>
       </div>
     </div>
 
-    <!-- Liste des commandes (style cards moderne) -->
-    <div class="space-y-3">
-      @for (order of tableData; track order.id) {
+    <!-- Loader -->
+    <div *ngIf="loading" class="flex items-center justify-center py-12">
       <div
-        class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-all hover:border-blue-300 dark:hover:border-blue-500/50"
+        class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"
+      ></div>
+    </div>
+
+    <!-- Liste des commandes -->
+    <div *ngIf="!loading" class="space-y-3">
+      <div
+        *ngIf="displayedOrders.length === 0"
+        class="p-8 text-center bg-white border border-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700"
+      >
+        <p class="text-gray-500 dark:text-gray-400">Aucune commande trouvée</p>
+      </div>
+
+      <div
+        *ngFor="let order of displayedOrders"
+        class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-all hover:border-blue-300"
       >
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <!-- Section Client -->
           <div class="flex items-start gap-4 min-w-0 lg:w-1/4">
             <div class="relative flex-shrink-0">
-              <img
-                [src]="order.user.image"
-                [alt]="order.user.name"
-                class="object-cover w-14 h-14 rounded-xl ring-2 ring-gray-100 dark:ring-gray-700"
-              />
+              <div
+                class="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white font-bold text-lg"
+              >
+                {{ order.username.charAt(0).toUpperCase() }}
+              </div>
               <span
                 class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full dark:border-gray-800"
               ></span>
             </div>
             <div class="min-w-0">
               <h3 class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                {{ order.user.name }}
+                {{ order.username }}
               </h3>
               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                {{ order.user.role }}
+                Commande #{{ order.id }}
               </p>
               <div class="flex items-center gap-1.5 mt-1">
                 <svg class="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -234,7 +240,9 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span class="text-xs text-gray-500 dark:text-gray-400">12:45</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{
+                  formatTime(order.createdAt)
+                }}</span>
               </div>
             </div>
           </div>
@@ -242,24 +250,12 @@
           <!-- Section Restaurant -->
           <div class="flex items-center gap-3 lg:w-1/6">
             <div
-              class="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-lg"
-              [ngClass]="{
-                'bg-orange-50 dark:bg-orange-500/10': order.restaurant === 'JOLOF',
-                'bg-green-50 dark:bg-green-500/10': order.restaurant === 'RODRA',
-                'bg-purple-50 dark:bg-purple-500/10': order.restaurant === 'CHEZ EVA'
-              }"
+              [class]="
+                'flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-lg ' +
+                getRestaurantColor(order.restaurantName)
+              "
             >
-              <svg
-                class="w-5 h-5"
-                [ngClass]="{
-                  'text-orange-600 dark:text-orange-400': order.restaurant === 'JOLOF',
-                  'text-green-600 dark:text-green-400': order.restaurant === 'RODRA',
-                  'text-purple-600 dark:text-purple-400': order.restaurant === 'CHEZ EVA'
-                }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -272,132 +268,130 @@
               <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">
                 Restaurant
               </p>
-              <p
-                class="text-sm font-semibold"
-                [ngClass]="{
-                  'text-orange-700 dark:text-orange-400': order.restaurant === 'JOLOF',
-                  'text-green-700 dark:text-green-400': order.restaurant === 'RODRA',
-                  'text-purple-700 dark:text-purple-400': order.restaurant === 'CHEZ EVA'
-                }"
-              >
-                {{ order.restaurant }}
+              <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                {{ order.restaurantName }}
               </p>
             </div>
           </div>
 
-          <!-- Section Articles commandés -->
+          <!-- Section Articles -->
           <div class="flex-1 lg:w-1/3">
             <p class="mb-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">
               Articles
             </p>
             <div class="flex flex-wrap gap-2">
-              @for (item of order.items; track $index) {
               <div
+                *ngFor="let item of order.items"
                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg dark:bg-gray-700/50 dark:border-gray-600"
               >
-                <span class="text-sm font-medium text-gray-900 dark:text-white">
-                  {{ item.name }}
-                </span>
+                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                  item.mealName
+                }}</span>
                 <span
                   class="flex items-center justify-center w-5 h-5 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full dark:bg-blue-500/20 dark:text-blue-400"
                 >
                   {{ item.quantity }}
                 </span>
               </div>
-              }
             </div>
           </div>
 
-          <!-- Section Prix et Status -->
-          <div class="flex items-center gap-4 lg:w-1/6 lg:justify-end">
+          <!-- Section Prix et Statut -->
+          <div class="flex items-center gap-4 lg:w-1/5 lg:justify-end">
             <div class="text-right">
               <p class="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Total</p>
-              <p class="mt-1 text-xl font-bold text-gray-900 dark:text-white">{{ order.total }}</p>
+              <p class="mt-1 text-xl font-bold text-gray-900 dark:text-white">
+                {{ order.totalAmount | number : '1.0-0' }} FCFA
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                Livraison: {{ order.deliveryFeeShare | number : '1.0-0' }} FCFA
+              </p>
             </div>
             <div>
-              <!-- <span
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg"
-                [ngClass]="{
-                  'bg-green-50 text-green-700 ring-1 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400':
-                    order.status === 'Payée',
-                  'bg-yellow-50 text-yellow-700 ring-1 ring-yellow-600/20 dark:bg-yellow-500/10 dark:text-yellow-400':
-                    order.status === 'En attente',
-                  'bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-500/10 dark:text-red-400':
-                    order.status === 'Annulée'
-                }"
+              <span
+                [class]="
+                  'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg ring-1 ring-inset ' +
+                  getStatusColor(order.status)
+                "
               >
                 <span
                   class="w-1.5 h-1.5 rounded-full"
-                  [ngClass]="{
-                    'bg-green-600': order.status === 'Payée',
-                    'bg-yellow-600': order.status === 'En attente',
-                    'bg-red-600': order.status === 'Annulée'
-                  }"
+                  [class]="order.status === 'CONFIRMED' ? 'bg-green-600' : 'bg-red-600'"
                 ></span>
-                {{ order.status }}
-              </span> -->
+                {{ getStatusLabel(order.status) }}
+              </span>
             </div>
-
-            <!-- Menu Actions -->
-            <button
-              class="p-2 text-gray-400 transition-colors rounded-lg hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-              type="button"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
-      }
     </div>
 
-    <!-- Résumé final (sticky au bas) -->
+    <!-- Pagination -->
     <div
-      class="sticky bottom-4 mt-6 p-5 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl shadow-xl dark:from-gray-800 dark:to-gray-900"
+      *ngIf="!loading && displayedOrders.length > 0"
+      class="flex flex-col gap-4 mt-6 sm:flex-row sm:items-center sm:justify-between"
     >
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div class="flex items-center gap-3">
-          <div
-            class="flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl backdrop-blur-sm"
-          >
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p class="text-sm font-medium text-gray-300">Récapitulatif du jour</p>
-            <p class="text-xs text-gray-400">Total de toutes les commandes</p>
-          </div>
-        </div>
+      <!-- Page size selector -->
+      <div class="flex items-center gap-2">
+        <label class="text-sm text-gray-700 dark:text-gray-300">Afficher:</label>
+        <select
+          [(ngModel)]="pageSize"
+          (change)="onPageSizeChange()"
+          class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        >
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+        <!-- <span class="text-sm text-gray-700 dark:text-gray-300">
+          résultats ({{ (currentPage - 1) * pageSize + 1 }}-{{
+            Math.min(currentPage * pageSize, filteredStats?.totalOrders || 0)
+          }}
+          sur {{ filteredStats?.totalOrders || 0 }})
+        </span> -->
+      </div>
 
-        <div class="flex flex-wrap items-center gap-6">
-          <div>
-            <p class="text-xs font-medium text-gray-400 uppercase">Commandes</p>
-            <p class="text-2xl font-bold text-white">15</p>
-          </div>
-          <div class="w-px h-10 bg-white/20"></div>
-          <div>
-            <p class="text-xs font-medium text-gray-400 uppercase">Total Général</p>
-            <p class="text-3xl font-bold text-white">45 750 FCFA</p>
-          </div>
-          <button
-            class="px-6 py-3 text-sm font-semibold text-gray-900 bg-white rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            Valider & Clôturer
-          </button>
-        </div>
+      <!-- Page numbers -->
+      <div class="flex items-center gap-2">
+        <button
+          (click)="previousPage()"
+          [disabled]="currentPage === 1"
+          class="p-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          *ngFor="let page of pageNumbers"
+          (click)="goToPage(page)"
+          [class]="
+            page === currentPage
+              ? 'px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg'
+              : 'px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300'
+          "
+        >
+          {{ page }}
+        </button>
+
+        <button
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+          class="p-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </div>

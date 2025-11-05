@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home-component';
 import { RestaurationComponent } from './features/restauration/restauration-component';
 import { NotFoundComponent } from './layouts/not-found/not-found-component';
-import { PanierComponent } from './features/restauration/panier/panier-component';
+import { PanierComponent } from './features/restauration/panier/panier.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout-component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout-component';
 import { AdminComponent } from './features/restauration/admin/admin-component';
@@ -12,6 +12,8 @@ import { ListPlatComponent } from './features/restauration/admin/list-plat/list-
 import { ListeRestaurant } from './features/restauration/admin/liste-restaurant/liste-restaurant';
 import { FormRestaurant } from './features/restauration/admin/form-restaurant/form-restaurant';
 import { roleGuard } from './features/auth/guards/role.guard';
+import { AdminWalletManagementComponent } from './features/restauration/admin/admin-wallet-management/admin-wallet-management.component';
+import { MyOrdersComponent } from './features/restauration/order/my-orders-component/my-orders-component';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,7 @@ export const routes: Routes = [
         children: [
           { path: '', component: RestaurationComponent },
           { path: 'cart', component: PanierComponent },
+          { path: 'my-orders', component: MyOrdersComponent },
         ],
       },
       { path: 'not-found', component: NotFoundComponent },
@@ -42,6 +45,11 @@ export const routes: Routes = [
       { path: 'liste-food', component: ListPlatComponent },
       { path: 'liste-restaurant', component: ListeRestaurant },
       { path: 'add-restaurant', component: FormRestaurant },
+      {
+        path: 'wallets',
+        component: AdminWalletManagementComponent,
+        data: { title: 'Gestion des Portefeuilles' },
+      },
     ],
   },
   {

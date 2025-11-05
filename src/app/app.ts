@@ -2,10 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaConfig, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fontAwesomeIcons } from './shared/font-awesome-icons';
+import { NotificationComponent } from './shared/components/notification/notification.component';
+import { ConfirmationComponent } from "./shared/components/notification/confirmation.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NotificationComponent, ConfirmationComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

@@ -6,12 +6,17 @@ import { AnimationItem } from 'lottie-web';
 import { RouterModule } from '@angular/router';
 import { RestaurantService } from './services/impl/restaurant.service';
 import { MenuClientService } from './services/impl/menu.client.service';
+
 import {
   MealDisplay,
   RestaurantDisplay,
   RestaurantWithMenu,
   Stat,
 } from './model/menuMealRestau.model';
+import { WalletService } from './services/impl/wallet.service';
+import { CartServiceImpl } from './services/impl/cart.service';
+import { WalletBalance } from './model/wallet.model';
+import { NotificationService } from '../../core/services/impl/notification.service';
 
 @Component({
   selector: 'app-restauration-component',
@@ -23,41 +28,37 @@ import {
 export class RestaurationComponent implements OnInit {
   private readonly restaurantService = inject(RestaurantService);
   private readonly menuClientService = inject(MenuClientService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly walletService = inject(WalletService);
+  protected readonly cartService = inject(CartServiceImpl);
 
   restaurants = signal<RestaurantDisplay[]>([]);
   selectedDate = signal<string>(this.getTodayDate());
   selectedDay = signal<string>('');
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
+  walletBalance = signal<WalletBalance | null>(null);
 
   days: string[] = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
 
-  stats: Stat[] = [
+  stats = signal<Stat[]>([
     {
-      id: 'balance',
-      label: 'Solde',
-      value: '10K',
+      id: 'credit',
+      label: 'Solde Créditeur',
+      value: '0',
       icon: 'wallet',
-      gradientFrom: '#3B82F6',
-      gradientTo: '#6366F1',
-    },
-    {
-      id: 'consumed',
-      label: 'Consommé',
-      value: '15K',
-      icon: 'chart-line',
       gradientFrom: '#14B8A6',
       gradientTo: '#10B981',
     },
     {
-      id: 'topay',
-      label: 'À payer',
-      value: '25K',
-      icon: 'credit-card',
+      id: 'debit',
+      label: 'Solde Débiteur',
+      value: '0',
+      icon: 'chart-line',
       gradientFrom: '#EF4444',
       gradientTo: '#EA580C',
     },
-  ];
+  ]);
 
   // Configurations des restaurants (couleurs et icônes)
   private readonly restaurantConfigs = [
@@ -88,7 +89,7 @@ export class RestaurationComponent implements OnInit {
     },
   ];
 
-  // Couleurs pour les plats (sans emojis)
+  // Couleurs pour les plats
   private readonly mealStyles = [
     { gradientFrom: '#E84141', gradientTo: '#FF6B35', hoverBorder: 'red-200' },
     { gradientFrom: '#14B8A6', gradientTo: '#10B981', hoverBorder: 'teal-200' },
@@ -100,7 +101,7 @@ export class RestaurationComponent implements OnInit {
     { gradientFrom: '#3B82F6', gradientTo: '#14B8A6', hoverBorder: 'teal-200' },
   ];
 
-  // Animation du chef principal
+  // Animations Lottie
   lottieOptions: AnimationOptions = {
     path: '/assets/lottie/3DChefDancing.json',
     loop: true,
@@ -110,7 +111,6 @@ export class RestaurationComponent implements OnInit {
     },
   };
 
-  // Animation du weekend
   weekendLottieOptions: AnimationOptions = {
     path: '/assets/lottie/relax.json',
     loop: true,
@@ -122,8 +122,100 @@ export class RestaurationComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedDay.set(this.getCurrentDayName());
-
+    this.loadWalletBalance();
     this.loadRestaurantsWithMenus();
+  }
+
+  /**
+   * Charge le solde du wallet
+   */
+  loadWalletBalance(): void {
+    this.walletService.getBalance().subscribe({
+      next: (balance) => {
+        this.walletBalance.set(balance);
+        this.updateStats(balance);
+        console.log('💰 Solde chargé:', balance);
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement du solde:', error);
+      },
+    });
+  }
+  /**
+   * Met à jour les statistiques affichées
+   */
+  updateStats(balance: WalletBalance): void {
+    if (balance.hasCredit) {
+      // Utilisateur en crédit (solde négatif)
+      this.stats.set([
+        {
+          id: 'credit',
+          label: 'Crédit en cours',
+          value: this.formatBalance(balance.creditAmount),
+          icon: 'exclamation-triangle',
+          gradientFrom: '#EF4444',
+          gradientTo: '#DC2626',
+        },
+        {
+          id: 'debit',
+          label: 'Total Dépensé',
+          value: this.formatBalance(balance.debitBalance),
+          icon: 'chart-line',
+          gradientFrom: '#F59E0B',
+          gradientTo: '#D97706',
+        },
+      ]);
+    } else if (balance.balance === 0) {
+      // Aucun solde
+      this.stats.set([
+        {
+          id: 'credit',
+          label: 'Solde Actuel',
+          value: '0',
+          icon: 'wallet',
+          gradientFrom: '#6B7280',
+          gradientTo: '#4B5563',
+        },
+        {
+          id: 'debit',
+          label: 'Commande à crédit',
+          icon: 'check-circle',
+          value: '0',
+          gradientFrom: '#14B8A6',
+          gradientTo: '#10B981',
+        },
+      ]);
+    } else {
+      // Solde positif
+      this.stats.set([
+        {
+          id: 'credit',
+          label: 'Solde Créditeur',
+          value: this.formatBalance(balance.creditBalance),
+          icon: 'wallet',
+          gradientFrom: '#14B8A6',
+          gradientTo: '#10B981',
+        },
+        {
+          id: 'debit',
+          label: 'Total Dépensé',
+          value: this.formatBalance(balance.debitBalance),
+          icon: 'chart-line',
+          gradientFrom: '#EF4444',
+          gradientTo: '#EA580C',
+        },
+      ]);
+    }
+  }
+
+  /**
+   * Formate le solde en K (milliers)
+   */
+  formatBalance(amount: number): string {
+    if (amount >= 1000) {
+      return Math.floor(amount / 1000) + 'K';
+    }
+    return amount.toString();
   }
 
   getTodayDate(): string {
@@ -200,7 +292,6 @@ export class RestaurationComponent implements OnInit {
           return {
             ...meal,
             quantity: 0,
-            // Support pour les images futures
             imageUrl: (meal as any).imageUrl || null,
             gradientFrom: style.gradientFrom,
             gradientTo: style.gradientTo,
@@ -228,7 +319,6 @@ export class RestaurationComponent implements OnInit {
     const date = this.getDateForDay(dayIndex);
     this.selectedDate.set(date);
     this.loadMenusForDate(date);
-   
   }
 
   getDateForDay(dayIndex: number): string {
@@ -303,5 +393,92 @@ export class RestaurationComponent implements OnInit {
   getRestaurantItemCount(restaurantId: number): number {
     const restaurant = this.restaurants().find((r) => r.id === restaurantId);
     return restaurant ? restaurant.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+  }
+
+  /**
+   * Ajoute les items sélectionnés au panier (version mise à jour sans vérification du solde)
+   */
+  addToCart(restaurantId: number): void {
+    const restaurant = this.restaurants().find((r) => r.id === restaurantId);
+    if (!restaurant) return;
+
+    const itemsToAdd = restaurant.items.filter((item) => item.quantity > 0);
+
+    if (itemsToAdd.length === 0) {
+      this.notificationService.warning(
+        'Sélection vide',
+        "Veuillez sélectionner au moins un plat avant d'ajouter au panier"
+      );
+      return;
+    }
+
+    // Plus de vérification du solde - on peut commander même à crédit
+    let addedCount = 0;
+    let hasError = false;
+
+    itemsToAdd.forEach((item) => {
+      this.cartService
+        .addToCart({
+          mealId: item.id!,
+          restaurantId: restaurantId,
+          quantity: item.quantity,
+        })
+        .subscribe({
+          next: (cart) => {
+            addedCount++;
+
+            if (addedCount === itemsToAdd.length && !hasError) {
+              console.log(`✅ ${addedCount} article(s) ajouté(s) au panier`);
+
+              this.notificationService.success(
+                'Ajouté au panier',
+                `${addedCount} article(s) ajouté(s) avec succès à votre panier`
+              );
+
+              this.resetRestaurantQuantities(restaurantId);
+              this.cartService.loadCart();
+            }
+          },
+          error: (error) => {
+            hasError = true;
+            console.error("❌ Erreur lors de l'ajout au panier:", error);
+
+            let title = "Erreur d'ajout";
+            let message = "Impossible d'ajouter l'article au panier";
+
+            if (error.status === 400) {
+              if (error.error?.includes('restaurant')) {
+                title = 'Restaurant différent';
+                message =
+                  "Vous ne pouvez commander que dans un seul restaurant à la fois. Veuillez vider votre panier d'abord.";
+              } else {
+                message = error.error || "Erreur lors de l'ajout au panier";
+              }
+            } else if (error.status === 404) {
+              title = 'Introuvable';
+              message = "Le plat ou le restaurant n'a pas été trouvé";
+            }
+
+            this.notificationService.error(title, message);
+          },
+        });
+    });
+  }
+
+  /**
+   * Réinitialise les quantités d'un restaurant
+   */
+  resetRestaurantQuantities(restaurantId: number): void {
+    const currentRestaurants = this.restaurants();
+    const updatedRestaurants = currentRestaurants.map((restaurant) => {
+      if (restaurant.id === restaurantId) {
+        return {
+          ...restaurant,
+          items: restaurant.items.map((item) => ({ ...item, quantity: 0 })),
+        };
+      }
+      return restaurant;
+    });
+    this.restaurants.set(updatedRestaurants);
   }
 }

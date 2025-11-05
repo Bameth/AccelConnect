@@ -32,6 +32,7 @@ export class AdminNavComponent implements OnInit {
     { name: 'Assigner Plat', route: '/admin/add-food-to-restau', icon: 'utensils' },
     { name: 'Liste des Plats', route: '/admin/liste-food', icon: 'list' },
     { name: 'Liste des Restaurants', route: '/admin/liste-restaurant', icon: 'list' },
+    { name: 'Ajouter solde', route: '/admin/wallets', icon: 'wallet' },
   ];
 
   ngOnInit() {

@@ -78,7 +78,7 @@
 
           <!-- Stats Cards Premium -->
           <div class="grid grid-cols-3 gap-2 sm:gap-3">
-            @for (stat of stats; track stat.id) {
+            @for (stat of stats(); track stat.id) {
             <div class="group relative">
               <div
                 class="absolute inset-0 rounded-xl sm:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
@@ -173,7 +173,7 @@
         </button>
         }
 
-        <!-- Panier Premium -->
+        <!-- Panier Premium avec badge dynamique -->
         <button class="ml-auto cursor-pointer group relative" [routerLink]="['/restauration/cart']">
           <div
             class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
@@ -189,11 +189,15 @@
               >Panier</span
             >
             <span
-              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full animate-pulse"
-              >3</span
+              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full"
+              [class.animate-pulse]="cartService.cartItemCount() > 0"
             >
+              {{ cartService.cartItemCount() }}
+            </span>
           </div>
         </button>
+
+        <!-- Dans le TypeScript du composant, il faut juste s'assurer que cartService est public -->
       </div>
     </div>
 
@@ -515,8 +519,8 @@
           <!-- Footer Button -->
           @if (restaurant.hasMenu && restaurant.items.length > 0) {
           <div class="p-3 sm:p-4 md:p-5 pt-0">
-            <button
-              class="w-full py-3 sm:py-3.5 md:py-4 hover:shadow-2xl text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
+            <button (click)="addToCart(restaurant.id)"
+              class="w-full cursor-pointer py-3 sm:py-3.5 md:py-4 hover:shadow-2xl text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
               [style.background]="
                 'linear-gradient(to right, ' +
                 restaurant.gradientFrom +

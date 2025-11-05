@@ -1,11 +1,10 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E1E1E1] via-white to-[#99CFBD]/10 py-8 px-4">
   <div class="container mx-auto max-w-7xl">
-    @if (cartItems.length === 0) {
+    <!-- Panier vide -->
+    @if (isEmpty && !isLoading()) {
     <div class="flex flex-col items-center justify-center py-20">
-      <!-- Cart Animation -->
       <div class="flex items-center justify-center mb-8">
         <div class="relative w-64 h-64">
-          <!-- Ajustez la taille selon vos besoins -->
           <ng-lottie
             [options]="emptyCartOptions"
             (animationCreated)="onAnimationCreated($event)"
@@ -25,18 +24,37 @@
         <fa-icon [icon]="['fas', 'arrow-right']" class="text-lg"></fa-icon>
       </button>
     </div>
-    } @else {
+    }
+
+    <!-- Chargement -->
+    @if (isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#25509D]"></div>
+    </div>
+    }
+
+    <!-- Panier avec items -->
+    @if (!isEmpty && !isLoading()) {
     <!-- Header -->
     <div class="mb-8 animate-fade-in">
-      <div class="flex items-center gap-3 mb-2">
-        <div class="bg-gradient-to-r from-[#25509D] to-[#99CFBD] p-3 rounded-xl shadow-md">
-          <fa-icon [icon]="['fas', 'cart-shopping']" class="text-white text-lg"></fa-icon>
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-3">
+          <div class="bg-gradient-to-r from-[#25509D] to-[#99CFBD] p-3 rounded-xl shadow-md">
+            <fa-icon [icon]="['fas', 'cart-shopping']" class="text-white text-lg"></fa-icon>
+          </div>
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold text-[#20264E]">Mon Panier</h1>
+            <p class="text-[#303131]">{{ cart()?.restaurantName }}</p>
+          </div>
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold text-[#20264E]">Mon Panier</h1>
+        <button
+          (click)="clearCart()"
+          class="text-red-600 cursor-pointer hover:text-red-700 font-medium flex items-center gap-2 hover:underline"
+        >
+          <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+          Vider le panier
+        </button>
       </div>
-      <p class="text-[#303131] ml-14">
-        {{ cartItems.length }} produit{{ cartItems.length > 1 ? 's' : '' }}
-      </p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -52,18 +70,20 @@
             <div
               class="flex-shrink-0 w-full sm:w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-[#E1E1E1] to-[#99CFBD]/20 rounded-xl overflow-hidden shadow-md group-hover:scale-105 transition-transform duration-300"
             >
-              <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover" />
+              <img [src]="item.imageUrl" [alt]="item.mealName" class="w-full h-full object-cover" />
             </div>
 
             <!-- Content -->
             <div class="flex-grow flex flex-col justify-between">
               <div class="flex justify-between items-start gap-4">
                 <div>
-                  <h3 class="text-lg md:text-xl font-bold text-[#20264E] mb-1">{{ item.name }}</h3>
+                  <h3 class="text-lg md:text-xl font-bold text-[#20264E] mb-1">
+                    {{ item.mealName }}
+                  </h3>
                   <p class="text-sm text-[#303131] mb-3">{{ item.description }}</p>
                 </div>
                 <div class="text-right">
-                  <p class="text-2xl font-bold text-[#E84141]">{{ item.price }} FCFA</p>
+                  <p class="text-2xl font-bold text-[#E84141]">{{ item.unitPrice }} FCFA</p>
                   <p class="text-sm text-[#303131] mt-1">l'unité</p>
                 </div>
               </div>
@@ -80,7 +100,7 @@
                     <fa-icon [icon]="['fas', 'minus']"></fa-icon>
                   </button>
                   <span
-                    [class.scale-110]="isAnimating"
+                    [class.scale-110]="isAnimating()"
                     class="px-4 font-bold text-lg text-[#20264E] min-w-[3rem] text-center transition-transform duration-300"
                   >
                     {{ item.quantity }}
@@ -101,42 +121,148 @@
                   <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                 </button>
               </div>
+
+              <!-- Subtotal per item -->
+              <div class="mt-2 text-right">
+                <span class="text-sm text-[#303131]">Sous-total: </span>
+                <span class="font-bold text-[#20264E]">{{ item.subtotal }} FCFA</span>
+              </div>
             </div>
           </div>
         </div>
         }
       </div>
+
       <!-- Summary -->
       <div class="lg:col-span-1">
         <div class="bg-white rounded-2xl shadow-xl p-6 sticky top-4 border-2 border-[#99CFBD]/30">
           <div class="flex items-center gap-3 mb-6">
             <div class="bg-gradient-to-r from-[#25509D] to-[#99CFBD] p-2 rounded-lg">
-              <i class="lucide-package w-5 h-5 text-white"></i>
+              <fa-icon [icon]="['fas', 'receipt']" class="text-white text-xl"></fa-icon>
             </div>
             <h2 class="text-xl font-bold text-[#20264E]">Résumé</h2>
           </div>
 
           <div class="space-y-4 mb-6">
+            <!-- Sous-total -->
             <div class="flex justify-between items-center py-3 border-b border-[#E1E1E1]">
               <span class="text-[#303131]">Sous-total</span>
               <span class="font-semibold text-[#20264E]">{{ subtotal }} FCFA</span>
             </div>
 
+            <!-- Subvention - NOUVEAU -->
+            <div class="bg-green-50 rounded-lg p-4 space-y-2 border-2 border-green-200">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <fa-icon [icon]="['fas', 'gift']" class="text-green-600"></fa-icon>
+                  <span class="text-sm font-bold text-green-700">Subvention</span>
+                </div>
+                <span class="font-bold text-green-600">-1 000 FCFA</span>
+              </div>
+              <p class="text-xs text-green-600 italic">
+                🎁 Réduction automatique sur toutes vos commandes !
+              </p>
+            </div>
 
-            <div class="flex justify-between items-center pt-4 pb-2">
+            <!-- Montant après subvention -->
+            <div class="flex justify-between items-center py-3 border-b border-[#E1E1E1]">
+              <span class="text-[#303131] font-semibold">Après subvention</span>
+              <span class="font-bold text-[#25509D]">{{ subtotalAfterSubvention }} FCFA</span>
+            </div>
+
+            <!-- Frais de livraison -->
+            @if (orderSummary()) { @if (isFreeDelivery) {
+            <!-- Livraison gratuite -->
+            <div
+              class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 space-y-2 border-2 border-purple-200"
+            >
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <fa-icon
+                    [icon]="['fas', 'shipping-fast']"
+                    class="text-purple-600 text-lg"
+                  ></fa-icon>
+                  <span class="text-sm font-bold text-purple-700">Livraison</span>
+                </div>
+                <span class="font-black text-purple-600">GRATUIT 🎉</span>
+              </div>
+              <p class="text-xs text-purple-600 italic">
+                Ce restaurant offre la livraison gratuitement !
+              </p>
+            </div>
+            } @else {
+            <!-- Frais de livraison partagés -->
+            <div class="bg-[#99CFBD]/10 rounded-lg p-4 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-[#303131]">Frais de livraison</span>
+                <span class="font-semibold text-[#25509D]">{{ deliveryFee }} FCFA</span>
+              </div>
+              <p class="text-xs text-[#303131] italic">
+                {{ deliveryMessage }}
+              </p>
+            </div>
+            } }
+
+            <!-- Total final -->
+            <div class="flex justify-between items-center pt-4 pb-2 border-t-2 border-[#20264E]">
               <span class="text-lg font-bold text-[#20264E]">Total</span>
               <span class="text-2xl font-bold text-[#E84141]">{{ total }} FCFA</span>
             </div>
+
+            <!-- Badge économie réalisée -->
+            @if (subtotal - total > 0) {
+            <div
+              class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-3 border border-emerald-200"
+            >
+              <div class="flex items-center justify-center gap-2">
+                <fa-icon [icon]="['fas', 'check-circle']" class="text-emerald-600"></fa-icon>
+                <span class="text-sm font-bold text-emerald-700">
+                  Vous économisez {{ subtotal - total }} FCFA !
+                </span>
+              </div>
+            </div>
+            }
           </div>
 
+          <!-- Bouton Commander -->
           <button
-            class="group w-full bg-gradient-to-r from-[#25509D] to-[#20264E] hover:from-[#20264E] hover:to-[#25509D] text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+            (click)="placeOrder()"
+            [disabled]="isOrdering()"
+            class="group w-full cursor-pointer bg-gradient-to-r from-[#25509D] to-[#20264E] hover:from-[#20264E] hover:to-[#25509D] text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            Commander maintenant
-            <i
-              class="lucide-arrow-right w-5 h-5 group-hover:translate-x-1 transition-transform"
-            ></i>
+            @if (isOrdering()) {
+            <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-white"></div>
+            <span>Commande en cours...</span>
+            } @else {
+            <span>Commander maintenant</span>
+            <fa-icon
+              [icon]="['fas', 'arrow-right']"
+              class="text-lg group-hover:translate-x-1 transition-transform"
+            ></fa-icon>
+            }
           </button>
+
+          <!-- Info importante -->
+          <!-- <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="flex items-start gap-2">
+              <fa-icon
+                [icon]="['fas', 'info-circle']"
+                class="text-blue-600 mt-0.5 flex-shrink-0"
+              ></fa-icon>
+              <div class="text-xs text-blue-800 space-y-1">
+                <p class="font-semibold">✨ Avantages de cette commande:</p>
+                <ul class="list-disc list-inside space-y-0.5 ml-2">
+                  <li>Subvention de 1000 FCFA incluse</li>
+                  @if (isFreeDelivery) {
+                  <li>Livraison gratuite</li>
+                  } @else {
+                  <li>Frais de livraison partagés</li>
+                  }
+                  <li>Possibilité de commander à crédit</li>
+                </ul>
+              </div>
+            </div>
+          </div> -->
         </div>
       </div>
     </div>
