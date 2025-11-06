@@ -1,30 +1,27 @@
 export interface CartItem {
-  id: number;
   mealId: number;
   mealName: string;
-  description: string;
+  restaurantId: number;
+  restaurantName: string;
   unitPrice: number;
   quantity: number;
-  subtotal: number;
-  imageUrl: string;
+  imageUrl?: string;
 }
 
-export interface Cart {
-  id: number;
-  userId: number;
-  restaurantId: number | null;
-  restaurantName: string | null;
-  items: CartItem[];
-  subtotal: number;
+export interface CartSummary {
   totalItems: number;
+  subtotal: number;
+  subsidyAmount: number; // 1000 FCFA
+  amountAfterSubsidy: number; // max(0, subtotal - 1000)
+  deliveryFeesNote: string;
+  items: CartItem[];
 }
 
-export interface AddToCartRequest {
-  mealId: number;
-  restaurantId: number;
-  quantity: number;
-}
-
-export interface UpdateCartItemRequest {
-  quantity: number;
+export interface OrderCreationPayload {
+  items: {
+    mealId: number;
+    restaurantId: number;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }

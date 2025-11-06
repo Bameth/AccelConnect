@@ -178,7 +178,7 @@ export class AddFoodToRestauComponent implements OnInit {
       filtered = filtered.filter(
         (meal) =>
           meal.mealName.toLowerCase().includes(query) ||
-          meal.description.toLowerCase().includes(query)
+          (meal.description?.toLowerCase() || '').includes(query)
       );
     }
     this.filteredMeals.set(filtered);
@@ -232,7 +232,7 @@ export class AddFoodToRestauComponent implements OnInit {
             });
 
         this.successMessage.set(
-          `Menu créé avec succès pour ${this.selectedRestaurant()!.restaurant_name} - ${dateText}`
+          `Menu créé avec succès pour ${this.selectedRestaurant()!.restaurantName} - ${dateText}`
         );
 
         // Réinitialiser après 3 secondes

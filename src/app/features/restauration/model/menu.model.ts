@@ -1,10 +1,10 @@
-import { Meal } from './plat.model';
+import { Meal } from "./plat.model";
 
 export interface Menu {
   id?: number;
   restaurantId: number;
   restaurantName?: string;
-  menuDate: string; // Format ISO: 'YYYY-MM-DD'
+  menuDate: string;
   mealIds: number[];
   meals?: Meal[];
   isActive: boolean;

@@ -1,12 +1,8 @@
-<!-- SECTION À TABLE - Design Ultra Premium Moderne (Full Responsive) -->
+<!-- SECTION RESTAURATION - Design Premium avec Balance -->
 <section
   class="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-4 sm:py-6 md:py-8 lg:py-12 overflow-hidden"
-  style="
-    font-family: 'UberMove', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-      sans-serif;
-  "
 >
-  <!-- Animated Background Blobs -->
+  <!-- Animated Background -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div
       class="absolute top-0 -right-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-br from-red-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"
@@ -16,26 +12,20 @@
       class="absolute bottom-0 -left-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-tr from-blue-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse"
       style="animation-duration: 5s; animation-delay: 1s"
     ></div>
-    <div
-      class="absolute top-1/2 left-1/2 w-48 sm:w-60 md:w-72 h-48 sm:h-60 md:h-72 bg-gradient-to-br from-purple-400/5 to-pink-400/5 rounded-full blur-3xl animate-pulse"
-      style="animation-duration: 6s; animation-delay: 2s"
-    ></div>
   </div>
 
   <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
-    <!-- Hero Header Premium -->
+    <!-- Hero Header -->
     <div class="mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-      <!-- Status Badge & Top Bar -->
+      <!-- Status Badge -->
       <div class="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 flex-wrap gap-3 sm:gap-4">
         <div
-          class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300 group"
+          class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300"
         >
-          <div class="relative flex items-center gap-1.5 sm:gap-2">
-            <fa-icon
-              [icon]="['fas', 'bell']"
-              class="text-red-500 text-xs sm:text-sm animate-bounce"
-            ></fa-icon>
-          </div>
+          <fa-icon
+            [icon]="['fas', 'bell']"
+            class="text-red-500 text-xs sm:text-sm animate-bounce"
+          ></fa-icon>
           <div class="flex items-center flex-wrap gap-1 sm:gap-2">
             <span class="text-red-600 font-black text-xs sm:text-sm uppercase tracking-wider"
               >Menu du Jour</span
@@ -44,18 +34,12 @@
               selectedDate() | date : 'dd/MM/yyyy'
             }}</span>
           </div>
-          <fa-icon
-            [icon]="['fas', 'arrow-right']"
-            class="text-red-500 text-xs sm:text-sm group-hover:translate-x-1 transition-transform hidden sm:block"
-          ></fa-icon>
         </div>
       </div>
 
-      <!-- Hero Title & Animation -->
-      <div
-        class="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center mb-6 sm:mb-8 md:mb-10 lg:mb-12"
-      >
-        <!-- Left Content -->
+      <!-- Hero Title + Stats -->
+      <div class="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center mb-6 sm:mb-8">
+        <!-- Left: Title -->
         <div class="space-y-4 sm:space-y-5 md:space-y-6">
           <div>
             <h1
@@ -64,19 +48,14 @@
             >
               À Table
             </h1>
-            <div class="relative inline-block">
-              <h2
-                class="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-clip-text text-transparent animate-pulse"
-              >
-                Vos délices quotidiens
-              </h2>
-              <div
-                class="absolute -bottom-1 sm:-bottom-2 left-0 right-0 h-0.5 sm:h-1 bg-gradient-to-r from-red-500 to-orange-500 rounded-full"
-              ></div>
-            </div>
+            <h2
+              class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-clip-text text-transparent animate-pulse"
+            >
+              Vos délices quotidiens
+            </h2>
           </div>
 
-          <!-- Stats Cards Premium -->
+          <!-- Stats Cards (Balance) -->
           <div class="grid grid-cols-3 gap-2 sm:gap-3">
             @for (stat of stats(); track stat.id) {
             <div class="group relative">
@@ -116,19 +95,13 @@
                 <div class="text-lg sm:text-xl md:text-2xl font-black text-gray-900">
                   {{ stat.value }}<span class="text-xs sm:text-sm ml-0.5 text-gray-600">F</span>
                 </div>
-                <div
-                  class="h-0.5 sm:h-1 rounded-full mt-1.5 sm:mt-2"
-                  [style.background]="
-                    'linear-gradient(to right, ' + stat.gradientFrom + ', ' + stat.gradientTo + ')'
-                  "
-                ></div>
               </div>
             </div>
             }
           </div>
         </div>
 
-        <!-- Right: Hero Animation -->
+        <!-- Right: Animation (Desktop) -->
         <div class="hidden lg:flex items-center justify-center">
           <div class="relative w-full max-w-md">
             <div
@@ -156,25 +129,41 @@
       <div
         class="flex flex-wrap items-center gap-2 sm:gap-3 pt-4 sm:pt-6 md:pt-8 border-t-2 border-gray-200"
       >
-        @for (day of days; track day; let i = $index) {
+        <!-- Sélecteur de jours -->
+        @for (day of days; track day) {
         <button
           (click)="selectDay(day)"
           [class]="
             selectedDay() === day
-              ? 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105 transition-all duration-300 hover:scale-110'
-              : 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-gray-700 font-bold text-xs sm:text-sm uppercase tracking-wider border-2 border-gray-200 hover:border-red-500 hover:text-red-500 hover:scale-105 transition-all duration-300'
+              ? 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105'
+              : 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-gray-700 font-bold text-xs sm:text-sm uppercase tracking-wider border-2 border-gray-200 hover:border-red-500 hover:text-red-500 hover:scale-105'
           "
+          class="transition-all duration-300"
         >
-          @if (selectedDay() === day) {
-          <fa-icon [icon]="['fas', 'clock']" class="mr-1 sm:mr-2 text-xs sm:text-sm"></fa-icon>
-          }
           <span class="hidden xs:inline">{{ day }}</span>
           <span class="xs:hidden">{{ day.substring(0, 3) }}</span>
         </button>
         }
 
-        <!-- Panier Premium avec badge dynamique -->
-        <button class="ml-auto cursor-pointer group relative" [routerLink]="['/restauration/cart']">
+        <div class="flex-grow"></div>
+
+        <!-- Bouton Ajouter au panier GLOBAL -->
+        @if (getTotalSelectedItems() > 0) {
+        <button
+          (click)="addAllToCart()"
+          class="group relative px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-2"
+        >
+          <fa-icon [icon]="['fas', 'cart-plus']" class="text-white text-lg"></fa-icon>
+          <span class="text-white font-bold text-sm hidden sm:inline">Ajouter au panier</span>
+          <span
+            class="px-2 py-0.5 bg-white text-green-600 text-xs font-black rounded-full animate-pulse"
+            >{{ getTotalSelectedItems() }}</span
+          >
+        </button>
+        }
+
+        <!-- Panier -->
+        <button [routerLink]="['/restauration/cart']" class="group cursor-pointer relative">
           <div
             class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
           ></div>
@@ -191,13 +180,31 @@
             <span
               class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full"
               [class.animate-pulse]="cartService.cartItemCount() > 0"
+              >{{ cartService.cartItemCount() }}</span
             >
-              {{ cartService.cartItemCount() }}
-            </span>
           </div>
         </button>
-
-        <!-- Dans le TypeScript du composant, il faut juste s'assurer que cartService est public -->
+        <button [routerLink]="['/restauration/my-orders']" class="group cursor-pointer relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-orange-500 to-green-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
+          ></div>
+          <div
+            class="relative px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-green-500 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+          >
+            <fa-icon
+              [icon]="['fas', 'list-check']"
+              class="text-white text-sm sm:text-base md:text-lg"
+            ></fa-icon>
+            <span class="text-white font-bold text-xs sm:text-sm md:text-base hidden xs:inline"
+              >Mes commandes</span
+            >
+            <span
+              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 text-white text-[10px] sm:text-xs font-black rounded-full"
+              [class.animate-pulse]="cartService.cartItemCount() > 0"
+              >Mes commandes</span
+            >
+          </div>
+        </button>
       </div>
     </div>
 
@@ -218,124 +225,16 @@
         <div
           class="absolute inset-0 rounded-full border-4 border-red-200 animate-ping opacity-20"
         ></div>
-        <div class="absolute inset-0 rounded-full border-4 border-red-200 animate-pulse"></div>
         <div
           class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent animate-spin"
         ></div>
-        <div
-          class="absolute inset-2 rounded-full border-4 border-orange-400 border-b-transparent animate-spin"
-          style="animation-direction: reverse; animation-duration: 1s"
-        ></div>
       </div>
-      <div class="text-center">
-        <p class="text-gray-900 font-black text-xl mb-2 animate-pulse">
-          Préparation de vos menus...
-        </p>
-        <p class="text-gray-500 font-medium text-sm">
-          Nos chefs sélectionnent les meilleurs plats pour vous
-        </p>
-      </div>
+      <p class="text-gray-900 font-black text-xl mb-2 animate-pulse">Préparation de vos menus...</p>
     </div>
     }
 
-    <!-- Restaurant Cards Grid ou Weekend Message -->
-    @if (!isLoading()) {
-
-    <!-- Weekend Message -->
-    @if (isWeekend(selectedDate())) {
-    <div class="relative overflow-hidden rounded-3xl">
-      <!-- Animated Background -->
-      <div class="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50"></div>
-      <div
-        class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"
-      ></div>
-      <div
-        class="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tr from-blue-400/20 to-teal-400/20 rounded-full blur-3xl animate-pulse"
-        style="animation-delay: 1s"
-      ></div>
-
-      <div class="relative z-10 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8">
-        <div class="max-w-4xl mx-auto">
-          <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <!-- Left: Animation -->
-            <div class="flex justify-center order-2 md:order-1">
-              <div class="relative w-full max-w-sm">
-                <div
-                  class="absolute inset-0 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-2xl animate-pulse"
-                ></div>
-                <div class="relative">
-                  <ng-lottie
-                    [options]="weekendLottieOptions"
-                    width="100%"
-                    height="350px"
-                    containerClass="flex items-center justify-center"
-                    (animationCreated)="onAnimationCreated($any($event))"
-                  ></ng-lottie>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right: Message -->
-            <div class="text-center md:text-left space-y-6 order-1 md:order-2">
-              <div>
-                <h2
-                  class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 md:mb-4"
-                  style="font-family: 'Georgia, serif'"
-                >
-                  {{ getCurrentWeekendMessage().title }}
-                </h2>
-                <p class="text-lg sm:text-xl md:text-2xl text-gray-600 font-semibold">
-                  {{ getCurrentWeekendMessage().subtitle }}
-                </p>
-              </div>
-
-              <div
-                class="inline-flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-4 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border-2 border-purple-100"
-              >
-                <div
-                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg"
-                >
-                  <fa-icon
-                    [icon]="['fas', 'calendar-check']"
-                    class="text-white text-xl sm:text-2xl"
-                  ></fa-icon>
-                </div>
-                <div class="text-left">
-                  <p class="text-xs sm:text-sm text-gray-500 font-semibold">Retour des menus</p>
-                  <p class="text-lg sm:text-xl font-black text-gray-900">Lundi prochain</p>
-                </div>
-              </div>
-
-              <div class="pt-4">
-                <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                  <div
-                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
-                  >
-                    <span class="text-2xl">🌴</span>
-                    <span class="ml-2 text-sm font-bold text-gray-700">Détente</span>
-                  </div>
-                  <div
-                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
-                  >
-                    <span class="text-2xl">☕</span>
-                    <span class="ml-2 text-sm font-bold text-gray-700">Repos</span>
-                  </div>
-                  <div
-                    class="px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200 hover:shadow-lg transition-shadow"
-                  >
-                    <span class="text-2xl">🎉</span>
-                    <span class="ml-2 text-sm font-bold text-gray-700">Profitez</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    } @else {
-
-    <!-- Restaurant Cards Grid (Weekdays) -->
+    <!-- Restaurant Cards Grid -->
+    @if (!isLoading() && !isWeekend(selectedDate())) {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
       @for (restaurant of restaurants(); track restaurant.id) {
       <div class="group relative">
@@ -351,9 +250,9 @@
         ></div>
 
         <div
-          class="relative bg-white rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-500 cursor-pointer group-hover:-translate-y-2"
+          class="relative bg-white rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-500 group-hover:-translate-y-2"
         >
-          <!-- Header avec gradient et stats -->
+          <!-- Header -->
           <div
             class="relative h-28 sm:h-32 md:h-36 p-3 sm:p-4 md:p-5 overflow-hidden"
             [style.background]="
@@ -364,25 +263,8 @@
               ')'
             "
           >
-            <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-            <div
-              class="absolute top-0 right-0 w-24 sm:w-28 md:w-32 h-24 sm:h-28 md:h-32 bg-white/5 rounded-full blur-2xl"
-            ></div>
-
             <div class="relative z-10 flex items-start justify-between">
               <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Logo du restaurant (si disponible) ou icône -->
-                @if (restaurant.logoUrl) {
-                <div
-                  class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border-2 border-white/50 shadow-xl group-hover:scale-110 transition-transform overflow-hidden p-1"
-                >
-                  <img
-                    [src]="restaurant.logoUrl"
-                    [alt]="restaurant.name"
-                    class="w-full h-full object-contain"
-                  />
-                </div>
-                } @else {
                 <div
                   class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/30 shadow-xl group-hover:scale-110 transition-transform"
                 >
@@ -391,11 +273,9 @@
                     class="text-white text-lg sm:text-xl md:text-2xl"
                   ></fa-icon>
                 </div>
-                }
                 <div>
                   <h3
                     class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-0.5 sm:mb-1"
-                    style="font-family: 'Georgia, serif'"
                   >
                     {{ restaurant.name }}
                   </h3>
@@ -404,27 +284,20 @@
                   </p>
                 </div>
               </div>
-
-              <!-- Badge statut menu -->
-              @if (!restaurant.hasMenu) {
-              <div class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30">
-                <span class="text-white text-[10px] font-bold">Fermé</span>
-              </div>
-              }
             </div>
           </div>
 
-          <!-- Menu Items ou Message -->
+          <!-- Menu Items -->
           @if (restaurant.hasMenu && restaurant.items.length > 0) {
           <div class="p-3 sm:p-4 md:p-5 space-y-2 sm:space-y-3">
             @for (item of restaurant.items; track item.id) {
             <div
-              class="group/item relative p-2.5 sm:p-3 md:p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg"
-              [class]="'border-gray-100 hover:border-' + item.hoverBorder"
+              class="group/item relative p-2.5 sm:p-3 md:p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl sm:rounded-2xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-{{
+                item.hoverBorder
+              }}"
             >
               <div class="flex items-center justify-between gap-2 sm:gap-3">
                 <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                  <!-- Image du plat (si disponible) ou icône -->
                   @if (item.imageUrl) {
                   <div
                     class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0 overflow-hidden border-2 border-white"
@@ -445,12 +318,7 @@
                       item.gradientTo +
                       ')'
                     "
-                  >
-                    <fa-icon
-                      [icon]="['fas', 'utensils']"
-                      class="text-white text-sm sm:text-base"
-                    ></fa-icon>
-                  </div>
+                  ></div>
                   }
                   <div class="flex-1 min-w-0">
                     <h4 class="font-black text-gray-900 text-xs sm:text-sm truncate">
@@ -465,12 +333,14 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                <!-- Quantity Controls -->
+                <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                   <div
                     class="flex items-center gap-1 sm:gap-2 bg-gray-100 rounded-lg sm:rounded-xl p-0.5 sm:p-1"
                   >
                     <button
-                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-white hover:text-white text-gray-700 flex items-center justify-center font-bold transition-all shadow-sm"
+                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-white text-gray-700 flex items-center justify-center font-bold transition-all shadow-sm"
+                      [class.text-white]="item.quantity > 0"
                       [style.background]="
                         item.quantity > 0
                           ? 'linear-gradient(to bottom right, ' +
@@ -480,8 +350,7 @@
                             ')'
                           : ''
                       "
-                      [class.text-white]="item.quantity > 0"
-                      (click)="decreaseQuantity(restaurant.id, item.id!); $event.stopPropagation()"
+                      (click)="decreaseQuantity(restaurant.id, item.id!)"
                     >
                       <fa-icon [icon]="['fas', 'minus']" class="text-[10px] sm:text-xs"></fa-icon>
                     </button>
@@ -498,7 +367,7 @@
                         item.gradientTo +
                         ')'
                       "
-                      (click)="increaseQuantity(restaurant.id, item.id!); $event.stopPropagation()"
+                      (click)="increaseQuantity(restaurant.id, item.id!)"
                     >
                       <fa-icon [icon]="['fas', 'plus']" class="text-[10px] sm:text-xs"></fa-icon>
                     </button>
@@ -511,43 +380,24 @@
           } @else {
           <div class="p-8 text-center">
             <fa-icon [icon]="['fas', 'utensils']" class="text-gray-300 text-4xl mb-3"></fa-icon>
-            <p class="text-gray-500 font-semibold">Aucun menu disponible aujourd'hui</p>
-            <p class="text-gray-400 text-sm mt-1">Revenez demain !</p>
-          </div>
-          }
-
-          <!-- Footer Button -->
-          @if (restaurant.hasMenu && restaurant.items.length > 0) {
-          <div class="p-3 sm:p-4 md:p-5 pt-0">
-            <button (click)="addToCart(restaurant.id)"
-              class="w-full cursor-pointer py-3 sm:py-3.5 md:py-4 hover:shadow-2xl text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-1.5 sm:gap-2 group/btn"
-              [style.background]="
-                'linear-gradient(to right, ' +
-                restaurant.gradientFrom +
-                ', ' +
-                restaurant.gradientTo +
-                ')'
-              "
-            >
-              <fa-icon
-                [icon]="['fas', 'cart-plus']"
-                class="text-base sm:text-lg group-hover/btn:animate-bounce"
-              ></fa-icon>
-              <span class="hidden xs:inline">Ajouter au panier</span>
-              <span class="xs:hidden">Ajouter</span>
-              <span
-                class="ml-1 sm:ml-2 px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-black"
-                [class.animate-pulse]="getRestaurantItemCount(restaurant.id) > 0"
-              >
-                {{ getRestaurantItemCount(restaurant.id) }}
-              </span>
-            </button>
+            <p class="text-gray-500 font-semibold">Aucun menu aujourd'hui</p>
           </div>
           }
         </div>
       </div>
       }
     </div>
-    } }
+    }
+
+    <!-- Weekend Message -->
+    @if (!isLoading() && isWeekend(selectedDate())) {
+    <div
+      class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-12 text-center"
+    >
+      <div class="text-6xl mb-6">🌴</div>
+      <h2 class="text-4xl font-black text-gray-900 mb-4">C'est le weekend !</h2>
+      <p class="text-gray-700 text-lg">Profitez de votre repos. Les commandes reprennent lundi.</p>
+    </div>
+    }
   </div>
 </section>

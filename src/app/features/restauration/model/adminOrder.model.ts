@@ -1,50 +1,52 @@
-export interface OrderItem {
-  id: number;
-  mealId: number;
-  mealName: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-}
-
-export interface AdminOrder {
-  id: number;
-  userId: number;
-  username: string;
+import { OrderDTO } from '../../restauration/model/order.model';
+/**
+ * 🏪 Statistiques par restaurant
+ */
+export interface RestaurantStats {
   restaurantId: number;
   restaurantName: string;
-  orderDate: string;
-  subtotal: number;
-  deliveryFeeShare: number;
-  totalAmount: number;
-  status: 'CONFIRMED' | 'CANCELLED';
-  createdAt: string;
-  items: OrderItem[];
-}
-
-export interface TodayOrderStats {
-  date: string;
   totalOrders: number;
   totalAmount: number;
   confirmedCount: number;
   cancelledCount: number;
-  restaurantStats: RestaurantOrderStats[];
 }
 
-export interface RestaurantOrderStats {
-  restaurantId: number;
-  restaurantName: string;
-  orderCount: number;
+/**
+ * 👤 Commande utilisateur enrichie
+ */
+export interface UserOrderSummary {
+  userId: number;
+  username: string;
+  email: string;
+  orders: OrderDTO[];
   totalAmount: number;
-  deliveryFee: number;
-  orders: AdminOrder[];
+  restaurants: string[]; // Liste des restaurants
+  meals: { name: string; quantity: number; restaurant: string }[];
+  balance: number;
+  hasDebt: boolean;
 }
 
-export interface OrderFilters {
-  date?: string;
-  month?: string;
-  year?: string;
-  restaurantId?: number;
-  status?: 'CONFIRMED' | 'CANCELLED' | 'ALL';
-  searchTerm?: string;
+/**
+ * 📊 Vue globale du dashboard
+ */
+export interface DashboardView {
+  date: string;
+  restaurantStats: RestaurantStats[];
+  userOrders: UserOrderSummary[];
+  globalStats: {
+    totalOrders: number;
+    totalAmount: number;
+    totalUsers: number;
+    totalRestaurants: number;
+  };
+}
+
+/**
+ * 🔍 Filtres dashboard
+ */
+export interface DashboardFilters {
+  selectedDate: string;
+  selectedRestaurantId: number | null;
+  searchTerm: string;
+  showCancelled: boolean;
 }

@@ -1,5 +1,6 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import Keycloak from 'keycloak-js';
 import { ExtendedKeycloakTokenParsed } from '../model/keycloak.model';
 
@@ -8,6 +9,7 @@ import { ExtendedKeycloakTokenParsed } from '../model/keycloak.model';
 })
 export class KeycloakService {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly router = inject(Router);
   private keycloak!: Keycloak;
   private initialized = false;
 
@@ -30,16 +32,24 @@ export class KeycloakService {
       });
 
       const authenticated = await this.keycloak.init({
-        onLoad: 'login-required',
+        onLoad: 'check-sso',
         checkLoginIframe: false,
         enableLogging: true,
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
       });
 
       this.initialized = true;
 
       if (authenticated) {
         console.log('✅ User authenticated via Keycloak');
+        console.log('👤 User roles:', this.getUserRoles());
         this.setupTokenRefresh();
+
+        // Rediriger uniquement si on est sur la racine
+        const currentPath = window.location.pathname;
+        if (currentPath === '/' || currentPath === '') {
+          this.redirectBasedOnRole();
+        }
       } else {
         console.log('ℹ️ User not authenticated');
       }
@@ -49,6 +59,23 @@ export class KeycloakService {
       console.error('❌ Keycloak initialization failed:', error);
       this.initialized = false;
       return false;
+    }
+  }
+
+  /**
+   * 🔄 Redirige automatiquement selon le rôle
+   */
+  private redirectBasedOnRole(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const isAdmin = this.isAdmin();
+
+    if (isAdmin) {
+      console.log('↪️ Redirecting admin to /admin');
+      this.router.navigate(['/admin']);
+    } else {
+      console.log('↪️ Keeping user on home page');
+      // Ne pas rediriger, l'utilisateur reste sur '/'
     }
   }
 
@@ -126,24 +153,55 @@ export class KeycloakService {
     };
   }
 
+  /**
+   * 🔍 Vérifie si l'utilisateur a au moins un des rôles requis
+   */
   hasAnyRole(requiredRoles: string[]): boolean {
     if (!isPlatformBrowser(this.platformId)) return false;
     if (!requiredRoles || requiredRoles.length === 0) return true;
 
     const tokenParsed = this.getTokenParsed();
 
+    // Récupérer les rôles du realm
+    const realmRoles: string[] = tokenParsed?.['realm_access']?.['roles'] || [];
+
+    // Récupérer les rôles du client
+    const clientRoles: string[] = tokenParsed?.['resource_access']?.['accel']?.['roles'] || [];
+
+    // Combiner tous les rôles
+    const allRoles = new Set<string>([...realmRoles, ...clientRoles]);
+
+    // Vérifier si l'utilisateur a au moins un des rôles requis (insensible à la casse)
+    return requiredRoles.some((role) => {
+      const normalizedRole = role.toLowerCase();
+      return Array.from(allRoles).some((userRole) => userRole.toLowerCase() === normalizedRole);
+    });
+  }
+
+  /**
+   * 🔐 Vérifie si l'utilisateur a un rôle spécifique
+   */
+  hasRole(role: string): boolean {
+    return this.hasAnyRole([role]);
+  }
+
+  /**
+   * 👑 Vérifie si l'utilisateur est admin
+   */
+  isAdmin(): boolean {
+    return this.hasAnyRole(['ROLE_ADMIN', 'role_admin', 'admin']);
+  }
+
+  /**
+   * 📋 Récupère tous les rôles de l'utilisateur
+   */
+  getUserRoles(): string[] {
+    if (!isPlatformBrowser(this.platformId)) return [];
+
+    const tokenParsed = this.getTokenParsed();
     const realmRoles: string[] = tokenParsed?.['realm_access']?.['roles'] || [];
     const clientRoles: string[] = tokenParsed?.['resource_access']?.['accel']?.['roles'] || [];
 
-    const allRoles = new Set<string>([...realmRoles, ...clientRoles]);
-
-    console.log('👤 User roles:', Array.from(allRoles));
-    console.log('🔒 Required roles:', requiredRoles);
-
-    return requiredRoles.some((role) => allRoles.has(role) || allRoles.has(role.toLowerCase()));
-  }
-
-  hasRole(role: string): boolean {
-    return this.hasAnyRole([role]);
+    return [...new Set([...realmRoles, ...clientRoles])];
   }
 }

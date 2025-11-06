@@ -244,7 +244,7 @@
             </div>
             <div class="text-left">
               <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-                {{ restaurant.restaurant_name }}
+                {{ restaurant.restaurantName }}
               </h3>
               <p
                 [class]="
@@ -307,11 +307,11 @@
             <span *ngIf="selectedRestaurant()">
               <span *ngIf="useTodayDate()">
                 Sélectionnez les plats du menu d'aujourd'hui pour
-                {{ selectedRestaurant()!.restaurant_name }}
+                {{ selectedRestaurant()!.restaurantName }}
               </span>
               <span *ngIf="!useTodayDate()">
                 Sélectionnez les plats pour le menu du {{ getDayName(selectedDate()) }}
-                {{ selectedDate() }} à {{ selectedRestaurant()!.restaurant_name }}
+                {{ selectedDate() }} à {{ selectedRestaurant()!.restaurantName }}
               </span>
             </span>
             <span *ngIf="!selectedRestaurant()"> Veuillez d'abord sélectionner un restaurant </span>

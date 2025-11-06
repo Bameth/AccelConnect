@@ -1,111 +1,154 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
-import { AddToCartRequest, Cart, UpdateCartItemRequest } from '../../model/panier.model';
+import { Injectable, signal, computed, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { CartItem, CartSummary } from '../../model/panier.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartServiceImpl {
-  private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/cart`;
+export class CartService {
+  private readonly SUBSIDY_AMOUNT = 1000;
 
-  // Signal réactif pour le panier
-  private readonly cartSubject = new BehaviorSubject<Cart | null>(null);
-  public cart$ = this.cartSubject.asObservable();
+  private readonly cartItems = signal<CartItem[]>([]);
+  private currentUserId = signal<number | null>(null);
 
-  // Signal pour le nombre d'items
-  cartItemCount = signal(0);
+  cartSummary = computed<CartSummary>(() => {
+    const items = this.cartItems();
+    const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+    const amountAfterSubsidy = Math.max(0, subtotal - this.SUBSIDY_AMOUNT);
 
-  constructor() {
-    this.loadCart();
+    return {
+      totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
+      subtotal,
+      subsidyAmount: this.SUBSIDY_AMOUNT,
+      amountAfterSubsidy,
+      deliveryFeesNote: 'Les frais de livraison seront calculés vendredi à 15h',
+      items,
+    };
+  });
+
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {}
+
+  /**
+   * 🔑 Initialise le panier pour un utilisateur spécifique
+   */
+  initializeForUser(userId: number): void {
+    this.currentUserId.set(userId);
+    this.loadFromStorage();
   }
 
   /**
-   * Charge le panier de l'utilisateur
+   * 🧹 Nettoie le panier à la déconnexion
    */
-  loadCart(): void {
-    this.http.get<Cart>(this.apiUrl).subscribe({
-      next: (cart) => {
-        this.cartSubject.next(cart);
-        this.cartItemCount.set(cart.totalItems);
-        console.log('🛒 Panier chargé:', cart);
-      },
-      error: (error) => {
-        console.error('❌ Erreur lors du chargement du panier:', error);
-      },
-    });
+  clearUserSession(): void {
+    this.cartItems.set([]);
+    this.currentUserId.set(null);
   }
 
-  /**
-   * Récupère le panier actuel
-   */
-  getCart(): Observable<Cart> {
-    return this.http.get<Cart>(this.apiUrl).pipe(
-      tap((cart) => {
-        this.cartSubject.next(cart);
-        this.cartItemCount.set(cart.totalItems);
-      })
+  addItem(item: CartItem): void {
+    const items = this.cartItems();
+    const existingIndex = items.findIndex(
+      (i) => i.mealId === item.mealId && i.restaurantId === item.restaurantId
     );
+
+    if (existingIndex >= 0) {
+      items[existingIndex].quantity += item.quantity;
+    } else {
+      items.push({ ...item });
+    }
+
+    this.cartItems.set([...items]);
+    this.saveToStorage();
   }
 
-  /**
-   * Ajoute un plat au panier
-   */
-  addToCart(request: AddToCartRequest): Observable<Cart> {
-    return this.http.post<Cart>(`${this.apiUrl}/add`, request).pipe(
-      tap((cart) => {
-        this.cartSubject.next(cart);
-        this.cartItemCount.set(cart.totalItems);
-        console.log('✅ Plat ajouté au panier:', cart);
-      })
+  updateQuantity(mealId: number, restaurantId: number, quantity: number): void {
+    const items = this.cartItems();
+    const index = items.findIndex((i) => i.mealId === mealId && i.restaurantId === restaurantId);
+    
+    if (index >= 0) {
+      if (quantity <= 0) {
+        items.splice(index, 1);
+      } else {
+        items[index].quantity = quantity;
+      }
+
+      this.cartItems.set([...items]);
+      this.saveToStorage();
+    }
+  }
+
+  removeItem(mealId: number, restaurantId: number): void {
+    const items = this.cartItems().filter(
+      (i) => !(i.mealId === mealId && i.restaurantId === restaurantId)
     );
+    this.cartItems.set(items);
+    this.saveToStorage();
+  }
+
+  clear(): void {
+    this.cartItems.set([]);
+    this.saveToStorage();
+  }
+
+  prepareOrderData(): OrderCreationPayload {
+    const items = this.cartItems();
+    return {
+      items: items.map((item) => ({
+        mealId: item.mealId,
+        restaurantId: item.restaurantId,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+      })),
+    };
   }
 
   /**
-   * Met à jour la quantité d'un item
+   * 💾 Sauvegarde avec clé utilisateur unique
    */
-  updateCartItem(itemId: number, quantity: number): Observable<Cart> {
-    const request: UpdateCartItemRequest = { quantity };
-    return this.http.put<Cart>(`${this.apiUrl}/items/${itemId}`, request).pipe(
-      tap((cart) => {
-        this.cartSubject.next(cart);
-        this.cartItemCount.set(cart.totalItems);
-      })
-    );
+  private saveToStorage(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const userId = this.currentUserId();
+      if (userId !== null) {
+        const storageKey = `accel_cart_user_${userId}`;
+        localStorage.setItem(storageKey, JSON.stringify(this.cartItems()));
+      }
+    }
   }
 
   /**
-   * Supprime un item du panier
+   * 📂 Chargement avec clé utilisateur unique
    */
-  removeFromCart(itemId: number): Observable<Cart> {
-    return this.http.delete<Cart>(`${this.apiUrl}/items/${itemId}`).pipe(
-      tap((cart) => {
-        this.cartSubject.next(cart);
-        this.cartItemCount.set(cart.totalItems);
-        console.log('❌ Item supprimé du panier');
-      })
-    );
+  private loadFromStorage(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const userId = this.currentUserId();
+      if (userId !== null) {
+        const storageKey = `accel_cart_user_${userId}`;
+        const stored = localStorage.getItem(storageKey);
+        
+        if (stored) {
+          try {
+            const items = JSON.parse(stored) as CartItem[];
+            this.cartItems.set(items);
+          } catch (e) {
+            console.error('❌ Erreur chargement panier:', e);
+            this.cartItems.set([]);
+          }
+        } else {
+          this.cartItems.set([]);
+        }
+      }
+    }
   }
 
-  /**
-   * Vide le panier
-   */
-  clearCart(): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/clear`).pipe(
-      tap(() => {
-        this.cartSubject.next(null);
-        this.cartItemCount.set(0);
-        console.log('🗑️ Panier vidé');
-      })
-    );
-  }
+  cartItemCount = computed(() => {
+    return this.cartItems().reduce((sum, item) => sum + item.quantity, 0);
+  });
+}
 
-  /**
-   * Obtient le panier actuel depuis le BehaviorSubject
-   */
-  getCurrentCart(): Cart | null {
-    return this.cartSubject.value;
-  }
+export interface OrderCreationPayload {
+  items: {
+    mealId: number;
+    restaurantId: number;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }

@@ -1,23 +1,33 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { KeycloakService } from '../service/keycloak.service';
+import { isPlatformBrowser } from '@angular/common';
 
-export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const adminOnlyGuard: CanActivateFn = () => {
+  const platformId = inject(PLATFORM_ID);
+
+  // ⚠️ En SSR, autoriser le passage
+  if (!isPlatformBrowser(platformId)) {
+    return true;
+  }
+
   const keycloakService = inject(KeycloakService);
   const router = inject(Router);
 
-  const requiredRoles = (route.data?.['roles'] as string[]) || [];
+  if (!keycloakService.isAuthenticated()) {
+    console.log('⚠️ User not authenticated, redirecting to login');
+    keycloakService.login();
+    return false;
+  }
 
-  if (!requiredRoles.length) {
+  const isAdmin = keycloakService.isAdmin();
+
+  if (isAdmin) {
+    console.log('✅ Admin access granted');
     return true;
   }
 
-  if (keycloakService.hasAnyRole(requiredRoles)) {
-    return true;
-  }
-
-  router.navigate(['/not-found']);
+  console.log('🚫 Access denied - Admin only, redirecting to home');
+  router.navigate(['/']);
   return false;
 };
-
-

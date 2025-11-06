@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
-import { CreateOrderRequest, Order, OrderStatus, OrderSummary } from '../../model/order.model';
+import { OrderCreationPayload } from './cart.service';
+import { OrderDTO } from '../../model/order.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,63 +13,56 @@ export class OrderService {
   private readonly apiUrl = `${environment.apiUrl}/orders`;
 
   /**
-   * Crée une commande à partir du panier
+   * 🛒 Crée une commande
    */
-  createOrder(request?: CreateOrderRequest): Observable<Order> {
-    return this.http.post<Order>(this.apiUrl, request || {});
+  createOrder(payload: OrderCreationPayload): Observable<OrderDTO> {
+    return this.http.post<OrderDTO>(this.apiUrl, payload);
   }
 
   /**
-   * Récupère toutes les commandes de l'utilisateur
+   * 📋 Récupère les commandes de l'utilisateur
    */
-  getMyOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl);
+  getMyOrders(): Observable<OrderDTO[]> {
+    return this.http.get<OrderDTO[]>(this.apiUrl);
   }
 
   /**
-   * Récupère une commande spécifique
+   * ❌ Annule une commande
    */
-  getOrder(orderId: number): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/${orderId}`);
+  cancelOrder(orderId: number): Observable<OrderDTO> {
+    return this.http.put<OrderDTO>(`${this.apiUrl}/${orderId}/cancel`, {});
   }
 
   /**
-   * Récupère le résumé de la commande avant validation
+   * 🎨 Obtient la couleur du statut
    */
-  getOrderSummary(deliveryDate?: string): Observable<OrderSummary> {
-    let params = new HttpParams();
-    if (deliveryDate) {
-      params = params.set('deliveryDate', deliveryDate);
-    }
-    return this.http.get<OrderSummary>(`${this.apiUrl}/summary`, { params });
+  getStatusColor(status: string): string {
+    const colors: Record<string, string> = {
+      CONFIRMED: 'from-green-500 to-emerald-600',
+      CANCELLED: 'from-red-500 to-red-600',
+    };
+    return colors[status] || 'from-gray-500 to-gray-600';
   }
 
   /**
-   * Annule une commande
+   * 📝 Obtient le label du statut
    */
-  cancelOrder(orderId: number): Observable<Order> {
-    return this.http.put<Order>(`${this.apiUrl}/${orderId}/cancel`, {});
-  }
-
-  /**
-   * Convertit le statut en texte français
-   */
-  getStatusLabel(status: OrderStatus): string {
-    const labels: Record<OrderStatus, string> = {
-      [OrderStatus.CONFIRMED]: 'Confirmée',
-      [OrderStatus.CANCELLED]: 'Annulée',
+  getStatusLabel(status: string): string {
+    const labels: Record<string, string> = {
+      CONFIRMED: 'Confirmée',
+      CANCELLED: 'Annulée',
     };
     return labels[status] || status;
   }
 
   /**
-   * Obtient la couleur du statut pour l'affichage
+   * 🎯 Obtient l'icône du statut
    */
-  getStatusColor(status: OrderStatus): string {
-    const colors: Record<OrderStatus, string> = {
-      [OrderStatus.CONFIRMED]: 'text-blue-600 bg-blue-50',
-      [OrderStatus.CANCELLED]: 'text-red-600 bg-red-50',
+  getStatusIcon(status: string): string {
+    const icons: Record<string, string> = {
+      CONFIRMED: 'check-circle',
+      CANCELLED: 'times-circle',
     };
-    return colors[status] || 'text-gray-600 bg-gray-50';
+    return icons[status] || 'circle';
   }
 }

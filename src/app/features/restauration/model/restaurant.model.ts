@@ -2,8 +2,9 @@ import { Meal } from "./plat.model";
 
 export interface Restaurant {
   id: number;
-  restaurant_name: string;
+  restaurantName: string;
   address: string;
   contact: string;
-  meal?: Meal[];
+  deliveryFee: number;
+  meals?: Meal[];
 }

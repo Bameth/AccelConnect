@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RestaurationComponent } from './restauration-component';
+import { RestaurationComponent } from './restauration.component';
 
 describe('RestaurationComponent', () => {
   let component: RestaurationComponent;

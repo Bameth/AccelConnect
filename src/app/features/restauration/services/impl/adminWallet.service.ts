@@ -2,36 +2,39 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
-import { DepositRequest, Transaction, UserWalletStats } from '../../model/adminWallet.model';
+import { UserBalanceStatsDTO, DepositRequest } from '../../model/balance.model';
+
+export interface UserWalletStats extends UserBalanceStatsDTO {
+  totalOrders: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminWalletService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/wallet`;
+  private readonly apiUrl = `${environment.apiUrl}/balance`;
 
   /**
-   * Récupère les statistiques de tous les utilisateurs
+   * 📊 Récupère les statistiques de tous les utilisateurs
    */
   getAllUserStats(): Observable<UserWalletStats[]> {
     return this.http.get<UserWalletStats[]>(`${this.apiUrl}/admin/stats`);
   }
 
   /**
-   * Effectue un dépôt pour un utilisateur
+   * 💵 Effectue un dépôt pour un utilisateur
    */
-  depositToUser(request: DepositRequest): Observable<Transaction> {
-    return this.http.post<Transaction>(`${this.apiUrl}/deposit`, request);
+  depositToUser(request: DepositRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/deposit`, request);
   }
 
   /**
-   * Formate un montant
+   * 💱 Formate un montant en FCFA
    */
   formatAmount(amount: number): string {
     return (
       new Intl.NumberFormat('fr-FR', {
-        style: 'decimal',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }).format(amount) + ' FCFA'
@@ -39,18 +42,15 @@ export class AdminWalletService {
   }
 
   /**
-   * Obtient la couleur du statut
+   * 🎨 Obtient la couleur du statut
    */
   getStatusColor(status: string): string {
-    switch (status) {
-      case 'Actif':
-        return 'text-green-600 bg-green-50';
-      case 'Solde faible':
-        return 'text-orange-600 bg-orange-50';
-      case 'Solde épuisé':
-        return 'text-red-600 bg-red-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
+    if (status.includes('Dette')) {
+      return 'bg-red-100 text-red-700 border-red-300';
     }
+    if (status.includes('rembourser')) {
+      return 'bg-green-100 text-green-700 border-green-300';
+    }
+    return 'bg-blue-100 text-blue-700 border-blue-300';
   }
 }

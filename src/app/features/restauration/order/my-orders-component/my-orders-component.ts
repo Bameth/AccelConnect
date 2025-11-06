@@ -1,13 +1,15 @@
 import { Component, OnInit, signal, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 import { AnimationItem } from 'lottie-web';
-import { Order, OrderStatus, ORDER_FILTERS, OrderFilterValue } from '../../model/order.model';
+import { OrderStatus, ORDER_FILTERS, OrderFilterValue, OrderDTO } from '../../model/order.model';
 import { OrderService } from '../../services/impl/order.service';
+import { CartService } from '../../services/impl/cart.service';
 import { ConfirmationService } from '../../../../core/services/impl/ConfirmationDialog.service';
 import { NotificationService } from '../../../../core/services/impl/notification.service';
+import { UniquePipe } from '../../../../shared/pipes/unique.pipe';
 
 interface MonthOption {
   value: string;
@@ -17,42 +19,36 @@ interface MonthOption {
 @Component({
   selector: 'app-my-orders',
   standalone: true,
-  imports: [CommonModule, RouterLink, FontAwesomeModule, LottieComponent],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, LottieComponent,UniquePipe],
   templateUrl: './my-orders-component.html',
   styleUrl: './my-orders-component.css',
 })
 export class MyOrdersComponent implements OnInit {
   private readonly orderService = inject(OrderService);
+  private readonly cartService = inject(CartService);
+  private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly notificationService = inject(NotificationService);
   private readonly platformId = inject(PLATFORM_ID);
 
-  orders = signal<Order[]>([]);
-  filteredOrders = signal<Order[]>([]);
+  orders = signal<OrderDTO[]>([]);
+  filteredOrders = signal<OrderDTO[]>([]);
   isLoading = signal(true);
   selectedFilter = signal<OrderFilterValue>('all');
   selectedMonth = signal<string>(this.getCurrentMonth());
   expandedOrderId = signal<number | null>(null);
 
-  // Statistiques
   totalOrders = signal(0);
   totalSpent = signal(0);
   confirmedCount = signal(0);
-
-  // Mois disponibles (12 derniers mois)
   availableMonths = signal<MonthOption[]>([]);
 
-  // Animation Lottie pour état vide
   emptyOrdersOptions: AnimationOptions = {
     path: '/assets/lottie/empty-orders.json',
     loop: true,
     autoplay: true,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
   };
 
-  // Filtres disponibles
   filters = ORDER_FILTERS.map((filter) => ({
     ...filter,
     count: 0,
@@ -65,9 +61,6 @@ export class MyOrdersComponent implements OnInit {
     }
   }
 
-  /**
-   * Génère la liste des 12 derniers mois
-   */
   generateAvailableMonths(): void {
     const months: MonthOption[] = [];
     const now = new Date();
@@ -88,33 +81,33 @@ export class MyOrdersComponent implements OnInit {
     this.availableMonths.set(months);
   }
 
-  /**
-   * Retourne le mois actuel au format YYYY-MM
-   */
   getCurrentMonth(): string {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   }
 
-  /**
-   * Charge toutes les commandes de l'utilisateur
-   */
   loadOrders(): void {
     this.isLoading.set(true);
 
     this.orderService.getMyOrders().subscribe({
       next: (orders) => {
-        this.orders.set(orders);
+        const normalizedOrders = orders.map((order) => ({
+          ...order,
+          restaurantName:
+            order.restaurantName ||
+            (order.items.length > 0 ? order.items[0].restaurantName : 'Restaurant inconnu'),
+        }));
+
+        this.orders.set(normalizedOrders);
         this.applyFilters();
         this.isLoading.set(false);
-        console.log('📦 Commandes chargées:', orders);
       },
       error: (error) => {
-        console.error('❌ Erreur lors du chargement des commandes:', error);
+        console.error('❌ Erreur chargement commandes:', error);
         if (error.status !== 401) {
           this.notificationService.error(
             'Erreur de chargement',
-            'Impossible de charger vos commandes. Veuillez réessayer.'
+            'Impossible de charger vos commandes.'
           );
         }
         this.isLoading.set(false);
@@ -122,20 +115,15 @@ export class MyOrdersComponent implements OnInit {
     });
   }
 
-  /**
-   * Applique tous les filtres (mois + statut)
-   */
   applyFilters(): void {
     let filtered = this.orders();
-
-    // Filtre par mois
     const selectedMonth = this.selectedMonth();
+
     filtered = filtered.filter((order) => {
-      const orderMonth = order.createdAt.substring(0, 7); // YYYY-MM
+      const orderMonth = order.createdAt.substring(0, 7);
       return orderMonth === selectedMonth;
     });
 
-    // Filtre par statut
     const statusFilter = this.selectedFilter();
     if (statusFilter !== 'all') {
       filtered = filtered.filter((order) => order.status === statusFilter);
@@ -146,10 +134,7 @@ export class MyOrdersComponent implements OnInit {
     this.updateFilterCounts();
   }
 
-  /**
-   * Calcule les statistiques pour les commandes filtrées
-   */
-  calculateStatistics(orders: Order[]): void {
+  calculateStatistics(orders: OrderDTO[]): void {
     this.totalOrders.set(orders.length);
     this.totalSpent.set(
       orders
@@ -159,14 +144,10 @@ export class MyOrdersComponent implements OnInit {
     this.confirmedCount.set(orders.filter((o) => o.status === OrderStatus.CONFIRMED).length);
   }
 
-  /**
-   * Met à jour le compteur de chaque filtre
-   */
   updateFilterCounts(): void {
     const allOrders = this.orders();
     const selectedMonth = this.selectedMonth();
 
-    // Filtrer par mois d'abord
     const ordersInMonth = allOrders.filter((order) => {
       const orderMonth = order.createdAt.substring(0, 7);
       return orderMonth === selectedMonth;
@@ -181,38 +162,78 @@ export class MyOrdersComponent implements OnInit {
     }));
   }
 
-  /**
-   * Change le mois sélectionné
-   */
   selectMonth(month: string): void {
     this.selectedMonth.set(month);
     this.applyFilters();
   }
 
-  /**
-   * Applique un filtre de statut
-   */
   applyFilter(filter: OrderFilterValue): void {
     this.selectedFilter.set(filter);
     this.applyFilters();
   }
 
-  /**
-   * Expand/Collapse une commande
-   */
   toggleOrderDetails(orderId: number): void {
     this.expandedOrderId.set(this.expandedOrderId() === orderId ? null : orderId);
   }
 
   /**
-   * Annule une commande
+   * 🔄 Modifier une commande du jour
+   */
+  modifyOrder(order: OrderDTO, event: Event): void {
+    event.stopPropagation();
+
+    const today = new Date().toISOString().split('T')[0];
+    const orderDate = order.orderDate;
+
+    if (orderDate !== today) {
+      this.notificationService.warning(
+        'Modification impossible',
+        'Vous ne pouvez modifier que la commande du jour.'
+      );
+      return;
+    }
+
+    this.confirmationService.confirm({
+      title: '🔄 Modifier votre commande',
+      message: `Vous allez modifier votre commande du jour. Les articles actuels seront remplacés par votre nouveau panier.`,
+      type: 'info',
+      confirmText: 'Modifier',
+      cancelText: 'Annuler',
+      onConfirm: () => {
+        // Vider le panier actuel
+        this.cartService.clear();
+
+        // Ajouter les items de la commande au panier
+        order.items.forEach((item) => {
+          this.cartService.addItem({
+            mealId: item.mealId,
+            mealName: item.mealName,
+            restaurantId: item.restaurantId,
+            restaurantName: item.restaurantName,
+            unitPrice: item.unitPrice,
+            quantity: item.quantity,
+          });
+        });
+
+        this.notificationService.success(
+          'Commande chargée',
+          'Modifiez votre panier puis validez vos changements.'
+        );
+
+        this.router.navigate(['/restauration']);
+      },
+    });
+  }
+
+  /**
+   * ❌ Annuler une commande
    */
   cancelOrder(orderId: number, event: Event): void {
     event.stopPropagation();
 
     this.confirmationService.confirmDelete(
       'Annuler cette commande ?',
-      'Êtes-vous sûr de vouloir annuler cette commande ? Cette action est irréversible.',
+      'Êtes-vous sûr ? Cette action est irréversible.',
       () => {
         this.orderService.cancelOrder(orderId).subscribe({
           next: (updatedOrder) => {
@@ -223,17 +244,13 @@ export class MyOrdersComponent implements OnInit {
               this.orders.set([...currentOrders]);
               this.applyFilters();
             }
-            this.notificationService.success(
-              'Commande annulée',
-              'Votre commande a été annulée avec succès. Votre wallet a été remboursé.'
-            );
-            console.log('✅ Commande annulée:', updatedOrder);
+            this.notificationService.success('Commande annulée', 'Votre wallet a été remboursé.');
           },
           error: (error) => {
-            console.error("❌ Erreur lors de l'annulation:", error);
+            console.error('❌ Erreur annulation:', error);
             this.notificationService.error(
               "Erreur d'annulation",
-              "Impossible d'annuler la commande. Veuillez réessayer."
+              "Impossible d'annuler la commande."
             );
           },
         });
@@ -242,15 +259,31 @@ export class MyOrdersComponent implements OnInit {
   }
 
   /**
-   * Obtient le label du statut
+   * 📅 Vérifie si la commande est du jour
    */
+  isTodayOrder(order: OrderDTO): boolean {
+    const today = new Date().toISOString().split('T')[0];
+    return order.orderDate === today;
+  }
+
+  /**
+   * ✅ Peut modifier (commande confirmée du jour)
+   */
+  canModify(order: OrderDTO): boolean {
+    return order.status === OrderStatus.CONFIRMED && this.isTodayOrder(order);
+  }
+
+  /**
+   * ❌ Peut annuler (commande confirmée)
+   */
+  canCancel(order: OrderDTO): boolean {
+    return order.status === OrderStatus.CONFIRMED;
+  }
+
   getStatusLabel(status: OrderStatus): string {
     return this.orderService.getStatusLabel(status);
   }
 
-  /**
-   * Obtient la couleur du statut
-   */
   getStatusColor(status: OrderStatus): string {
     const colors: Record<OrderStatus, string> = {
       [OrderStatus.CONFIRMED]: 'from-green-500 to-emerald-600',
@@ -259,9 +292,6 @@ export class MyOrdersComponent implements OnInit {
     return colors[status] || 'from-gray-500 to-gray-600';
   }
 
-  /**
-   * Obtient l'icône du statut
-   */
   getStatusIcon(status: OrderStatus): string {
     const icons: Record<OrderStatus, string> = {
       [OrderStatus.CONFIRMED]: 'check-circle',
@@ -270,17 +300,6 @@ export class MyOrdersComponent implements OnInit {
     return icons[status] || 'circle';
   }
 
-  /**
-   * Vérifie si une commande peut être annulée
-   * Note: Seules les commandes confirmées peuvent être annulées
-   */
-  canCancel(order: Order): boolean {
-    return order.status === OrderStatus.CONFIRMED;
-  }
-
-  /**
-   * Formate un montant
-   */
   formatAmount(amount: number): string {
     return new Intl.NumberFormat('fr-FR', {
       style: 'decimal',
@@ -289,10 +308,7 @@ export class MyOrdersComponent implements OnInit {
     }).format(amount);
   }
 
-  /**
-   * Gestion animation Lottie
-   */
   onAnimationCreated(animationItem: AnimationItem): void {
-    console.log('Empty orders animation loaded!', animationItem);
+    console.log('Animation loaded!', animationItem);
   }
 }

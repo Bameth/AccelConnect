@@ -2,8 +2,9 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AdminWalletService } from '../../services/impl/adminWallet.service';
-import { DepositRequest, UserWalletStats } from '../../model/adminWallet.model';
+import { AdminWalletService, UserWalletStats } from '../../services/impl/adminWallet.service';
+import { NotificationService } from '../../../../core/services/impl/notification.service';
+import { DepositRequest } from '../../model/adminWallet.model';
 
 @Component({
   selector: 'app-admin-wallet-management',
@@ -14,6 +15,8 @@ import { DepositRequest, UserWalletStats } from '../../model/adminWallet.model';
 })
 export class AdminWalletManagementComponent implements OnInit {
   private readonly adminWalletService = inject(AdminWalletService);
+  private readonly notificationService = inject(NotificationService);
+   protected readonly Math = Math;
 
   users = signal<UserWalletStats[]>([]);
   filteredUsers = signal<UserWalletStats[]>([]);
@@ -25,12 +28,20 @@ export class AdminWalletManagementComponent implements OnInit {
   depositDescription = signal('');
   isDepositing = signal(false);
 
+  // Statistiques globales
+  globalStats = signal({
+    totalUsers: 0,
+    totalDebt: 0,
+    totalRefundable: 0,
+    totalDeposited: 0,
+  });
+
   ngOnInit(): void {
     this.loadUsers();
   }
 
   /**
-   * Charge tous les utilisateurs avec leurs statistiques
+   * 📊 Charge tous les utilisateurs avec leurs statistiques
    */
   loadUsers(): void {
     this.isLoading.set(true);
@@ -38,18 +49,40 @@ export class AdminWalletManagementComponent implements OnInit {
       next: (users) => {
         this.users.set(users);
         this.filteredUsers.set(users);
+        this.calculateGlobalStats(users);
         this.isLoading.set(false);
         console.log('👥 Utilisateurs chargés:', users);
       },
       error: (error) => {
         console.error('❌ Erreur lors du chargement des utilisateurs:', error);
         this.isLoading.set(false);
+        this.notificationService.error(
+          'Erreur de chargement',
+          'Erreur lors du chargement des données'
+        );
       },
     });
   }
 
   /**
-   * Recherche d'utilisateurs
+   * 📈 Calcule les statistiques globales
+   */
+  private calculateGlobalStats(users: UserWalletStats[]): void {
+    const stats = users.reduce(
+      (acc, user) => ({
+        totalUsers: acc.totalUsers + 1,
+        totalDebt: acc.totalDebt + (user.hasDebt ? user.debtAmount : 0),
+        totalRefundable: acc.totalRefundable + user.refundableAmount,
+        totalDeposited: acc.totalDeposited + user.totalDeposited,
+      }),
+      { totalUsers: 0, totalDebt: 0, totalRefundable: 0, totalDeposited: 0 }
+    );
+
+    this.globalStats.set(stats);
+  }
+
+  /**
+   * 🔍 Recherche d'utilisateurs
    */
   onSearch(): void {
     const term = this.searchTerm().toLowerCase();
@@ -66,7 +99,7 @@ export class AdminWalletManagementComponent implements OnInit {
   }
 
   /**
-   * Sélectionne un utilisateur pour dépôt
+   * 👤 Sélectionne un utilisateur pour dépôt
    */
   selectUser(user: UserWalletStats): void {
     this.selectedUser.set(user);
@@ -75,7 +108,7 @@ export class AdminWalletManagementComponent implements OnInit {
   }
 
   /**
-   * Ferme le modal de dépôt
+   * ❌ Ferme le modal de dépôt
    */
   closeDepositModal(): void {
     this.selectedUser.set(null);
@@ -84,7 +117,7 @@ export class AdminWalletManagementComponent implements OnInit {
   }
 
   /**
-   * Effectue un dépôt
+   * 💵 Effectue un dépôt
    */
   makeDeposit(): void {
     const user = this.selectedUser();
@@ -108,37 +141,43 @@ export class AdminWalletManagementComponent implements OnInit {
     };
 
     this.adminWalletService.depositToUser(request).subscribe({
-      next: (transaction) => {
-        console.log('✅ Dépôt effectué:', transaction);
-        alert(`Dépôt de ${amount} FCFA effectué avec succès !`);
+      next: (response) => {
+        console.log('✅ Dépôt effectué:', response);
+        this.notificationService.success(
+          'Dépôt effectué',
+          `Dépôt de ${amount} FCFA effectué avec succès !`
+        );
         this.isDepositing.set(false);
         this.closeDepositModal();
         this.loadUsers();
       },
       error: (error) => {
         console.error('❌ Erreur lors du dépôt:', error);
-        alert(error.error || 'Erreur lors du dépôt');
+        this.notificationService.error(
+          'Erreur dépôt',
+          error.error?.message || 'Erreur lors du dépôt'
+        );
         this.isDepositing.set(false);
       },
     });
   }
 
   /**
-   * Formate un montant
+   * 💱 Formate un montant
    */
   formatAmount(amount: number): string {
     return this.adminWalletService.formatAmount(amount);
   }
 
   /**
-   * Obtient la couleur du statut
+   * 🎨 Obtient la couleur du statut
    */
   getStatusColor(status: string): string {
     return this.adminWalletService.getStatusColor(status);
   }
 
   /**
-   * Trie les utilisateurs par solde
+   * 📊 Trie les utilisateurs par solde
    */
   sortByBalance(ascending: boolean = true): void {
     const sorted = [...this.filteredUsers()].sort((a, b) =>
@@ -148,7 +187,7 @@ export class AdminWalletManagementComponent implements OnInit {
   }
 
   /**
-   * Trie les utilisateurs par nom
+   * 🔤 Trie les utilisateurs par nom
    */
   sortByName(ascending: boolean = true): void {
     const sorted = [...this.filteredUsers()].sort((a, b) =>
@@ -158,14 +197,17 @@ export class AdminWalletManagementComponent implements OnInit {
   }
 
   /**
-   * Filtre par statut
+   * 🏷️ Filtre par statut
    */
   filterByStatus(status: string): void {
     if (status === 'all') {
       this.filteredUsers.set(this.users());
-    } else {
-      const filtered = this.users().filter((user) => user.status === status);
-      this.filteredUsers.set(filtered);
+    } else if (status === 'debt') {
+      this.filteredUsers.set(this.users().filter((u) => u.hasDebt));
+    } else if (status === 'refundable') {
+      this.filteredUsers.set(this.users().filter((u) => u.refundableAmount > 0));
+    } else if (status === 'settled') {
+      this.filteredUsers.set(this.users().filter((u) => !u.hasDebt && u.refundableAmount === 0));
     }
   }
 }
