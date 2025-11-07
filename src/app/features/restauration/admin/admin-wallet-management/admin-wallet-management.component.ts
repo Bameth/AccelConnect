@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminWalletService, UserWalletStats } from '../../services/impl/adminWallet.service';
 import { NotificationService } from '../../../../core/services/impl/notification.service';
-import { DepositRequest } from '../../model/adminWallet.model';
+import { DepositRequest, UpdateBalanceRequest } from '../../model/adminWallet.model';
 
 @Component({
   selector: 'app-admin-wallet-management',
@@ -16,17 +16,22 @@ import { DepositRequest } from '../../model/adminWallet.model';
 export class AdminWalletManagementComponent implements OnInit {
   private readonly adminWalletService = inject(AdminWalletService);
   private readonly notificationService = inject(NotificationService);
-   protected readonly Math = Math;
+  protected readonly Math = Math;
 
   users = signal<UserWalletStats[]>([]);
   filteredUsers = signal<UserWalletStats[]>([]);
-  isLoading = signal(true);
+  isLoading = signal(false);
   searchTerm = signal('');
 
   selectedUser = signal<UserWalletStats | null>(null);
   depositAmount = signal<number | null>(null);
   depositDescription = signal('');
   isDepositing = signal(false);
+
+  // Pour la mise à jour de solde
+  isUpdatingBalance = signal(false);
+  updateBalanceAmount = signal<number | null>(null);
+  updateBalanceReason = signal('');
 
   // Statistiques globales
   globalStats = signal({
@@ -45,20 +50,24 @@ export class AdminWalletManagementComponent implements OnInit {
    */
   loadUsers(): void {
     this.isLoading.set(true);
+
     this.adminWalletService.getAllUserStats().subscribe({
       next: (users) => {
         this.users.set(users);
         this.filteredUsers.set(users);
         this.calculateGlobalStats(users);
         this.isLoading.set(false);
-        console.log('👥 Utilisateurs chargés:', users);
+        console.log('👥 Utilisateurs chargés:', users.length);
       },
       error: (error) => {
         console.error('❌ Erreur lors du chargement des utilisateurs:', error);
         this.isLoading.set(false);
+
+        // Notification d'erreur plus précise
+        const errorMessage = error.error?.message || error.message || 'Erreur de chargement';
         this.notificationService.error(
-          'Erreur de chargement',
-          'Erreur lors du chargement des données'
+          'Erreur',
+          `Impossible de charger les utilisateurs: ${errorMessage}`
         );
       },
     });
@@ -105,15 +114,19 @@ export class AdminWalletManagementComponent implements OnInit {
     this.selectedUser.set(user);
     this.depositAmount.set(null);
     this.depositDescription.set(`Dépôt pour ${user.username}`);
+    this.updateBalanceReason.set(`Remboursement pour ${user.username}`);
+    this.updateBalanceAmount.set(null);
   }
 
   /**
-   * ❌ Ferme le modal de dépôt
+   * ❌ Ferme le modal
    */
   closeDepositModal(): void {
     this.selectedUser.set(null);
     this.depositAmount.set(null);
     this.depositDescription.set('');
+    this.updateBalanceAmount.set(null);
+    this.updateBalanceReason.set('');
   }
 
   /**
@@ -124,7 +137,7 @@ export class AdminWalletManagementComponent implements OnInit {
     const amount = this.depositAmount();
 
     if (!user || !amount || amount <= 0) {
-      alert('Veuillez entrer un montant valide');
+      this.notificationService.warning('Attention', 'Veuillez entrer un montant valide');
       return;
     }
 
@@ -144,8 +157,8 @@ export class AdminWalletManagementComponent implements OnInit {
       next: (response) => {
         console.log('✅ Dépôt effectué:', response);
         this.notificationService.success(
-          'Dépôt effectué',
-          `Dépôt de ${amount} FCFA effectué avec succès !`
+          'Dépôt réussi',
+          `${amount} FCFA déposé pour ${user.username}`
         );
         this.isDepositing.set(false);
         this.closeDepositModal();
@@ -153,11 +166,64 @@ export class AdminWalletManagementComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Erreur lors du dépôt:', error);
-        this.notificationService.error(
-          'Erreur dépôt',
-          error.error?.message || 'Erreur lors du dépôt'
-        );
+        const errorMessage = error.error?.message || 'Erreur lors du dépôt';
+        this.notificationService.error('Échec du dépôt', errorMessage);
         this.isDepositing.set(false);
+      },
+    });
+  }
+
+  /**
+   * 🔄 Met à jour le solde (remboursement effectif)
+   */
+  updateBalance(): void {
+    const user = this.selectedUser();
+    const newBalance = this.updateBalanceAmount();
+
+    if (!user || newBalance === null) {
+      this.notificationService.warning('Attention', 'Veuillez entrer le nouveau solde');
+      return;
+    }
+
+    if (!this.updateBalanceReason().trim()) {
+      this.notificationService.warning('Attention', 'Veuillez indiquer la raison');
+      return;
+    }
+
+    if (
+      !confirm(
+        `Confirmer la mise à jour du solde de ${user.username}\n` +
+          `De ${user.balance} FCFA → ${newBalance} FCFA\n` +
+          `Raison: ${this.updateBalanceReason()}`
+      )
+    ) {
+      return;
+    }
+
+    this.isUpdatingBalance.set(true);
+
+    const request: UpdateBalanceRequest = {
+      userId: user.userId,
+      newBalance: newBalance,
+      reason: this.updateBalanceReason(),
+    };
+
+    this.adminWalletService.updateBalance(request).subscribe({
+      next: (response) => {
+        console.log('✅ Solde mis à jour:', response);
+        this.notificationService.success(
+          'Solde mis à jour',
+          `Solde de ${user.username} ajusté à ${newBalance} FCFA`
+        );
+        this.isUpdatingBalance.set(false);
+        this.closeDepositModal();
+        this.loadUsers();
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors de la mise à jour:', error);
+        const errorMessage = error.error?.message || 'Erreur lors de la mise à jour';
+        this.notificationService.error('Échec de la mise à jour', errorMessage);
+        this.isUpdatingBalance.set(false);
       },
     });
   }

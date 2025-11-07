@@ -12,6 +12,7 @@ export class KeycloakService {
   private readonly router = inject(Router);
   private keycloak!: Keycloak;
   private initialized = false;
+  private initPromise: Promise<boolean> | null = null;
 
   async init(): Promise<boolean> {
     // Ne pas initialiser Keycloak côté serveur
@@ -20,10 +21,22 @@ export class KeycloakService {
       return false;
     }
 
+    // Si déjà en cours d'initialisation, retourner la promesse existante
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+
+    // Si déjà initialisé, retourner true
     if (this.initialized) {
       return true;
     }
 
+    // Créer la promesse d'initialisation
+    this.initPromise = this.performInit();
+    return this.initPromise;
+  }
+
+  private async performInit(): Promise<boolean> {
     try {
       this.keycloak = new Keycloak({
         url: 'http://localhost:8081',
@@ -43,6 +56,7 @@ export class KeycloakService {
       if (authenticated) {
         console.log('✅ User authenticated via Keycloak');
         console.log('👤 User roles:', this.getUserRoles());
+        console.log('🔑 Token available:', !!this.keycloak.token);
         this.setupTokenRefresh();
 
         // Rediriger uniquement si on est sur la racine
@@ -58,6 +72,7 @@ export class KeycloakService {
     } catch (error) {
       console.error('❌ Keycloak initialization failed:', error);
       this.initialized = false;
+      this.initPromise = null;
       return false;
     }
   }
@@ -75,7 +90,6 @@ export class KeycloakService {
       this.router.navigate(['/admin']);
     } else {
       console.log('↪️ Keeping user on home page');
-      // Ne pas rediriger, l'utilisateur reste sur '/'
     }
   }
 
@@ -98,7 +112,9 @@ export class KeycloakService {
   }
 
   getToken(): string | undefined {
-    if (!isPlatformBrowser(this.platformId)) return undefined;
+    if (!isPlatformBrowser(this.platformId) || !this.initialized) {
+      return undefined;
+    }
     return this.keycloak?.token;
   }
 
@@ -127,12 +143,16 @@ export class KeycloakService {
   }
 
   isAuthenticated(): boolean {
-    if (!isPlatformBrowser(this.platformId)) return false;
+    if (!isPlatformBrowser(this.platformId) || !this.initialized) {
+      return false;
+    }
     return !!this.keycloak?.authenticated;
   }
 
   getTokenParsed(): ExtendedKeycloakTokenParsed | undefined {
-    if (!isPlatformBrowser(this.platformId)) return undefined;
+    if (!isPlatformBrowser(this.platformId) || !this.initialized) {
+      return undefined;
+    }
     return this.keycloak?.tokenParsed as ExtendedKeycloakTokenParsed | undefined;
   }
 
@@ -157,21 +177,18 @@ export class KeycloakService {
    * 🔍 Vérifie si l'utilisateur a au moins un des rôles requis
    */
   hasAnyRole(requiredRoles: string[]): boolean {
-    if (!isPlatformBrowser(this.platformId)) return false;
+    if (!isPlatformBrowser(this.platformId) || !this.initialized) {
+      return false;
+    }
     if (!requiredRoles || requiredRoles.length === 0) return true;
 
     const tokenParsed = this.getTokenParsed();
 
-    // Récupérer les rôles du realm
     const realmRoles: string[] = tokenParsed?.['realm_access']?.['roles'] || [];
-
-    // Récupérer les rôles du client
     const clientRoles: string[] = tokenParsed?.['resource_access']?.['accel']?.['roles'] || [];
 
-    // Combiner tous les rôles
     const allRoles = new Set<string>([...realmRoles, ...clientRoles]);
 
-    // Vérifier si l'utilisateur a au moins un des rôles requis (insensible à la casse)
     return requiredRoles.some((role) => {
       const normalizedRole = role.toLowerCase();
       return Array.from(allRoles).some((userRole) => userRole.toLowerCase() === normalizedRole);
@@ -196,7 +213,9 @@ export class KeycloakService {
    * 📋 Récupère tous les rôles de l'utilisateur
    */
   getUserRoles(): string[] {
-    if (!isPlatformBrowser(this.platformId)) return [];
+    if (!isPlatformBrowser(this.platformId) || !this.initialized) {
+      return [];
+    }
 
     const tokenParsed = this.getTokenParsed();
     const realmRoles: string[] = tokenParsed?.['realm_access']?.['roles'] || [];

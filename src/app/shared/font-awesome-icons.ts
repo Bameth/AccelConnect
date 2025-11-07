@@ -66,6 +66,8 @@ import {
   faListCheck,
   faHandHoldingUsd,
   faPlusCircle,
+  faSyncAlt,
+  faCancel,
 } from '@fortawesome/free-solid-svg-icons';
 export const fontAwesomeIcons: IconDefinition[] = [
   faWallet,
@@ -86,6 +88,8 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faCircle,
   faTrash,
   faAward,
+  faSyncAlt,
+  faCancel,
   faFire,
   faHandHoldingUsd,
   faPlusCircle,

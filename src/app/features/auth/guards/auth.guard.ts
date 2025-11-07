@@ -6,18 +6,28 @@ import { isPlatformBrowser } from '@angular/common';
 export const authGuard: CanActivateFn = async () => {
   const platformId = inject(PLATFORM_ID);
 
-  // ⚠️ En SSR, toujours autoriser le passage
+  // ⚠️ En SSR, toujours autoriser le passage - l'auth sera vérifiée côté client
   if (!isPlatformBrowser(platformId)) {
-    console.log('⚙️ SSR: Skipping auth check');
+    console.log('⚙️ SSR: Auth guard bypassed');
     return true;
   }
 
   const keycloakService = inject(KeycloakService);
   const router = inject(Router);
 
+  // Attendre que Keycloak soit initialisé
+  try {
+    await keycloakService.init();
+  } catch (error) {
+    console.error('❌ Keycloak init failed in guard:', error);
+  }
+
   if (keycloakService.isAuthenticated()) {
+    console.log('✅ Auth guard: User authenticated');
     return true;
   }
+
+  console.log('⚠️ Auth guard: User not authenticated, redirecting to login');
 
   // Rediriger vers Keycloak pour l'authentification
   try {
@@ -25,7 +35,7 @@ export const authGuard: CanActivateFn = async () => {
     return false;
   } catch (error) {
     console.error('❌ Authentication failed:', error);
-    router.navigate(['/login']);
+    router.navigate(['/']);
     return false;
   }
 };

@@ -41,6 +41,7 @@ export class MyOrdersComponent implements OnInit {
   totalOrders = signal(0);
   totalSpent = signal(0);
   confirmedCount = signal(0);
+  cancelOrderCount = signal(0);
   availableMonths = signal<MonthOption[]>([]);
 
   emptyOrdersOptions: AnimationOptions = {
@@ -142,6 +143,7 @@ export class MyOrdersComponent implements OnInit {
         .reduce((sum, o) => sum + o.totalAmount, 0)
     );
     this.confirmedCount.set(orders.filter((o) => o.status === OrderStatus.CONFIRMED).length);
+    this.cancelOrderCount.set(orders.filter((o) => o.status === OrderStatus.CANCELLED).length);
   }
 
   updateFilterCounts(): void {

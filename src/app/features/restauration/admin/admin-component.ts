@@ -10,6 +10,12 @@ import {
   UserOrderSummary,
 } from '../model/adminOrder.model';
 
+interface MealStat {
+  mealName: string;
+  quantity: number;
+  totalAmount: number;
+}
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -32,11 +38,12 @@ export class AdminComponent implements OnInit {
     showCancelled: false,
   });
 
-  // Modal dépôt
-  showDepositModal = signal(false);
-  selectedUser = signal<UserOrderSummary | null>(null);
-  depositAmount = signal<number | null>(null);
-  isDepositing = signal(false);
+  // Modal statistiques restaurant
+  showStatsModal = signal(false);
+  selectedRestaurantStats = signal<{
+    restaurant: RestaurantStats;
+    meals: MealStat[];
+  } | null>(null);
 
   // Computed: Restaurants filtrés
   filteredRestaurants = computed(() => {
@@ -45,7 +52,7 @@ export class AdminComponent implements OnInit {
     return data.restaurantStats;
   });
 
-  // Computed: Utilisateurs filtrés
+  // Computed: Utilisateurs filtrés - CORRIGÉ
   filteredUsers = computed(() => {
     const data = this.dashboardData();
     const f = this.filters();
@@ -74,7 +81,7 @@ export class AdminComponent implements OnInit {
       );
     }
 
-    // Filtre commandes annulées
+    // ✅ CORRECTION: Filtre commandes annulées
     if (!f.showCancelled) {
       users = users.filter((u) => u.orders.some((o) => o.status === 'CONFIRMED'));
     }
@@ -83,7 +90,10 @@ export class AdminComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadData();
+    // ✅ CORRECTION: Attendre un peu avant de charger pour que Keycloak soit initialisé
+    setTimeout(() => {
+      this.loadData();
+    }, 500);
   }
 
   /**
@@ -128,11 +138,59 @@ export class AdminComponent implements OnInit {
     this.filters.update((f) => ({ ...f, searchTerm: term }));
   }
 
+  /**
+   * ✅ CORRECTION: Toggle annulées
+   */
   updateShowCancelled(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-    this.filters().showCancelled = checked;
-    this.loadData();
+    this.filters.update((f) => ({ ...f, showCancelled: checked }));
   }
+
+  /**
+   * 📊 Ouvre le modal de statistiques d'un restaurant
+   */
+  openRestaurantStats(restaurant: RestaurantStats): void {
+    const data = this.dashboardData();
+    if (!data) return;
+
+    // Calculer les statistiques des plats pour ce restaurant
+    const mealStatsMap = new Map<string, MealStat>();
+
+    data.userOrders.forEach((user) => {
+      user.orders
+        .filter((order) => order.status === 'CONFIRMED')
+        .forEach((order) => {
+          order.items
+            .filter((item) => item.restaurantId === restaurant.restaurantId)
+            .forEach((item) => {
+              const existing = mealStatsMap.get(item.mealName) || {
+                mealName: item.mealName,
+                quantity: 0,
+                totalAmount: 0,
+              };
+
+              existing.quantity += item.quantity;
+              existing.totalAmount += item.subtotal;
+
+              mealStatsMap.set(item.mealName, existing);
+            });
+        });
+    });
+
+    const meals = Array.from(mealStatsMap.values()).sort((a, b) => b.quantity - a.quantity);
+
+    this.selectedRestaurantStats.set({ restaurant, meals });
+    this.showStatsModal.set(true);
+  }
+
+  /**
+   * ❌ Ferme le modal
+   */
+  closeStatsModal(): void {
+    this.showStatsModal.set(false);
+    this.selectedRestaurantStats.set(null);
+  }
+
   /**
    * 📥 Exporte les données d'un restaurant
    */
@@ -151,8 +209,6 @@ export class AdminComponent implements OnInit {
       data.date
     );
   }
-
-
 
   /**
    * 💱 Formate un montant
@@ -177,8 +233,8 @@ export class AdminComponent implements OnInit {
    * 🎨 Couleur du solde
    */
   getBalanceColor(balance: number): string {
-    if (balance < 0) return 'text-red-600';
-    if (balance > 0) return 'text-green-600';
-    return 'text-gray-600';
+    if (balance < 0) return 'text-[#E84141]';
+    if (balance > 0) return 'text-[#99CFBD]';
+    return 'text-[#303131]';
   }
 }

@@ -180,12 +180,30 @@
                   autoplay
                   muted
                   loop
-                  playsinline
+                  webkit-playsinline
+                  data-playsinline
                   class="w-full h-full object-cover"
                   (timeupdate)="onTimeUpdate()"
                   (loadedmetadata)="onMetadataLoaded()"
                 >
-                  <source src="assets/videos/warzone.mp4" type="video/mp4" />
+                  <source src="assets/videos/collaboration.mp4" type="video/mp4" />
+                  <track
+                    kind="subtitles"
+                    src="assets/videos/collaboration.vtt"
+                    srclang="en"
+                    label="English"
+                    default
+                  />
+                  <track
+                    kind="descriptions"
+                    src="assets/videos/collaboration-desc.vtt"
+                    srclang="en"
+                    label="English descriptions"
+                  />
+                  <p>
+                    Your browser doesn't support HTML5 video. Here is a
+                    <a href="assets/videos/collaboration.mp4">link to the video</a> instead.
+                  </p>
                 </video>
 
                 <div

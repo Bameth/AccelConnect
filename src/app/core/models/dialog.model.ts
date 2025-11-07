@@ -1,9 +1,9 @@
 export interface ConfirmationDialog {
   title: string;
   message: string;
+  type?: 'info' | 'warning' | 'danger' | 'success';
   confirmText?: string;
   cancelText?: string;
-  type?: 'danger' | 'warning' | 'info' | 'success';
   onConfirm: () => void;
   onCancel?: () => void;
 }

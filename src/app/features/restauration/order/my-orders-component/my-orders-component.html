@@ -33,7 +33,7 @@
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <!-- Total Commandes du mois -->
-        <div class="group relative">
+        <!-- <div class="group relative">
           <div
             class="absolute inset-0 bg-gradient-to-br from-blue-500 to-teal-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
           ></div>
@@ -52,7 +52,7 @@
             </div>
             <p class="text-sm text-gray-600 font-semibold">Commandes du mois</p>
           </div>
-        </div>
+        </div> -->
 
         <!-- Total Dépensé du mois -->
         <div class="group relative">
@@ -97,6 +97,26 @@
               </div>
             </div>
             <p class="text-sm text-gray-600 font-semibold">Confirmées</p>
+          </div>
+        </div>
+        <div class="group relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all"
+          >
+            <div class="flex items-center justify-between mb-3">
+              <div
+                class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow-md"
+              >
+                <fa-icon [icon]="['fas', 'cancel']" class="text-white text-xl"></fa-icon>
+              </div>
+              <div class="text-right">
+                <p class="text-3xl font-black text-gray-900">{{ cancelOrderCount() }}</p>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 font-semibold">Annulées</p>
           </div>
         </div>
       </div>

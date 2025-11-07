@@ -13,10 +13,18 @@ export interface UserWalletStats {
   totalOrders: number;
 }
 
+// DTO pour le dépôt
 export interface DepositRequest {
   userId: number;
   amount: number;
   description?: string;
+}
+
+// DTO pour la mise à jour du solde
+export interface UpdateBalanceRequest {
+  userId: number;
+  newBalance: number;
+  reason: string;
 }
 
 export interface DepositResponse {

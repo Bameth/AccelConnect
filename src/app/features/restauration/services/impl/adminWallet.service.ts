@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { UserBalanceStatsDTO, DepositRequest } from '../../model/balance.model';
+import { UpdateBalanceRequest } from '../../model/adminWallet.model';
 
 export interface UserWalletStats extends UserBalanceStatsDTO {
   totalOrders: number;
@@ -27,6 +28,13 @@ export class AdminWalletService {
    */
   depositToUser(request: DepositRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/deposit`, request);
+  }
+
+  /**
+   * 🔄 Met à jour le solde d'un utilisateur
+   */
+  updateBalance(request: UpdateBalanceRequest): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update`, request);
   }
 
   /**

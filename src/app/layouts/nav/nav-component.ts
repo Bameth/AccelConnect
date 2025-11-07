@@ -40,7 +40,7 @@ export class NavComponent implements OnInit {
     if (this.isAuthenticated()) {
       // Récupérer les infos depuis Keycloak immédiatement
       this.keycloakInfo.set(this.keycloakService.getUserInfo());
-      console.log('👤 Keycloak info:', this.keycloakInfo());
+      // console.log('👤 Keycloak info:', this.keycloakInfo());
 
       // Charger l'utilisateur depuis le backend (peut prendre un peu de temps)
       this.loadCurrentUser();
@@ -50,7 +50,7 @@ export class NavComponent implements OnInit {
   private loadCurrentUser() {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        console.log('✅ User loaded from backend:', user);
+        // console.log('✅ User loaded from backend:', user);
         this.currentUser.set(user);
 
         // Mettre à jour l'avatar si disponible
@@ -59,7 +59,7 @@ export class NavComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('❌ Failed to load user from backend:', error);
+        // console.error('❌ Failed to load user from backend:', error);
         // L'info Keycloak reste disponible en fallback
         const info = this.keycloakInfo();
         if (info?.email) {
