@@ -20,7 +20,7 @@ export class FormRestaurant implements OnInit {
   isSubmitting = false;
   ngOnInit(): void {
     this.restaurantForm = this.fb.group({
-      restaurant_name: [
+      restaurantName: [
         '',
         [Validators.required, Validators.minLength(3), CustomValidators.noNumber],
       ],
@@ -28,6 +28,7 @@ export class FormRestaurant implements OnInit {
         '',
         [Validators.required, CustomValidators.noNumber, CustomValidators.noWhitespace],
       ],
+      deliveryFee: ['', [Validators.required, CustomValidators.integer]],
       contact: ['', [Validators.required, Validators.minLength(9), CustomValidators.phoneNumberSN]],
     });
   }

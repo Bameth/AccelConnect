@@ -78,24 +78,11 @@ export class PanierComponent {
       return;
     }
 
-    const message = `
-📦 Détails de votre commande:
-
-🍽️ ${summary.totalItems} article(s)
-💰 Sous-total: ${this.formatAmount(summary.subtotal)} FCFA
-🎁 Subvention: -1 000 FCFA
-✅ À payer maintenant: ${this.formatAmount(summary.amountAfterSubsidy)} FCFA
-
-ℹ️ ${summary.deliveryFeesNote}
-
-💡 Si vous avez déjà commandé aujourd'hui, cette nouvelle commande remplacera l'ancienne.
-    `.trim();
-
     this.confirmationService.confirm({
-      title: '✨ Confirmer la commande',
-      message,
+      title: 'Confirmer la commande',
+      message: '',
       type: 'info',
-      confirmText: '🛒 Commander',
+      confirmText: 'Commander',
       cancelText: 'Annuler',
       onConfirm: () => {
         this.processOrder();
@@ -110,27 +97,11 @@ export class PanierComponent {
 
     this.orderService.createOrder(payload).subscribe({
       next: (order) => {
-        console.log('✅ Commande créée/modifiée:', order);
         this.isOrdering.set(false);
-
         this.cartService.clear();
-
-        this.notificationService.showWithAction(
-          'success',
-          '🎉 Commande validée !',
-          `Votre commande a été enregistrée. Total: ${this.formatAmount(
-            order.amountAfterSubsidy
-          )} FCFA`,
-          'Voir mes commandes',
-          () => {
-            this.router.navigate(['restauration/my-orders']);
-          },
-          10000
-        );
-
         setTimeout(() => {
           this.router.navigate(['restauration/my-orders']);
-        }, 2000);
+        }, 300);
       },
       error: (error) => {
         console.error('❌ Erreur:', error);

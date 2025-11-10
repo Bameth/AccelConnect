@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PlatService } from '../../services/impl/plat.service';
 import { RestaurantService } from '../../services/impl/restaurant.service';
 import { MenuService } from '../../services/impl/menu.service';
@@ -11,7 +11,7 @@ import { Restaurant } from '../../model/restaurant.model';
 @Component({
   selector: 'app-add-food-to-restau-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [CommonModule, FormsModule, DatePipe, RouterLink],
   templateUrl: './add-food-to-restau-component.html',
   styleUrl: './add-food-to-restau-component.css',
 })
@@ -253,7 +253,9 @@ export class AddFoodToRestauComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/admin/restaurants']);
+    this.router.navigate(['/admin/add-food-to-restau']);
+    this.selectedMealIds.set(new Set());
+    this.selectedRestaurant.set(null);
   }
 
   getRestaurantColor(index: number): string {
