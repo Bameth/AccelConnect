@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FaConfig, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { FaConfig, FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fontAwesomeIcons } from './shared/font-awesome-icons';
 import { NotificationComponent } from './shared/components/notification/notification.component';
 import { ConfirmationComponent } from './shared/components/notification/confirmation.component';
@@ -11,7 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NotificationComponent, ConfirmationComponent],
+  imports: [RouterOutlet, NotificationComponent, ConfirmationComponent,FontAwesomeModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -37,7 +37,7 @@ export class App implements OnInit {
   private initializeApp(): void {
     // Vérifier l'authentification
     if (this.keycloakService.isAuthenticated()) {
-      console.log('✅ User authenticated, loading session...');
+      // console.log('✅ User authenticated, loading session...');
       this.initializeUserSession();
     } else {
       console.log('ℹ️ User not authenticated');
@@ -51,12 +51,12 @@ export class App implements OnInit {
   private initializeUserSession(): void {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        console.log('✅ Utilisateur chargé:', user.username);
-        console.log('🎭 Rôles:', this.keycloakService.getUserRoles());
+        // console.log('✅ Utilisateur chargé:', user.username);
+        // console.log('🎭 Rôles:', this.keycloakService.getUserRoles());
 
         // Initialiser le panier
         this.cartService.initializeForUser(user.id);
-        console.log('🛒 Panier initialisé pour userId:', user.id);
+        // console.log('🛒 Panier initialisé pour userId:', user.id);
       },
       error: (error) => {
         console.error('❌ Erreur chargement utilisateur:', error);

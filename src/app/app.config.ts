@@ -24,10 +24,10 @@ export function initializeKeycloak(
 ): () => Promise<boolean> {
   return () => {
     if (isPlatformBrowser(platformId)) {
-      console.log('🔐 Initializing Keycloak in browser...');
+      // console.log('🔐 Initializing Keycloak in browser...');
       return keycloakService.init();
     }
-    console.log('⚠️ Skipping Keycloak initialization (SSR)');
+    // console.log('⚠️ Skipping Keycloak initialization (SSR)');
     return Promise.resolve(false);
   };
 }

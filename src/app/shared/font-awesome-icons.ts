@@ -71,6 +71,9 @@ import {
   faMoneyBillWave,
   faTruck,
   faLock,
+  faCalendarDay,
+  faCheck,
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
 export const fontAwesomeIcons: IconDefinition[] = [
   faWallet,
@@ -89,6 +92,9 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faBell,
   faBolt,
   faCircle,
+  faCalendarDay,
+  faCheck,
+  faLink,
   faTrash,
   faAward,
   faLock,

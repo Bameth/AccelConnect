@@ -1,36 +1,37 @@
-<!-- SECTION RESTAURATION - Design Premium avec Balance -->
+<!-- SECTION RESTAURATION - Design Premium Fully Responsive -->
 <section
   class="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-4 sm:py-6 md:py-8 lg:py-12 overflow-hidden"
 >
   <!-- Animated Background -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div
-      class="absolute top-0 -right-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-br from-red-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"
+      class="absolute top-0 -right-10 sm:-right-20 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-red-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"
       style="animation-duration: 4s"
     ></div>
     <div
-      class="absolute bottom-0 -left-20 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-gradient-to-tr from-blue-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse"
+      class="absolute bottom-0 -left-10 sm:-left-20 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-tr from-blue-400/10 to-teal-400/10 rounded-full blur-3xl animate-pulse"
       style="animation-duration: 5s; animation-delay: 1s"
     ></div>
   </div>
 
   <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
     <!-- Hero Header -->
-    <div class="mb-6 sm:mb-8 md:mb-10 lg:mb-12">
+    <div class="mb-4 sm:mb-6 md:mb-8 lg:mb-12">
       <!-- Status Badge -->
-      <div class="flex items-center justify-between mb-4 sm:mb-6 md:mb-8 flex-wrap gap-3 sm:gap-4">
+      <div class="flex items-center justify-between mb-3 sm:mb-4 md:mb-6 flex-wrap gap-2 sm:gap-3">
         <div
-          class="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 bg-white/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300"
+          class="inline-flex items-center gap-1.5 sm:gap-2 md:gap-3 px-2.5 sm:px-3 md:px-4 lg:px-5 py-1.5 sm:py-2 md:py-2.5 lg:py-3 bg-white/80 backdrop-blur-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-red-100 shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <fa-icon
             [icon]="['fas', 'bell']"
-            class="text-red-500 text-xs sm:text-sm animate-bounce"
+            class="text-red-500 text-[10px] sm:text-xs md:text-sm animate-bounce"
           ></fa-icon>
-          <div class="flex items-center flex-wrap gap-1 sm:gap-2">
-            <span class="text-red-600 font-black text-xs sm:text-sm uppercase tracking-wider"
+          <div class="flex items-center flex-wrap gap-1 sm:gap-1.5 md:gap-2">
+            <span
+              class="text-red-600 font-black text-[10px] sm:text-xs md:text-sm uppercase tracking-wide"
               >Menu du Jour</span
             >
-            <span class="text-gray-500 text-[10px] sm:text-xs font-medium">{{
+            <span class="text-gray-500 text-[8px] sm:text-[10px] md:text-xs font-medium">{{
               selectedDate() | date : 'dd/MM/yyyy'
             }}</span>
           </div>
@@ -38,29 +39,31 @@
       </div>
 
       <!-- Hero Title + Stats -->
-      <div class="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 items-center mb-6 sm:mb-8">
+      <div
+        class="grid lg:grid-cols-2 gap-4 sm:gap-5 md:gap-6 lg:gap-8 items-center mb-4 sm:mb-6 md:mb-8"
+      >
         <!-- Left: Title -->
-        <div class="space-y-4 sm:space-y-5 md:space-y-6">
+        <div class="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
           <div>
             <h1
-              class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-none mb-2 sm:mb-3 md:mb-4"
+              class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black text-gray-900 leading-tight sm:leading-none mb-1.5 sm:mb-2 md:mb-3 lg:mb-4"
               style="font-family: 'Georgia, serif'"
             >
               À Table
             </h1>
             <h2
-              class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-clip-text text-transparent animate-pulse"
+              class="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black bg-gradient-to-r from-red-600 via-orange-500 to-red-600 bg-clip-text text-transparent animate-pulse"
             >
               Vos délices quotidiens
             </h2>
           </div>
 
           <!-- Stats Cards (Balance) -->
-          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+          <div class="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3">
             @for (stat of stats(); track stat.id) {
             <div class="group relative">
               <div
-                class="absolute inset-0 rounded-xl sm:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
+                class="absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity"
                 [style.background]="
                   'linear-gradient(to bottom right, ' +
                   stat.gradientFrom +
@@ -70,10 +73,10 @@
                 "
               ></div>
               <div
-                class="relative bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-3 md:p-4 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+                class="relative bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-2.5 md:p-3 lg:p-4 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
               >
                 <div
-                  class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-2 sm:mb-3 shadow-lg"
+                  class="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-md sm:rounded-lg md:rounded-xl flex items-center justify-center mb-1 sm:mb-1.5 md:mb-2 lg:mb-3 shadow-lg"
                   [style.background]="
                     'linear-gradient(to bottom right, ' +
                     stat.gradientFrom +
@@ -84,16 +87,19 @@
                 >
                   <fa-icon
                     [icon]="['fas', stat.icon]"
-                    class="text-white text-sm sm:text-base md:text-xl"
+                    class="text-white text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-xl"
                   ></fa-icon>
                 </div>
                 <div
-                  class="text-[10px] sm:text-xs text-gray-500 uppercase font-bold mb-0.5 sm:mb-1"
+                  class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs text-gray-500 uppercase font-bold mb-0.5"
                 >
                   {{ stat.label }}
                 </div>
-                <div class="text-lg sm:text-xl md:text-2xl font-black text-gray-900">
-                  {{ stat.value }}<span class="text-xs sm:text-sm ml-0.5 text-gray-600">F</span>
+                <div
+                  class="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-black text-gray-900"
+                >
+                  {{ stat.value
+                  }}<span class="text-[10px] sm:text-xs md:text-sm ml-0.5 text-gray-600">F</span>
                 </div>
               </div>
             </div>
@@ -101,7 +107,7 @@
           </div>
         </div>
 
-        <!-- Right: Animation (Desktop) -->
+        <!-- Right: Animation (Desktop only) -->
         <div class="hidden lg:flex items-center justify-center">
           <div class="relative w-full max-w-md">
             <div
@@ -109,7 +115,7 @@
             ></div>
             <div class="relative">
               <div
-                class="relative w-64 h-64 xl:w-80 xl:h-80 mx-auto rounded-full shadow-2xl overflow-hidden"
+                class="relative w-56 h-56 lg:w-64 lg:h-64 xl:w-80 xl:h-80 mx-auto rounded-full shadow-2xl overflow-hidden"
               >
                 <div class="absolute inset-0 bg-white rounded-full"></div>
                 <ng-lottie
@@ -127,16 +133,16 @@
 
       <!-- Navigation Jours + Panier -->
       <div
-        class="flex flex-wrap items-center gap-2 sm:gap-3 pt-4 sm:pt-6 md:pt-8 border-t-2 border-gray-200"
+        class="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-3 pt-3 sm:pt-4 md:pt-6 lg:pt-8 border-t-2 border-gray-200"
       >
         <!-- Sélecteur de jours -->
         @for (day of days; track day) {
         <button
-          (click)="selectDay(day)"
+          [disabled]="day !== selectedDay()"
           [class]="
             selectedDay() === day
-              ? 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105'
-              : 'px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-gray-700 font-bold text-xs sm:text-sm uppercase tracking-wider border-2 border-gray-200 hover:border-red-500 hover:text-red-500 hover:scale-105'
+              ? 'px-2 sm:px-3 md:px-4 lg:px-5 py-1 sm:py-1.5 md:py-2 lg:py-2.5 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider shadow-lg shadow-red-500/30 scale-105'
+              : 'px-2 sm:px-3 md:px-4 lg:px-5 py-1 sm:py-1.5 md:py-2 lg:py-2.5 rounded-md sm:rounded-lg md:rounded-xl bg-gray-200 text-gray-400 font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider border-2 border-gray-200 cursor-not-allowed opacity-70'
           "
           class="transition-all duration-300"
         >
@@ -151,12 +157,17 @@
         @if (getTotalSelectedItems() > 0) {
         <button
           (click)="addAllToCart()"
-          class="group relative px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-2"
+          class="group relative px-2.5 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg sm:rounded-xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-1 sm:gap-1.5 md:gap-2"
         >
-          <fa-icon [icon]="['fas', 'cart-plus']" class="text-white text-lg"></fa-icon>
-          <span class="text-white font-bold text-sm hidden sm:inline">Ajouter au panier</span>
+          <fa-icon
+            [icon]="['fas', 'cart-plus']"
+            class="text-white text-xs sm:text-sm md:text-base lg:text-lg"
+          ></fa-icon>
+          <span class="text-white font-bold text-[10px] sm:text-xs md:text-sm hidden sm:inline"
+            >Ajouter</span
+          >
           <span
-            class="px-2 py-0.5 bg-white text-green-600 text-xs font-black rounded-full animate-pulse"
+            class="px-1 sm:px-1.5 md:px-2 py-0.5 bg-white text-green-600 text-[8px] sm:text-[10px] md:text-xs font-black rounded-full animate-pulse"
             >{{ getTotalSelectedItems() }}</span
           >
         </button>
@@ -165,44 +176,44 @@
         <!-- Panier -->
         <button [routerLink]="['/restauration/cart']" class="group cursor-pointer relative">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
+            class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-md sm:rounded-lg md:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
           ></div>
           <div
-            class="relative px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            class="relative px-2 sm:px-3 md:px-4 lg:px-6 py-1 sm:py-1.5 md:py-2 lg:py-2.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-md sm:rounded-lg md:rounded-xl flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             <fa-icon
               [icon]="['fas', 'shopping-cart']"
-              class="text-white text-sm sm:text-base md:text-lg"
+              class="text-white text-xs sm:text-sm md:text-base lg:text-lg"
             ></fa-icon>
-            <span class="text-white font-bold text-xs sm:text-sm md:text-base hidden xs:inline"
+            <span
+              class="text-white font-bold text-[10px] sm:text-xs md:text-sm lg:text-base hidden xs:inline"
               >Panier</span
             >
             <span
-              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 bg-white text-red-500 text-[10px] sm:text-xs font-black rounded-full"
+              class="px-1 sm:px-1.5 md:px-2 lg:px-2.5 py-0.5 bg-white text-red-500 text-[8px] sm:text-[10px] md:text-xs font-black rounded-full"
               [class.animate-pulse]="cartService.cartItemCount() > 0"
               >{{ cartService.cartItemCount() }}</span
             >
           </div>
         </button>
+
+        <!-- Mes commandes -->
         <button [routerLink]="['/restauration/my-orders']" class="group cursor-pointer relative">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-orange-500 to-green-500 rounded-lg sm:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
+            class="absolute inset-0 bg-gradient-to-r from-orange-500 to-green-500 rounded-md sm:rounded-lg md:rounded-xl blur opacity-50 group-hover:opacity-75 transition-opacity"
           ></div>
           <div
-            class="relative px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gradient-to-r from-orange-500 to-green-500 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            class="relative px-2 sm:px-3 md:px-4 lg:px-6 py-1 sm:py-1.5 md:py-2 lg:py-2.5 bg-gradient-to-r from-orange-500 to-green-500 rounded-md sm:rounded-lg md:rounded-xl flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             <fa-icon
               [icon]="['fas', 'list-check']"
-              class="text-white text-sm sm:text-base md:text-lg"
+              class="text-white text-xs sm:text-sm md:text-base lg:text-lg"
             ></fa-icon>
-            <span class="text-white font-bold text-xs sm:text-sm md:text-base hidden xs:inline"
-              >Mes commandes</span
-            >
             <span
-              class="px-1.5 sm:px-2 md:px-2.5 py-0.5 text-white text-[10px] sm:text-xs font-black rounded-full"
-              [class.animate-pulse]="cartService.cartItemCount() > 0"
+              class="text-white font-bold text-[10px] sm:text-xs md:text-sm lg:text-base hidden md:inline"
               >Mes commandes</span
             >
+            <span class="text-white font-bold text-[10px] sm:text-xs md:hidden">Commandes</span>
           </div>
         </button>
       </div>
@@ -210,18 +221,25 @@
 
     <!-- Message d'erreur -->
     @if (errorMessage()) {
-    <div class="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-2xl">
-      <div class="flex items-center gap-3">
-        <fa-icon [icon]="['fas', 'exclamation-circle']" class="text-red-500 text-xl"></fa-icon>
-        <p class="text-red-700 font-semibold">{{ errorMessage() }}</p>
+    <div
+      class="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border-2 border-red-200 rounded-xl sm:rounded-2xl"
+    >
+      <div class="flex items-center gap-2 sm:gap-3">
+        <fa-icon
+          [icon]="['fas', 'exclamation-circle']"
+          class="text-red-500 text-base sm:text-lg md:text-xl flex-shrink-0"
+        ></fa-icon>
+        <p class="text-red-700 font-semibold text-xs sm:text-sm md:text-base">
+          {{ errorMessage() }}
+        </p>
       </div>
     </div>
     }
 
     <!-- Loader -->
     @if (isLoading()) {
-    <div class="flex flex-col items-center justify-center py-20">
-      <div class="relative w-24 h-24 mb-6">
+    <div class="flex flex-col items-center justify-center py-12 sm:py-16 md:py-20">
+      <div class="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 sm:mb-5 md:mb-6">
         <div
           class="absolute inset-0 rounded-full border-4 border-red-200 animate-ping opacity-20"
         ></div>
@@ -229,17 +247,19 @@
           class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent animate-spin"
         ></div>
       </div>
-      <p class="text-gray-900 font-black text-xl mb-2 animate-pulse">Préparation de vos menus...</p>
+      <p class="text-gray-900 font-black text-base sm:text-lg md:text-xl mb-2 animate-pulse">
+        Préparation de vos menus...
+      </p>
     </div>
     }
 
     <!-- Restaurant Cards Grid -->
     @if (!isLoading() && !isWeekend(selectedDate())) {
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
       @for (restaurant of restaurants(); track restaurant.id) {
       <div class="group relative">
         <div
-          class="absolute inset-0 rounded-2xl sm:rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
+          class="absolute inset-0 rounded-xl sm:rounded-2xl md:rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
           [style.background]="
             'linear-gradient(to bottom right, ' +
             restaurant.gradientFrom +
@@ -250,11 +270,11 @@
         ></div>
 
         <div
-          class="relative bg-white rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-500 group-hover:-translate-y-2"
+          class="relative bg-white rounded-xl sm:rounded-2xl md:rounded-3xl shadow-xl hover:shadow-2xl border-2 border-gray-100 overflow-hidden transition-all duration-500 group-hover:-translate-y-2"
         >
           <!-- Header -->
           <div
-            class="relative h-28 sm:h-32 md:h-36 p-3 sm:p-4 md:p-5 overflow-hidden"
+            class="relative h-24 sm:h-28 md:h-32 lg:h-36 p-2.5 sm:p-3 md:p-4 lg:p-5 overflow-hidden"
             [style.background]="
               'linear-gradient(to bottom right, ' +
               restaurant.gradientFrom +
@@ -264,22 +284,22 @@
             "
           >
             <div class="relative z-10 flex items-start justify-between">
-              <div class="flex items-center gap-2 sm:gap-3">
+              <div class="flex items-center gap-1.5 sm:gap-2 md:gap-3">
                 <div
-                  class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/30 shadow-xl group-hover:scale-110 transition-transform"
+                  class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center border border-white/30 shadow-xl group-hover:scale-110 transition-transform"
                 >
                   <fa-icon
                     [icon]="['fas', restaurant.icon]"
-                    class="text-white text-lg sm:text-xl md:text-2xl"
+                    class="text-white text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl"
                   ></fa-icon>
                 </div>
                 <div>
                   <h3
-                    class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-0.5 sm:mb-1"
+                    class="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-black text-white tracking-tight mb-0.5"
                   >
                     {{ restaurant.name }}
                   </h3>
-                  <p class="text-white/90 text-[10px] sm:text-xs font-medium">
+                  <p class="text-white/90 text-[9px] sm:text-[10px] md:text-xs font-medium">
                     {{ restaurant.subtitle }}
                   </p>
                 </div>
@@ -289,18 +309,23 @@
 
           <!-- Menu Items -->
           @if (restaurant.hasMenu && restaurant.items.length > 0) {
-          <div class="p-3 sm:p-4 md:p-5 space-y-2 sm:space-y-3">
+          <div class="p-2.5 sm:p-3 md:p-4 lg:p-5 space-y-1.5 sm:space-y-2 md:space-y-3">
             @for (item of restaurant.items; track item.id) {
             <div
-              class="group/item relative p-2.5 sm:p-3 md:p-4 bg-gradient-to-br from-gray-50 to-white rounded-xl sm:rounded-2xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg hover:border-{{
-                item.hoverBorder
-              }}"
+              class="group/item relative p-2 sm:p-2.5 md:p-3 lg:p-4 bg-gradient-to-br from-gray-50 to-white rounded-lg sm:rounded-xl md:rounded-2xl border-2 border-gray-100 transition-all duration-300 hover:shadow-lg"
+              [ngClass]="{
+                'hover:border-red-500': item.hoverBorder === 'red-500',
+                'hover:border-orange-500': item.hoverBorder === 'orange-500',
+                'hover:border-green-500': item.hoverBorder === 'green-500',
+                'hover:border-blue-500': item.hoverBorder === 'blue-500',
+                'hover:border-purple-500': item.hoverBorder === 'purple-500'
+              }"
             >
-              <div class="flex items-center justify-between gap-2 sm:gap-3">
-                <div class="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1.5 sm:gap-2 md:gap-3">
+                <div class="flex items-center gap-1.5 sm:gap-2 md:gap-3 flex-1 min-w-0">
                   @if (item.imageUrl) {
                   <div
-                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0 overflow-hidden border-2 border-white"
+                    class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-md sm:rounded-lg md:rounded-xl shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0 overflow-hidden border-2 border-white"
                   >
                     <img
                       [src]="item.imageUrl"
@@ -310,7 +335,7 @@
                   </div>
                   } @else {
                   <div
-                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0"
+                    class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-md sm:rounded-lg md:rounded-xl flex items-center justify-center shadow-md group-hover/item:scale-110 transition-transform flex-shrink-0"
                     [style.background]="
                       'linear-gradient(to bottom right, ' +
                       item.gradientFrom +
@@ -321,25 +346,29 @@
                   ></div>
                   }
                   <div class="flex-1 min-w-0">
-                    <h4 class="font-black text-gray-900 text-xs sm:text-sm truncate">
+                    <h4 class="font-black text-gray-900 text-[10px] sm:text-xs md:text-sm truncate">
                       {{ item.mealName }}
                     </h4>
-                    <div class="flex items-center gap-1.5 sm:gap-2">
-                      <span class="text-red-600 font-black text-sm sm:text-base md:text-lg">{{
-                        item.unitPrice
-                      }}</span>
-                      <span class="text-gray-600 font-bold text-[10px] sm:text-xs">FCFA</span>
+                    <div class="flex items-center gap-1 sm:gap-1.5 md:gap-2">
+                      <span
+                        class="text-red-600 font-black text-xs sm:text-sm md:text-base lg:text-lg"
+                        >{{ item.unitPrice }}</span
+                      >
+                      <span
+                        class="text-gray-600 font-bold text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs"
+                        >FCFA</span
+                      >
                     </div>
                   </div>
                 </div>
 
                 <!-- Quantity Controls -->
-                <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <div class="flex items-center gap-0.5 sm:gap-1 md:gap-2 flex-shrink-0">
                   <div
-                    class="flex items-center gap-1 sm:gap-2 bg-gray-100 rounded-lg sm:rounded-xl p-0.5 sm:p-1"
+                    class="flex items-center gap-0.5 sm:gap-1 md:gap-2 bg-gray-100 rounded-md sm:rounded-lg md:rounded-xl p-0.5"
                   >
                     <button
-                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg bg-white text-gray-700 flex items-center justify-center font-bold transition-all shadow-sm"
+                      class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm sm:rounded-md md:rounded-lg bg-white text-gray-700 flex items-center justify-center font-bold transition-all shadow-sm"
                       [class.text-white]="item.quantity > 0"
                       [style.background]="
                         item.quantity > 0
@@ -352,14 +381,17 @@
                       "
                       (click)="decreaseQuantity(restaurant.id, item.id!)"
                     >
-                      <fa-icon [icon]="['fas', 'minus']" class="text-[10px] sm:text-xs"></fa-icon>
+                      <fa-icon
+                        [icon]="['fas', 'minus']"
+                        class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs"
+                      ></fa-icon>
                     </button>
                     <span
-                      class="w-5 sm:w-6 text-center font-black text-gray-900 text-xs sm:text-sm"
+                      class="w-4 sm:w-5 md:w-6 text-center font-black text-gray-900 text-[10px] sm:text-xs md:text-sm"
                       >{{ item.quantity }}</span
                     >
                     <button
-                      class="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all"
+                      class="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-sm sm:rounded-md md:rounded-lg text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg hover:scale-110 transition-all"
                       [style.background]="
                         'linear-gradient(to bottom right, ' +
                         item.gradientFrom +
@@ -369,7 +401,10 @@
                       "
                       (click)="increaseQuantity(restaurant.id, item.id!)"
                     >
-                      <fa-icon [icon]="['fas', 'plus']" class="text-[10px] sm:text-xs"></fa-icon>
+                      <fa-icon
+                        [icon]="['fas', 'plus']"
+                        class="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs"
+                      ></fa-icon>
                     </button>
                   </div>
                 </div>
@@ -378,9 +413,14 @@
             }
           </div>
           } @else {
-          <div class="p-8 text-center">
-            <fa-icon [icon]="['fas', 'utensils']" class="text-gray-300 text-4xl mb-3"></fa-icon>
-            <p class="text-gray-500 font-semibold">Aucun menu aujourd'hui</p>
+          <div class="p-6 sm:p-8 text-center">
+            <fa-icon
+              [icon]="['fas', 'utensils']"
+              class="text-gray-300 text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3"
+            ></fa-icon>
+            <p class="text-gray-500 font-semibold text-xs sm:text-sm md:text-base">
+              Aucun menu aujourd'hui
+            </p>
           </div>
           }
         </div>
@@ -392,11 +432,15 @@
     <!-- Weekend Message -->
     @if (!isLoading() && isWeekend(selectedDate())) {
     <div
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-12 text-center"
+      class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-8 sm:p-10 md:p-12 text-center"
     >
-      <div class="text-6xl mb-6">🌴</div>
-      <h2 class="text-4xl font-black text-gray-900 mb-4">C'est le weekend !</h2>
-      <p class="text-gray-700 text-lg">Profitez de votre repos. Les commandes reprennent lundi.</p>
+      <div class="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-5 md:mb-6">🌴</div>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-3 sm:mb-4">
+        C'est le weekend !
+      </h2>
+      <p class="text-gray-700 text-sm sm:text-base md:text-lg">
+        Profitez de votre repos. Les commandes reprennent lundi.
+      </p>
     </div>
     }
   </div>

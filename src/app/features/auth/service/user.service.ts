@@ -12,6 +12,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phoneNumber?: string;
+  avatarUrl?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -30,7 +31,7 @@ export class UserService {
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`).pipe(
       tap((user) => {
-        console.log('👤 Current user loaded:', user);
+        // console.log('👤 Current user loaded:', user);
         this.currentUserSubject.next(user);
       })
     );
@@ -39,7 +40,7 @@ export class UserService {
   updateCurrentUser(user: Partial<User>): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/me`, user).pipe(
       tap((updatedUser) => {
-        console.log('✅ User updated:', updatedUser);
+        // console.log('✅ User updated:', updatedUser);
         this.currentUserSubject.next(updatedUser);
       })
     );

@@ -14,7 +14,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   // ✅ En SSR, ne pas essayer d'ajouter de token
   if (!isPlatformBrowser(platformId)) {
-    console.log('⚠️ SSR detected - skipping token for:', req.url);
+    // console.log('⚠️ SSR detected - skipping token for:', req.url);
     return next(req);
   }
 
@@ -23,7 +23,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Si pas de token disponible, ne pas ajouter le header
   if (!token) {
-    console.warn('⚠️ No token available for request to:', req.url);
+    // console.warn('⚠️ No token available for request to:', req.url);
     // Ne pas bloquer la requête, laisser le backend répondre 401
     return next(req).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -43,7 +43,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     },
   });
 
-  console.log('🔑 Token added to request:', req.url);
+  // console.log('🔑 Token added to request:', req.url);
 
   return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {

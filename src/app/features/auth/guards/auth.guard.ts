@@ -8,7 +8,7 @@ export const authGuard: CanActivateFn = async () => {
 
   // ⚠️ En SSR, toujours autoriser le passage - l'auth sera vérifiée côté client
   if (!isPlatformBrowser(platformId)) {
-    console.log('⚙️ SSR: Auth guard bypassed');
+    // console.log('⚙️ SSR: Auth guard bypassed');
     return true;
   }
 
@@ -23,11 +23,11 @@ export const authGuard: CanActivateFn = async () => {
   }
 
   if (keycloakService.isAuthenticated()) {
-    console.log('✅ Auth guard: User authenticated');
+    // console.log('✅ Auth guard: User authenticated');
     return true;
   }
 
-  console.log('⚠️ Auth guard: User not authenticated, redirecting to login');
+  // console.log('⚠️ Auth guard: User not authenticated, redirecting to login');
 
   // Rediriger vers Keycloak pour l'authentification
   try {

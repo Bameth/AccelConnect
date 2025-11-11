@@ -30,8 +30,8 @@ export class AdminNavComponent implements OnInit {
   navigationLinks: NavigationLink[] = [
     { name: 'Dashboard', route: '/admin', icon: 'house' },
     { name: 'Assigner Plat', route: '/admin/add-food-to-restau', icon: 'utensils' },
-    { name: 'Liste des Plats', route: '/admin/liste-food', icon: 'list' },
-    { name: 'Liste des Restaurants', route: '/admin/liste-restaurant', icon: 'list' },
+    { name: 'Plats', route: '/admin/liste-food', icon: 'list' },
+    { name: 'Restaurants', route: '/admin/liste-restaurant', icon: 'list' },
     { name: 'Ajouter solde', route: '/admin/wallets', icon: 'wallet' },
   ];
 
@@ -50,7 +50,7 @@ export class AdminNavComponent implements OnInit {
   private loadCurrentUser() {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        console.log('👤 Admin user loaded:', user);
+        // console.log('👤 Admin user loaded:', user);
         this.currentUser.set(user);
         this.updateAvatar(user);
       },

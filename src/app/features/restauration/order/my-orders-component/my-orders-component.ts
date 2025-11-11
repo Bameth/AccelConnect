@@ -19,7 +19,7 @@ interface MonthOption {
 @Component({
   selector: 'app-my-orders',
   standalone: true,
-  imports: [CommonModule, RouterLink, FontAwesomeModule, LottieComponent,UniquePipe],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, LottieComponent, UniquePipe],
   templateUrl: './my-orders-component.html',
   styleUrl: './my-orders-component.css',
 })
@@ -44,8 +44,11 @@ export class MyOrdersComponent implements OnInit {
   cancelOrderCount = signal(0);
   availableMonths = signal<MonthOption[]>([]);
 
+  // Constante pour l'heure limite (12h)
+  private readonly MODIFICATION_DEADLINE_HOUR = 12;
+
   emptyOrdersOptions: AnimationOptions = {
-    path: '/assets/lottie/empty-orders.json',
+    path: 'assets/lottie/empty-orders.json',
     loop: true,
     autoplay: true,
   };
@@ -179,6 +182,14 @@ export class MyOrdersComponent implements OnInit {
   }
 
   /**
+   * ⏰ Vérifie si on est avant 12h aujourd'hui
+   */
+  isBeforeDeadline(): boolean {
+    const now = new Date();
+    return now.getHours() < this.MODIFICATION_DEADLINE_HOUR;
+  }
+
+  /**
    * 🔄 Modifier une commande du jour
    */
   modifyOrder(order: OrderDTO, event: Event): void {
@@ -191,6 +202,14 @@ export class MyOrdersComponent implements OnInit {
       this.notificationService.warning(
         'Modification impossible',
         'Vous ne pouvez modifier que la commande du jour.'
+      );
+      return;
+    }
+
+    if (!this.isBeforeDeadline()) {
+      this.notificationService.warning(
+        'Délai dépassé',
+        `Il est trop tard pour modifier votre commande (après ${this.MODIFICATION_DEADLINE_HOUR}h).`
       );
       return;
     }
@@ -233,6 +252,14 @@ export class MyOrdersComponent implements OnInit {
   cancelOrder(orderId: number, event: Event): void {
     event.stopPropagation();
 
+    if (!this.isBeforeDeadline()) {
+      this.notificationService.warning(
+        'Délai dépassé',
+        `Il est trop tard pour annuler votre commande (après ${this.MODIFICATION_DEADLINE_HOUR}h).`
+      );
+      return;
+    }
+
     this.confirmationService.confirmDelete(
       'Annuler cette commande ?',
       'Êtes-vous sûr ? Cette action est irréversible.',
@@ -250,10 +277,13 @@ export class MyOrdersComponent implements OnInit {
           },
           error: (error) => {
             console.error('❌ Erreur annulation:', error);
-            this.notificationService.error(
-              "Erreur d'annulation",
-              "Impossible d'annuler la commande."
-            );
+
+            let message = "Impossible d'annuler la commande.";
+            if (error.error?.includes('12h')) {
+              message = `Il est trop tard pour annuler (après ${this.MODIFICATION_DEADLINE_HOUR}h).`;
+            }
+
+            this.notificationService.error("Erreur d'annulation", message);
           },
         });
       }
@@ -269,17 +299,19 @@ export class MyOrdersComponent implements OnInit {
   }
 
   /**
-   * ✅ Peut modifier (commande confirmée du jour)
+   * ✅ Peut modifier (commande confirmée du jour ET avant 12h)
    */
   canModify(order: OrderDTO): boolean {
-    return order.status === OrderStatus.CONFIRMED && this.isTodayOrder(order);
+    return (
+      order.status === OrderStatus.CONFIRMED && this.isTodayOrder(order) && this.isBeforeDeadline()
+    );
   }
 
   /**
-   * ❌ Peut annuler (commande confirmée)
+   * ❌ Peut annuler (commande confirmée ET avant 12h)
    */
   canCancel(order: OrderDTO): boolean {
-    return order.status === OrderStatus.CONFIRMED;
+    return order.status === OrderStatus.CONFIRMED && this.isTodayOrder(order) && this.isBeforeDeadline();
   }
 
   getStatusLabel(status: OrderStatus): string {

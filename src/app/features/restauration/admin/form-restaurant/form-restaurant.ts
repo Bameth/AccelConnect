@@ -4,10 +4,11 @@ import { RestaurantService } from '../../services/impl/restaurant.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CustomValidators } from '../../../../core/validators/CustomValidators';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-form-restaurant',
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule,FontAwesomeModule],
   templateUrl: './form-restaurant.html',
   styleUrl: './form-restaurant.css',
 })

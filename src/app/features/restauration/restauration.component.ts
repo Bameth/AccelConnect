@@ -31,7 +31,7 @@ export class RestaurationComponent implements OnInit {
   restaurants = signal<RestaurantDisplay[]>([]);
   userBalance = signal<UserBalanceDTO | null>(null);
   selectedDate = signal<string>(this.getTodayDate());
-  selectedDay = signal<string>("Aujourd'hui");
+  selectedDay = signal<string>(this.getCurrentDay());
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
 
@@ -121,6 +121,11 @@ export class RestaurationComponent implements OnInit {
     );
   }
 
+  getCurrentDay(): string {
+    const jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+    return jours[new Date().getDay()];
+  }
+
   /**
    * 💰 Charge le solde utilisateur
    */
@@ -128,7 +133,7 @@ export class RestaurationComponent implements OnInit {
     this.userBalanceService.getMyBalance().subscribe({
       next: (balance) => {
         this.userBalance.set(balance);
-        console.log('💰 Solde utilisateur:', balance);
+        // console.log('💰 Solde utilisateur:', balance);
       },
       error: (error) => {
         console.error('❌ Erreur lors du chargement du solde:', error);
@@ -165,15 +170,6 @@ export class RestaurationComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
-  }
-
-  /**
-   * 📅 Sélectionne un jour
-   */
-  selectDay(day: string): void {
-    this.selectedDay.set(day);
-    // TODO: Implémenter la navigation par jour
-    this.notificationService.info('Fonction à venir', `Navigation vers ${day}`);
   }
 
   /**
@@ -332,6 +328,6 @@ export class RestaurationComponent implements OnInit {
   };
 
   onAnimationCreated(anim: any): void {
-    console.log('Animation créée:', anim);
+    // console.log('Animation créée:', anim);
   }
 }

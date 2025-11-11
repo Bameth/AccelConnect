@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -16,7 +16,7 @@ import { AnimationItem } from 'lottie-web';
   templateUrl: './panier-component.html',
   styleUrl: './panier-component.css',
 })
-export class PanierComponent {
+export class PanierComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
   private readonly router = inject(Router);
@@ -32,6 +32,35 @@ export class PanierComponent {
     loop: true,
     autoplay: true,
   };
+
+  ngOnInit(): void {
+    // Valider les items du panier au chargement
+    this.validateCart();
+  }
+
+  /**
+   * ✅ Valide que les items du panier sont toujours disponibles
+   */
+  validateCart(): void {
+    this.isLoading.set(true);
+    this.cartService.validateCartItems().subscribe({
+      next: ({ validItems, removedItems }) => {
+        this.isLoading.set(false);
+
+        if (removedItems.length > 0) {
+          const itemNames = removedItems.map((item) => item.mealName).join(', ');
+          this.notificationService.warning(
+            'Articles retirés',
+            `${removedItems.length} article(s) retiré(s) du panier car non disponible(s) aujourd'hui : ${itemNames}`
+          );
+        }
+      },
+      error: (error) => {
+        console.error('❌ Erreur validation panier:', error);
+        this.isLoading.set(false);
+      },
+    });
+  }
 
   updateQuantity(mealId: number, restaurantId: number, delta: number): void {
     const summary = this.cartSummary();
@@ -78,14 +107,45 @@ export class PanierComponent {
       return;
     }
 
-    this.confirmationService.confirm({
-      title: 'Confirmer la commande',
-      message: '',
-      type: 'info',
-      confirmText: 'Commander',
-      cancelText: 'Annuler',
-      onConfirm: () => {
-        this.processOrder();
+    // Valider une dernière fois avant de commander
+    this.isLoading.set(true);
+    this.cartService.validateCartItems().subscribe({
+      next: ({ validItems, removedItems }) => {
+        this.isLoading.set(false);
+
+        if (removedItems.length > 0) {
+          const itemNames = removedItems.map((item) => item.mealName).join(', ');
+          this.notificationService.error(
+            'Articles indisponibles',
+            `Certains articles ne sont plus disponibles : ${itemNames}`
+          );
+          return;
+        }
+
+        if (validItems.length === 0) {
+          this.notificationService.warning('Panier vide', 'Votre panier est vide');
+          return;
+        }
+
+        // Continuer avec la confirmation
+        this.confirmationService.confirm({
+          title: 'Confirmer la commande',
+          message: 'Êtes-vous sûr de vouloir passer cette commande ?',
+          type: 'info',
+          confirmText: 'Commander',
+          cancelText: 'Annuler',
+          onConfirm: () => {
+            this.processOrder();
+          },
+        });
+      },
+      error: (error) => {
+        console.error('❌ Erreur validation:', error);
+        this.isLoading.set(false);
+        this.notificationService.error(
+          'Erreur de validation',
+          'Impossible de valider votre panier'
+        );
       },
     });
   }
@@ -113,6 +173,8 @@ export class PanierComponent {
           if (error.error?.includes('annulé')) {
             message =
               "Vous avez annulé votre commande du jour. Vous ne pouvez plus commander aujourd'hui.";
+          } else if (error.error?.includes('12h')) {
+            message = "Il est trop tard pour commander ou modifier aujourd'hui (après 12h).";
           } else {
             message = error.error || message;
           }

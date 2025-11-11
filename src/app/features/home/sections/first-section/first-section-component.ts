@@ -78,7 +78,7 @@ export class FirstSectionComponent implements AfterViewInit, OnInit {
    */
   private loadUserName(): void {
     if (!this.keycloakService.isAuthenticated()) {
-      this.userName.set('Visiteur');
+      this.userName.set('');
       this.isLoading.set(false);
       return;
     }
@@ -89,7 +89,7 @@ export class FirstSectionComponent implements AfterViewInit, OnInit {
         const firstName = user.firstName || user.username || 'Utilisateur';
         this.userName.set(this.capitalizeFirstLetter(firstName));
         this.isLoading.set(false);
-        console.log('👤 User name loaded:', firstName);
+        // console.log('👤 User name loaded:', firstName);
       },
       error: (error) => {
         console.warn('⚠️ Failed to load user from backend, using Keycloak info:', error);

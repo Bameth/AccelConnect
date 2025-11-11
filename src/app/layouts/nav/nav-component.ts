@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
   private readonly userService = inject(UserService);
 
   logoUrl = AppConfig.logoUrl;
-  avatarUrl = AppConfig.defaultAvatar;
+  avatarUrl: string | null = null;
 
   isAuthenticated = signal(false);
   currentUser = signal<User | null>(null);
@@ -50,19 +50,17 @@ export class NavComponent implements OnInit {
   private loadCurrentUser() {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        // console.log('✅ User loaded from backend:', user);
         this.currentUser.set(user);
 
-        // Mettre à jour l'avatar si disponible
-        if (user.email) {
+        if (user.avatarUrl) {
+          this.avatarUrl = user.avatarUrl;
+        } else {
           this.avatarUrl = this.generateAvatar(user);
         }
       },
       error: (error) => {
-        // console.error('❌ Failed to load user from backend:', error);
-        // L'info Keycloak reste disponible en fallback
         const info = this.keycloakInfo();
-        if (info?.email) {
+        if (info?.firstName || info?.lastName) {
           this.avatarUrl = this.generateAvatarFromKeycloak(info);
         }
       },

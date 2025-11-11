@@ -17,7 +17,7 @@ export class KeycloakService {
   async init(): Promise<boolean> {
     // Ne pas initialiser Keycloak côté serveur
     if (!isPlatformBrowser(this.platformId)) {
-      console.log('⚠️ Keycloak initialization skipped (SSR)');
+      // console.log('⚠️ Keycloak initialization skipped (SSR)');
       return false;
     }
 
@@ -39,9 +39,9 @@ export class KeycloakService {
   private async performInit(): Promise<boolean> {
     try {
       this.keycloak = new Keycloak({
-        url: 'http://localhost:8081',
-        realm: 'accel',
-        clientId: 'accel',
+        url: 'https://sso-01.heritage.africa',
+        realm: 'heritage-internal',
+        clientId: 'accel-connect',
       });
 
       const authenticated = await this.keycloak.init({
@@ -54,9 +54,9 @@ export class KeycloakService {
       this.initialized = true;
 
       if (authenticated) {
-        console.log('✅ User authenticated via Keycloak');
-        console.log('👤 User roles:', this.getUserRoles());
-        console.log('🔑 Token available:', !!this.keycloak.token);
+        // console.log('✅ User authenticated via Keycloak');
+        // console.log('👤 User roles:', this.getUserRoles());
+        // console.log('🔑 Token available:', !!this.keycloak.token);
         this.setupTokenRefresh();
 
         // Rediriger uniquement si on est sur la racine
@@ -86,10 +86,10 @@ export class KeycloakService {
     const isAdmin = this.isAdmin();
 
     if (isAdmin) {
-      console.log('↪️ Redirecting admin to /admin');
+      // console.log('↪️ Redirecting admin to /admin');
       this.router.navigate(['/admin']);
     } else {
-      console.log('↪️ Keeping user on home page');
+      // console.log('↪️ Keeping user on home page');
     }
   }
 
@@ -101,7 +101,7 @@ export class KeycloakService {
         .updateToken(70)
         .then((refreshed) => {
           if (refreshed) {
-            console.log('🔄 Token refreshed');
+            // console.log('🔄 Token refreshed');
           }
         })
         .catch(() => {
@@ -185,7 +185,7 @@ export class KeycloakService {
     const tokenParsed = this.getTokenParsed();
 
     const realmRoles: string[] = tokenParsed?.['realm_access']?.['roles'] || [];
-    const clientRoles: string[] = tokenParsed?.['resource_access']?.['accel']?.['roles'] || [];
+    const clientRoles: string[] = tokenParsed?.['resource_access']?.['accel-connect']?.['roles'] || [];
 
     const allRoles = new Set<string>([...realmRoles, ...clientRoles]);
 
