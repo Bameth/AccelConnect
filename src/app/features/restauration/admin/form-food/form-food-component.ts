@@ -1,11 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PlatService } from '../../services/impl/plat.service';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CustomValidators } from '../../../../core/validators/CustomValidators';
@@ -13,7 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-form-food-component',
-  imports: [ReactiveFormsModule, RouterLink, CommonModule,FontAwesomeModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule, FontAwesomeModule],
   templateUrl: './form-food-component.html',
   styleUrl: './form-food-component.css',
 })
@@ -33,6 +28,7 @@ export class FormFoodComponent implements OnInit {
         [Validators.required, CustomValidators.integer, CustomValidators.minValue(300)],
       ],
       description: ['', [Validators.required, Validators.minLength(10)]],
+      imageUrl: [''],
     });
   }
 

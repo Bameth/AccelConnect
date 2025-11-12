@@ -19,7 +19,14 @@ export class RestaurantService implements IRestaurantService {
     return this.httpClient.post<Restaurant>(`${environment.apiUrl}/restaurants`, restaurant);
   }
 
-  // Nouvelle méthode pour assigner un plat à un restaurant
+  updateRestaurant(id: number, restaurant: Restaurant): Observable<Restaurant> {
+    return this.httpClient.put<Restaurant>(`${environment.apiUrl}/restaurants/${id}`, restaurant);
+  }
+
+  deleteRestaurant(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiUrl}/restaurants/${id}`);
+  }
+
   addMealToRestaurant(restaurantId: number, mealId: number): Observable<Restaurant> {
     return this.httpClient.post<Restaurant>(
       `${environment.apiUrl}/restaurants/${restaurantId}/meals/${mealId}`,
@@ -27,7 +34,6 @@ export class RestaurantService implements IRestaurantService {
     );
   }
 
-  // Méthode optionnelle pour récupérer un restaurant avec ses plats
   getRestaurantWithMeals(restaurantId: number): Observable<Restaurant> {
     return this.httpClient.get<Restaurant>(`${environment.apiUrl}/restaurants/${restaurantId}`);
   }

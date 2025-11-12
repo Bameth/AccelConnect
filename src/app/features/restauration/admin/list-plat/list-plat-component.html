@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <!-- Barre de recherche et filtres -->
+    <!-- Barre de recherche -->
     <div
       class="mb-4 sm:mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm"
     >
@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <!-- Toggle vue et compteur -->
+    <!-- Toggle vue -->
     <div class="flex items-center justify-between mb-4 px-1">
       <div class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <button class="p-1.5 sm:p-2 text-white bg-blue-600 rounded-md transition-colors">
@@ -104,16 +104,15 @@
     <div
       class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4"
     >
-      @for (plat of plats(); track $index) {
-      <!-- Carte plat -->
+      @for (plat of plats(); track plat.id) {
       <div
         class="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1"
       >
         <!-- Image -->
         <div class="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-900">
           <img
-            src="/api/placeholder/400/400"
-            alt="{{ plat.mealName }}"
+            [src]="plat.imageUrl || '/api/placeholder/400/400'"
+            [alt]="plat.mealName"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
           <div class="absolute top-2 right-2 flex gap-1">
@@ -129,18 +128,18 @@
         <div class="p-3 sm:p-4">
           <h3
             class="font-bold text-sm sm:text-base lg:text-lg text-gray-900 dark:text-white mb-1 line-clamp-1"
-            title="{{ plat.mealName }}"
+            [title]="plat.mealName"
           >
             {{ plat.mealName }}
           </h3>
           <p
             class="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-2"
-            title="{{ plat.description }}"
+            [title]="plat.description"
           >
             {{ plat.description }}
           </p>
 
-          <!-- Prix et note -->
+          <!-- Prix -->
           <div class="flex items-center justify-between mb-3 sm:mb-4">
             <span class="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
               {{ plat.unitPrice }} <span class="text-xs sm:text-sm font-normal">FCFA</span>
@@ -162,6 +161,7 @@
           <!-- Boutons d'action -->
           <div class="flex items-center gap-1.5 sm:gap-2">
             <button
+              (click)="openEditModal(plat)"
               title="Modifier"
               class="flex-1 px-2 sm:px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
@@ -194,6 +194,7 @@
               </svg>
             </button>
             <button
+              (click)="deletePlat(plat)"
               title="Supprimer"
               class="px-2 sm:px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 transition-colors"
             >
@@ -211,7 +212,7 @@
       </div>
       }
 
-      <!-- Bouton ajouter un plat -->
+      <!-- Bouton ajouter -->
       <button
         routerLink="/admin/add-food"
         class="group bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl sm:rounded-2xl overflow-hidden hover:border-blue-400 dark:hover:border-blue-500 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/20 dark:hover:to-blue-800/20 transition-all cursor-pointer"
@@ -253,37 +254,171 @@
       <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center xs:text-left">
         <span class="hidden sm:inline">Affichage de </span>
         <span class="font-semibold text-gray-900 dark:text-white">1</span> à
-        <span class="font-semibold text-gray-900 dark:text-white">6</span>
+        <span class="font-semibold text-gray-900 dark:text-white">{{ totalPlats() }}</span>
         <span class="hidden sm:inline"> sur </span>
         <span class="sm:hidden">/</span>
-        <span class="font-semibold text-gray-900 dark:text-white">24</span>
+        <span class="font-semibold text-gray-900 dark:text-white">{{ totalPlats() }}</span>
         <span class="hidden sm:inline"> résultats</span>
       </p>
-      <div class="flex gap-1.5 sm:gap-2">
-        <button
-          class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          disabled
-        >
-          <span class="hidden xs:inline">Précédent</span>
-          <span class="xs:hidden">‹</span>
-        </button>
-        <button
-          class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 shadow-sm transition-colors"
-        >
-          1
-        </button>
-        <button
-          class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
-        >
-          2
-        </button>
-        <button
-          class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
-        >
-          <span class="hidden xs:inline">Suivant</span>
-          <span class="xs:hidden">›</span>
-        </button>
-      </div>
     </div>
   </div>
+
+  <!-- Modal d'édition -->
+  @if (isEditModalOpen()) {
+  <div
+    class="fixed inset-0 z-[9998] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    (click)="closeEditModal()"
+  >
+    <div
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all"
+      (click)="$event.stopPropagation()"
+    >
+      @if (selectedPlat(); as plat) {
+      <form (submit)="updatePlat($event)">
+        <!-- Header -->
+        <div
+          class="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6 z-10"
+        >
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Modifier le plat</h2>
+            <button
+              type="button"
+              (click)="closeEditModal()"
+              class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6 space-y-6">
+          <!-- Nom du plat -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Nom du plat <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              [value]="plat.mealName"
+              (input)="updateField('mealName', $any($event.target).value)"
+              required
+              class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="Ex: Thieboudienne"
+            />
+          </div>
+
+          <!-- Prix -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Prix unitaire (FCFA) <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              [value]="plat.unitPrice"
+              (input)="updateField('unitPrice', +$any($event.target).value)"
+              required
+              min="0"
+              step="1"
+              class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="2000"
+            />
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea
+              [value]="plat.description"
+              (input)="updateField('description', $any($event.target).value)"
+              rows="4"
+              class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+              placeholder="Décrivez votre plat..."
+            ></textarea>
+          </div>
+
+          <!-- URL de l'image -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              URL de l'image
+            </label>
+            <input
+              type="url"
+              [value]="plat.imageUrl"
+              (input)="updateField('imageUrl', $any($event.target).value)"
+              class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              placeholder="https://..."
+            />
+          </div>
+
+          <!-- Aperçu de l'image -->
+          @if (plat.imageUrl) {
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Aperçu
+            </label>
+            <div
+              class="relative w-full h-48 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-900"
+            >
+              <img [src]="plat.imageUrl" [alt]="plat.mealName" class="w-full h-full object-cover" />
+            </div>
+          </div>
+          }
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="sticky bottom-0 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-6"
+        >
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              (click)="closeEditModal()"
+              [disabled]="isSubmitting()"
+              class="flex-1 px-6 py-3 text-sm font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting()"
+              class="flex-1 px-6 py-3 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              @if (isSubmitting()) {
+              <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>Enregistrement...</span>
+              } @else {
+              <span>Enregistrer les modifications</span>
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+  }
 </div>

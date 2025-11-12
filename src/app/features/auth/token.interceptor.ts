@@ -8,7 +8,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
 
   // Ne pas ajouter le token pour les URLs externes ou en SSR
-  if (!req.url.includes('localhost:8085')) {
+  if (!req.url.includes('https://accel-connect-back.apps.origins.heritage.africa')) {
     return next(req);
   }
 
